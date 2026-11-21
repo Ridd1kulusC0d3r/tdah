@@ -55,30 +55,30 @@
  },
  "05-painel": {
   "w": 1280,
-  "h": 2796,
+  "h": 2748,
   "marcas": [
    {
     "n": 1,
     "x": 276,
-    "y": 226,
+    "y": 283,
     "rotulo": "Resumo dos 14 dias"
    },
    {
     "n": 2,
     "x": 297,
-    "y": 554,
+    "y": 611,
     "rotulo": "Foco em barras, humor em linha"
    },
    {
     "n": 3,
     "x": 297,
-    "y": 1211,
+    "y": 1268,
     "rotulo": "Sono e atividade física"
    },
    {
     "n": 4,
     "x": 297,
-    "y": 2318,
+    "y": 2375,
     "rotulo": "Comparações dos seus próprios dados"
    }
   ]
@@ -266,6 +266,30 @@
    }
   ]
  },
+ "02b-fim-foco": {
+  "w": 1280,
+  "h": 860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 371,
+    "y": 358,
+    "rotulo": "Como foi"
+   },
+   {
+    "n": 2,
+    "x": 371,
+    "y": 434,
+    "rotulo": "Por onde começar da próxima vez"
+   },
+   {
+    "n": 3,
+    "x": 471,
+    "y": 524,
+    "rotulo": "Avancei um pouco: a tarefa continua na fila"
+   }
+  ]
+ },
  "03-tarefas": {
   "w": 1280,
   "h": 1193,
@@ -382,13 +406,13 @@
  },
  "09-mais": {
   "w": 1280,
-  "h": 4175,
+  "h": 3045,
   "marcas": [
    {
     "n": 1,
-    "x": 297,
-    "y": 1832,
-    "rotulo": "Triagem ASRS (rastreio, não diagnóstico)"
+    "x": 276,
+    "y": 1813,
+    "rotulo": "Preparar a sessão e falar com um psicólogo"
    },
    {
     "n": 2,
@@ -405,31 +429,73 @@
    {
     "n": 4,
     "x": 276,
-    "y": 3266,
+    "y": 2136,
     "rotulo": "Lembretes de rotina e do diário"
    },
    {
     "n": 5,
     "x": 297,
-    "y": 3914,
+    "y": 2784,
     "rotulo": "Backup dos seus dados"
+   }
+  ]
+ },
+ "24-preparo": {
+  "w": 1280,
+  "h": 1592,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 190,
+    "rotulo": "O que atrapalhou?"
+   },
+   {
+    "n": 2,
+    "x": 462,
+    "y": 672,
+    "rotulo": "Período do resumo"
+   },
+   {
+    "n": 3,
+    "x": 301,
+    "y": 801,
+    "rotulo": "Você escolhe o que entra"
+   },
+   {
+    "n": 4,
+    "x": 297,
+    "y": 955,
+    "rotulo": "Prévia revisável antes de levar ou enviar"
+   }
+  ]
+ },
+ "25-importar-cursos": {
+  "w": 1280,
+  "h": 860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 371,
+    "y": 469,
+    "rotulo": "Prévia: o que entra e o que atualiza"
    }
   ]
  },
  "10-vinculo": {
   "w": 1280,
-  "h": 4257,
+  "h": 3127,
   "marcas": [
    {
     "n": 1,
     "x": 301,
-    "y": 3045,
+    "y": 1915,
     "rotulo": "Você escolhe o que a profissional vê"
    },
    {
     "n": 2,
     "x": 456,
-    "y": 3228,
+    "y": 2098,
     "rotulo": "Sincronizar agora"
    }
   ]
@@ -520,7 +586,7 @@
  },
  "14-planos": {
   "w": 1280,
-  "h": 4257,
+  "h": 3127,
   "marcas": [
    {
     "n": 1,
@@ -574,7 +640,7 @@
  },
  "16-plus-ativo": {
   "w": 1280,
-  "h": 4210,
+  "h": 3080,
   "marcas": [
    {
     "n": 1,
@@ -646,7 +712,7 @@
  },
  "40-servicos": {
   "w": 1280,
-  "h": 4685,
+  "h": 3194,
   "marcas": [
    {
     "n": 1,
@@ -682,7 +748,7 @@
  },
  "41-turmas": {
   "w": 1280,
-  "h": 4860,
+  "h": 3370,
   "marcas": [
    {
     "n": 1,
@@ -740,6 +806,18 @@
    }
   ]
  },
+ "26-pro-preparo": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 424,
+    "y": 348,
+    "rotulo": "Preparo enviado pelo paciente"
+   }
+  ]
+ },
  "44-site-servicos": {
   "w": 1280,
   "h": 900,
@@ -760,7 +838,7 @@
  },
  "45-site-comecar": {
   "w": 1280,
-  "h": 1336,
+  "h": 1338,
   "marcas": [
    {
     "n": 1,
@@ -953,7 +1031,7 @@
  },
  "28-android-planos": {
   "w": 390,
-  "h": 5524,
+  "h": 3840,
   "marcas": [
    {
     "n": 1,
@@ -964,7 +1042,7 @@
    {
     "n": 2,
     "x": 37,
-    "y": 1124,
+    "y": 1147,
     "rotulo": "Plus sem botão de compra no Android"
    }
   ]

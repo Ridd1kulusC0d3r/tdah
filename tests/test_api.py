@@ -48,7 +48,7 @@ class HttpFalso:
 def cfg_teste(**extra):
     base = dict(url_publica="http://teste.local", ambiente="desenvolvimento", provedor="simulado", limite_registro=1000,
                 mp_token="TEST-token", mp_segredo_webhook="segredo-mp", stripe_chave="sk_test_x", stripe_segredo_webhook="whsec_teste",
-                play_token_rtdn="tok-rtdn", smtp_host="", atras_de_proxy=False, chave=CHAVE_TESTE, agendador=False,
+                play_token_rtdn="tok-rtdn", smtp_host="", atras_de_proxy=False, chave=CHAVE_TESTE, agendador=False, permitir_cifra_python=True,
                 vapid_privada="", vapid_publica="", alerta_email="", exigir_2fa_admin=True)
     base.update(extra)
     return Config(**base)

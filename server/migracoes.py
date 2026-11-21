@@ -92,7 +92,18 @@ CREATE TABLE IF NOT EXISTS lembretes_push (
 """)
 
 
-MIGRACOES = [m1_producao]
+def m2_preparo(con):
+    """2.1: preparo da sessão enviado pelo paciente ao profissional vinculado."""
+    _script(con, """
+CREATE TABLE IF NOT EXISTS preparos (
+  id INTEGER PRIMARY KEY, paciente_id INTEGER NOT NULL, profissional_id INTEGER NOT NULL, texto TEXT NOT NULL,
+  criado_em TEXT NOT NULL, visto INTEGER DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS ix_preparos ON preparos(profissional_id, paciente_id)
+""")
+
+
+MIGRACOES = [m1_producao, m2_preparo]
 VERSAO_ATUAL = len(MIGRACOES)
 
 
@@ -121,6 +132,7 @@ CAMPOS_CIFRADOS = (
     ("interesses", "id", "mensagem", "interesse"),
     ("usuarios", "id", "totp_segredo", "totp"),
     ("missoes_feitas", "rowid", "nota", "missao"),
+    ("preparos", "id", "texto", "preparo"),
 )
 
 

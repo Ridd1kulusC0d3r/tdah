@@ -139,7 +139,8 @@ class Funil:
             vinc = u and u["papel"] == "paciente" and self._vinculado(con, u["id"])
         finally:
             con.close()
-        out = self.catalogo.publico(self._plataforma(cab, query), bool(vinc))
+        linhas = ["pessoas"] if query.get("contexto") == "app" else None  # app do paciente: só a linha "Para você"
+        out = self.catalogo.publico(self._plataforma(cab, query), bool(vinc), linhas)
         out["vinculado"] = bool(vinc)
         if vinc:
             out["aviso"] = "Você já é acompanhado por um profissional no Agora. Converse com ele sobre outros serviços."

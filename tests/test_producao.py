@@ -552,6 +552,18 @@ class TestOperacao(unittest.TestCase):
             finally:
                 os.environ.pop("AGORA_CHAVE", None)
 
+    def test_producao_exige_cryptography(self):
+        import cripto as cr
+        original = cr._CC20
+        cr._CC20 = None
+        try:
+            with tempfile.TemporaryDirectory() as t:
+                with self.assertRaises(SystemExit) as e:
+                    server.API(server.Banco(str(Path(t) / "p.db")), cfg_teste(ambiente="producao", permitir_cifra_python=False))
+                self.assertIn("cryptography", str(e.exception))
+        finally:
+            cr._CC20 = original
+
     def test_producao_recusa_sem_chave(self):
         with tempfile.TemporaryDirectory() as t:
             with self.assertRaises(SystemExit):

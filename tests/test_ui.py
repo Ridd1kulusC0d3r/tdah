@@ -173,8 +173,15 @@ def main():
                                  ("[data-snd=brown]", "Ruído branco, rosa ou marrom"), (".room", "Sala de foco (body doubling)")], full=False)
         pg.evaluate("FOCO.end = Date.now()")
         pg.wait_for_selector("[data-feel]")
+        ok("fim do foco separa o tempo da tarefa (Concluí / Avancei / Retomar)", pg.locator("[data-fim]").count() == 3)
         pg.click("[data-feel=fluiu]")
+        pg.fill("#fProx", "abrir o calendário do médico")
+        captura(pg, "02b-fim-foco", [("[data-feel=fluiu]", "Como foi"), ("#fProx", "Por onde começar da próxima vez"),
+                                     ("[data-fim=avancei]", "Avancei um pouco: a tarefa continua na fila")], full=False)
+        pg.click("[data-fim=avancei]")
         ok("sessão registrada (15 min no placar)", "15" in pg.locator(".score .tile >> nth=1").inner_text())
+        ok("onde parei aparece na próxima ação, com o passo guardado", "abrir o calendário do médico" in pg.locator(".now").inner_text())
+        ok("placar mostra dias em que voltei, sem exigir sequência", "Dias em que voltei" in pg.locator(".score").inner_text())
         pg.click("[data-act=snooze]")
         ok("agora não troca a tarefa", "Marcar psiquiatra" in pg.locator(".now h2").inner_text())
         pg.click("[data-act=pin] >> nth=0")
@@ -229,17 +236,62 @@ def main():
         pg.click("#rNext")
         ok("rotina concluída marca 'feita hoje'", pg.locator(".card:has-text('Sair de casa') .pill.good").count() == 1)
 
-        print("\n[6] Triagem ASRS")
+        print("\n[6] Triagem ASRS (desligada até o texto validado) e preparo da sessão")
         pg.click("[data-go=mais]")
+        ok("triagem fica fora do app até o texto brasileiro validado", pg.locator("#sec-triagem").count() == 0)
+        tr = nova({"width": 1100, "height": 860})
+        tr.add_init_script("window.AGORA_CONFIG = { triagem: true };")
+        tr.goto(url + "/app/#mais")
+        tr.wait_for_selector("#sec-triagem")
         for i, j in enumerate([3, 2, 2, 4, 1, 1]):
-            pg.click(f"[data-act=asrs][data-i='{i}'][data-j='{j}']")
-        pg.click("[data-act=asrs-save]")
-        res = pg.locator("#asrsRes").inner_text()
-        ok("ASRS: 4 respostas na faixa de atenção → sugere avaliação", "4 de 6" in res and "avaliação" in res, res[:80])
-        captura(pg, "09-mais", [("#sec-triagem h2", "Triagem ASRS (rastreio, não diagnóstico)"), ("#sec-conta", "Sua conta: criar, entrar ou recuperar a senha"),
+            tr.click(f"[data-act=asrs][data-i='{i}'][data-j='{j}']")
+        tr.click("[data-act=asrs-save]")
+        res = tr.locator("#asrsRes").inner_text()
+        ok("ASRS (ligada por configuração): 4 na faixa de atenção → sugere avaliação", "4 de 6" in res and "avaliação" in res, res[:80])
+        tr.close()
+        captura(pg, "09-mais", [("#sec-terapia", "Preparar a sessão e falar com um psicólogo"), ("#sec-conta", "Sua conta: criar, entrar ou recuperar a senha"),
                                  ("#sec-planos .plans", "Planos: grátis e Plus"), ("#sec-lembretes", "Lembretes de rotina e do diário"),
                                  ("[data-act=export]", "Backup dos seus dados")])
         ok("seção de lembretes com rotina e diário", pg.locator("#optLembRot").is_checked() and pg.locator("#lembDiario").input_value() == "21:00")
+        pg.click("#sec-terapia [data-act=preparo]")
+        pg.wait_for_selector("#prevPrep")
+        pg.fill("#pr1", "comecei três coisas e não terminei nenhuma")
+        pg.fill("#pr3", "como retomar depois de interrupção")
+        ok("preparo: a prévia mostra as respostas na hora", "não terminei nenhuma" in pg.locator("#prevPrep").inner_text())
+        pg.click("[data-prep-dias='28']")
+        pg.check("[data-prep-incl=rotinas]")
+        prev = pg.locator("#prevPrep").inner_text()
+        ok("preparo: período e categorias mudam o resumo", "últimos 28 dias" in prev and "ROTINAS" in prev and "BEM-ESTAR" in prev, prev[:300])
+        pg.uncheck("[data-prep-incl=bem]")
+        ok("preparo: tirar uma categoria tira do resumo", "BEM-ESTAR" not in pg.locator("#prevPrep").inner_text())
+        with pg.expect_download() as dl:
+            pg.click("#prBaixar")
+        ok("preparo: baixa como texto", dl.value.suggested_filename.startswith("preparo-sessao-"))
+        try:
+            pg.wait_for_selector(".toast", state="detached", timeout=6000)
+        except Exception:
+            pass
+        captura(pg, "24-preparo", [("#pr1", "O que atrapalhou?"), ("[data-prep-dias='28']", "Período do resumo"),
+                                   ("[data-prep-incl=bem]", "Você escolhe o que entra"), ("#prevPrep", "Prévia revisável antes de levar ou enviar")])
+        pg.click("[data-go=tarefas]")
+        if pg.locator("[data-act=importar-cursos]").count() == 0:
+            pg.click("[data-act=sub][data-x=cursos]")
+        pg.wait_for_selector("[data-act=importar-cursos]")
+        pg.evaluate("S.courses.some(c => c.name === 'Python para análise de dados') || S.courses.push({ id: 'cx', name: 'Python para análise de dados', platform: '', total: 10, done: 2, deadline: null, priority: 'media', created: hoje() })")
+        antes = pg.evaluate("S.courses.length")
+        pg.click("[data-act=importar-cursos]")
+        pg.fill("#icTxt", "<table><tr><th>Curso</th><th>Prazo de acesso</th><th>Carga horária</th><th>Status</th></tr>"
+                          "<tr><td>Inteligência Cibernética</td><td>31/12/2026</td><td>60</td><td>Em andamento</td></tr>"
+                          "<tr><td>OSINT Avançado</td><td>15/03/2027</td><td>40</td><td>Não iniciado</td></tr>"
+                          "<tr><td>Python para análise de dados</td><td>10/10/2026</td><td>24</td><td>Em andamento</td></tr>"
+                          "<tr><td>Curso Vencido</td><td>01/01/2025</td><td>10</td><td>Expirado</td></tr></table>")
+        ok("importar cursos: lê a tabela e avisa o que já existe", "4 curso(s) encontrados · 1 já existem" in pg.locator("#icPrev").inner_text(), pg.locator("#icPrev").inner_text()[:200])
+        ok("importar cursos: expirado vem desmarcado", not pg.locator("[data-ic='3']").is_checked())
+        captura(pg, "25-importar-cursos", [("#icPrev", "Prévia: o que entra e o que atualiza")], full=False)
+        pg.click(".sheet #icOk")
+        ok("importar cursos: 2 novos, nenhum duplicado", pg.evaluate("S.courses.length") == antes + 2)
+        ok("importar cursos: prazo lido da tabela", pg.evaluate("S.courses.find(c => c.name === 'OSINT Avançado').deadline") == "2027-03-15")
+        pg.click("[data-go=mais]")
 
         print("\n[7] Vínculo com a profissional e prescrição")
         pro_tok = api(url, "entrar", {"email": "ana@demo.agora", "senha": "demo1234"})["token"]
@@ -379,7 +431,8 @@ def main():
         sv.wait_for_selector("text=Conectado como")
         sv.click("[data-act=servicos]")
         sv.wait_for_selector(".svc")
-        ok("serviços listados por linha, com marca", sv.locator(".svc").count() >= 8 and sv.locator(".svc:has-text('Lume')").count() >= 2)
+        ok("app mostra só a linha Para você (9 itens), com marca", sv.locator(".svc").count() == 9 and sv.locator(".svc:has-text('Lume')").count() >= 2)
+        ok("empresas e psicólogos ficam fora do app", sv.locator("#svc-palestra, #svc-supervisao, #svc-nr1").count() == 0)
         ok("serviço psicológico mostra nome e CRP do responsável", "CRP-04/65709" in sv.locator("#svc-terapia").inner_text())
         ok("nenhum texto de desconto ou promessa", not any(w in sv.locator("main").inner_text().lower() for w in ("desconto", "promoção", "garantido")))
         ok("minhas turmas mostra a turma confirmada com 8 missões", sv.locator("#sec-minhas .missoes li").count() == 8)
@@ -443,6 +496,19 @@ def main():
         ok("tela de ajuda traz CVV 188 e caminho pelo SUS", "188" in pg.locator(".sheet").inner_text() and "UBS" in pg.locator(".sheet").inner_text())
         captura(pg, "43-ajuda", [(".sheet h2", "Onde buscar ajuda"), (".sheet li:has-text('188')", "CVV 188, 24 horas")], full=False)
         pg.click(".sheet [data-close]")
+        pg.goto(url + "/app/#preparo")
+        pg.wait_for_selector("#prEnviar")
+        pg.fill("#pr1", "semana com muitas interrupções")
+        pg.click("#prEnviar")
+        pg.wait_for_selector(".toast:has-text('Enviado')")
+        ok("vinculado envia o preparo ao profissional", True)
+        pp.reload()
+        pp.wait_for_selector(".pt")
+        ok("profissional vê 'enviou preparo' na lista", pp.locator(".pt:has-text('Lucas') .pill:has-text('enviou preparo')").count() == 1)
+        pp.locator(".pt:has-text('Lucas')").click()
+        pp.wait_for_selector("details.prep")
+        ok("preparo aparece na ficha com o texto", "semana com muitas interrupções" in pp.locator("details.prep").first.inner_text())
+        captura(pp, "26-pro-preparo", [("details.prep", "Preparo enviado pelo paciente")], full=False)
 
         print("\n[7g] Site: página de serviços, formulário e página Começar")
         ss = nova({"width": 1280, "height": 900})

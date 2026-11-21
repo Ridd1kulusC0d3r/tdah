@@ -71,6 +71,7 @@ def main():
     publico = cat.Catalogo(Config(), None).publico("web", False)
     contato = publico["responsavel"]["contato"]
     texto_cat = json.dumps(publico, ensure_ascii=False, indent=1)
+    texto_cat_app = json.dumps(cat.Catalogo(Config(), None).publico("web", False, ["pessoas"]), ensure_ascii=False, indent=1)
 
     for arq in (RAIZ / "site").iterdir():
         if arq.suffix == ".html":
@@ -88,7 +89,7 @@ def main():
             (DEST / "app" / arq.name).write_text(marcar(arq.read_text(encoding="utf-8")), encoding="utf-8")
         else:
             shutil.copy2(arq, DEST / "app" / arq.name)
-    (DEST / "app" / "catalogo.json").write_text(texto_cat, encoding="utf-8")
+    (DEST / "app" / "catalogo.json").write_text(texto_cat_app, encoding="utf-8")  # app: só "Para você"
     (DEST / "app" / "pro.html").write_text(PRO_PLACEHOLDER.replace("CONTATO", contato), encoding="utf-8")
 
     # hospedagens: GitHub Pages (sem Jekyll), Netlify e Cloudflare Pages (cabeçalhos e endereços curtos)

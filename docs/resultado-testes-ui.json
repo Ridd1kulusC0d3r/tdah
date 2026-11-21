@@ -1,5 +1,5 @@
 {
- "quando": "2026-11-14T08:14:14",
+ "quando": "2026-11-21T17:10:24",
  "resultados": [
   {
    "teste": "abre com banner de dados de exemplo",
@@ -97,7 +97,22 @@
    "detalhe": ""
   },
   {
+   "teste": "fim do foco separa o tempo da tarefa (Concluí / Avancei / Retomar)",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
    "teste": "sessão registrada (15 min no placar)",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "onde parei aparece na próxima ação, com o passo guardado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "placar mostra dias em que voltei, sem exigir sequência",
    "ok": true,
    "detalhe": ""
   },
@@ -147,12 +162,57 @@
    "detalhe": ""
   },
   {
-   "teste": "ASRS: 4 respostas na faixa de atenção → sugere avaliação",
+   "teste": "triagem fica fora do app até o texto brasileiro validado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "ASRS (ligada por configuração): 4 na faixa de atenção → sugere avaliação",
    "ok": true,
    "detalhe": "4 de 6 respostas na faixa de atenção.\n\nQuatro ou mais costuma indicar que vale u"
   },
   {
    "teste": "seção de lembretes com rotina e diário",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "preparo: a prévia mostra as respostas na hora",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "preparo: período e categorias mudam o resumo",
+   "ok": true,
+   "detalhe": "Preparo para a sessão · Paula · 21/11/2026\nPeríodo: últimos 28 dias (25/10 a 21/11)\n\nO QUE QUERO LEVAR\n- O que atrapalhou: comecei três coisas e não terminei nenhuma\n- Em quais situações: (sem resposta)\n- O que gostaria de trabalhar: como retomar depois de interrupção\n\nTAREFAS E FOCO\n- Foco: 0,3 h e"
+  },
+  {
+   "teste": "preparo: tirar uma categoria tira do resumo",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "preparo: baixa como texto",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "importar cursos: lê a tabela e avisa o que já existe",
+   "ok": true,
+   "detalhe": "4 curso(s) encontrados · 1 já existem e serão atualizados\nInteligência Cibernética · prazo 31/12 · 60 h · em andamento\nOSINT Avançado · prazo 15/03 · 40 h · nao iniciado\nPython para análise de dados ·"
+  },
+  {
+   "teste": "importar cursos: expirado vem desmarcado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "importar cursos: 2 novos, nenhum duplicado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "importar cursos: prazo lido da tabela",
    "ok": true,
    "detalhe": ""
   },
@@ -219,7 +279,7 @@
   {
    "teste": "URL limpa depois do retorno",
    "ok": true,
-   "detalhe": "http://localhost:32901/app/#mais"
+   "detalhe": "http://localhost:42509/app/#mais"
   },
   {
    "teste": "cópia na nuvem salva",
@@ -262,7 +322,12 @@
    "detalhe": ""
   },
   {
-   "teste": "serviços listados por linha, com marca",
+   "teste": "app mostra só a linha Para você (9 itens), com marca",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "empresas e psicólogos ficam fora do app",
    "ok": true,
    "detalhe": ""
   },
@@ -333,6 +398,21 @@
   },
   {
    "teste": "tela de ajuda traz CVV 188 e caminho pelo SUS",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "vinculado envia o preparo ao profissional",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "profissional vê 'enviou preparo' na lista",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "preparo aparece na ficha com o texto",
    "ok": true,
    "detalhe": ""
   },

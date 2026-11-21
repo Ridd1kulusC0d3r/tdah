@@ -19,7 +19,7 @@ try:
 except Exception:
     pwv = "?"
 linhas = [
-    "# Relatório de testes — Agora 2.0", "",
+    "# Relatório de testes — Agora 2.1", "",
     f"Executado em {ui['quando'].replace('T', ' ')} num ambiente Linux na nuvem.", "",
     "| Suíte | Resultado |", "|---|---|",
     f"| API e produção (`tests/test_api.py` e `tests/test_producao.py`, unittest) | **{n_api}/{len(api)}** |",
@@ -46,7 +46,10 @@ linhas = [
     "limite de tentativas que sobrevive a reinício, CSP com hash de cada script, conflito de versão na nuvem, erro interno registrado sem vazar, catálogo por contexto "
     "(web, Android, paciente vinculado), formulário de interesse com armadilha para robôs, sequência de e-mails com descadastro assinado, eventos anônimos, turma com pagamento, "
     "missões, lista de espera e estorno, e-book com link assinado que expira, compra avulsa pelo Stripe, trava de publicidade no catálogo, lembrete Web Push com JWT VAPID, "
-    "retenção, exportação e exclusão, backup cifrado com envio S3 e restauração, CLI de administração e recusa de partida em produção sem chave. No navegador, o teste confere também que nenhuma página pede arquivos a servidores de fora (as fontes ficam no próprio app).", "",
+    "retenção, exportação e exclusão, backup cifrado com envio S3 e restauração, CLI de administração, recusa de partida em produção sem chave e sem o pacote cryptography. "
+    "Na 2.1, no navegador: fim do foco com Concluí/Avancei/Retomar e o passo guardado em Onde você parou, dias em que voltei, triagem desligada até o texto validado, "
+    "preparo da sessão (prévia, período, categorias, download e envio ao profissional vinculado), importação de cursos com prévia, atualização sem duplicar e expirados desmarcados, "
+    "catálogo do app só com a linha Para você. No navegador, o teste confere também que nenhuma página pede arquivos a servidores de fora (as fontes ficam no próprio app).", "",
     "| Teste da API | Resultado |", "|---|---|"]
 linhas += [f"| `{t}` | {'✓' if s == 'ok' else '✕ ' + s} |" for t, s in api]
 linhas += ["", "## Verificações no navegador", "", "| # | Verificação | Resultado |", "|---|---|---|"]

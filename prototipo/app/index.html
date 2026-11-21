@@ -284,6 +284,7 @@ label.f{display:grid;gap:6px;font-weight:650;font-size:.9rem}
 .delta.up{color:var(--good)} .delta.down{color:var(--bad)}
 
 /* mais */
+pre.prep{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--sunk);border-radius:var(--rs);padding:14px;font:13.5px/1.55 var(--f-mono);margin:0;max-height:420px;overflow:auto}
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 .svc h3{margin:0;font-size:1.12rem;line-height:1.25}.svc p{margin:0}
 .svc-ebook{border-top:1px solid var(--line);padding-top:8px}
@@ -534,6 +535,9 @@ const minutosHoje = minutosDia;
 function diaAtivo(d) {
   return S.sessions.some(s => s.date === d) || !!S.checkins[d] || S.routineRuns.some(r => r.date === d) || S.tasks.some(t => t.doneAt === d);
 }
+function diasVoltei() {  // presença sem exigir sequência: quantos dos últimos 14 dias tiveram algum registro
+  return [...Array(14)].filter((_, i) => diaAtivo(diasAtras(i))).length;
+}
 function sequencia() {
   let n = 0, i = diaAtivo(hoje()) ? 0 : 1;
   while (diaAtivo(diasAtras(i))) { n++; i++; }
@@ -587,7 +591,7 @@ function render() {
   document.body.classList.toggle("big", !!S.settings.big);
   document.body.classList.toggle("calm", !!S.settings.calm);
   const m = $("#main");
-  m.innerHTML = (S._demo ? bannerDemo() : "") + ({ agora: vAgora, tarefas: vTarefas, rotinas: vRotinas, diario: vDiario, painel: vPainel, mais: vMais, relatorio: vRelatorio, servicos: vServicos }[VIEW] || vAgora)();
+  m.innerHTML = (S._demo ? bannerDemo() : "") + ({ agora: vAgora, tarefas: vTarefas, rotinas: vRotinas, diario: vDiario, painel: vPainel, mais: vMais, relatorio: vRelatorio, servicos: vServicos, preparo: vPreparo }[VIEW] || vAgora)();
   bind(m);
   $("#skinsMini").innerHTML = SKINS.map(([k, n, a, b, c]) => `<button title="${n}" aria-label="Tema ${n}" aria-pressed="${S.settings.skin === k}" data-skin="${k}" style="background:linear-gradient(135deg, ${a} 50%, ${c} 50%)"></button>`).join("");
   $$("#skinsMini [data-skin]").forEach(b => b.onclick = () => { S.settings.skin = b.dataset.skin; aplicaTema(); save({ noSync: true }); render(); });
@@ -627,7 +631,8 @@ function vAgora() {
     card = `<section class="now" aria-labelledby="nowt" style="--c:${cor}">
       <div class="top"><div class="kind"><span class="label">Sua próxima ação</span>${tipoTag(x.type)}${prioTag(x.priority)}${x.from ? `<span class="pill pro">da sua psicóloga</span>` : ""}<span class="pill">energia ${x.energy === "media" ? "média" : esc(x.energy || "média")}</span></div>
       <h2 id="nowt">${esc(x.title)}</h2>
-      <p class="why">${ico("spark")}<span>Por que esta: ${esc(top.motivo.slice(0, 2).join(" e "))}.</span></p></div>
+      <p class="why">${ico("spark")}<span>Por que esta: ${esc(top.motivo.slice(0, 2).join(" e "))}.</span></p>
+      ${x.parou ? `<p class="why">${ico("clock")}<span>Onde você parou (${fmtData(x.parou.em)}): ${x.parou.prox ? esc(x.parou.prox) : x.parou.como === "avancei" ? "avançou um pouco" : "ficou para retomar"}.</span></p>` : ""}</div>
       <div class="body">
       ${c ? `<div class="stack" style="gap:6px"><div class="row between small"><span>${esc(c.platform || "Curso")}</span><span class="mono">${c.done}/${c.total} aulas · ${Math.round(100 * c.done / c.total)}%</span></div><div class="bar" style="--c:${cor}"><i style="width:${100 * c.done / c.total}%"></i></div></div>`
       : x.steps.length ? `<div class="segbar" aria-label="${x.steps.length - pend.length} de ${x.steps.length} passos feitos">${x.steps.map(s => `<i class="${s.done ? "on" : ""}"></i>`).join("")}</div>
@@ -660,7 +665,7 @@ function vAgora() {
     ${nudgeTerapia()}
     ${card}
     <div class="score">
-      <div class="tile"><span class="ti">${ico("flame")}<span class="label">Seguidos</span></span><b>${sequencia()}<small class="small"> dias</small></b></div>
+      <div class="tile"><span class="ti">${ico("flame")}<span class="label">Dias em que voltei</span></span><b>${diasVoltei()}<small class="small"> de 14</small></b></div>
       <div class="tile"><span class="ti">${ico("clock")}<span class="label">Foco hoje</span></span><b>${minutosHoje()}<small class="small"> min</small></b>${spark(d7.map(d => minutosDia(d)))}</div>
       <div class="tile"><span class="ti">${ico("check")}<span class="label">Feitas</span></span><b>${S.tasks.filter(x => x.doneAt === t).length + S.routineRuns.filter(r => r.date === t && r.done).length}<small class="small"> hoje</small></b></div>
     </div>
@@ -734,7 +739,7 @@ function vCursos(seg) {
   const tot = soma(S.courses.map(c => c.total)), feitas = soma(S.courses.map(c => c.done));
   return `<div class="view">
     <div class="head"><div><h1>Cursos</h1><p class="muted small">${S.courses.length} cursos · ${feitas} de ${tot} aulas feitas. A próxima aula do curso mais urgente entra no Agora.</p></div>${seg}</div>
-    <div class="row"><button class="btn primary" data-act="new-course">${ico("plus")} Novo curso</button></div>
+    <div class="row"><button class="btn primary" data-act="new-course">${ico("plus")} Novo curso</button><button class="btn" data-act="importar-cursos">Importar cursos</button></div>
     ${lista.length ? lista.map(card).join("") : `<section class="card stack"><p class="muted">Nenhum curso ainda. Cadastre os cursos que você está fazendo; o app distribui as aulas pelos dias e mostra o ritmo para o prazo.</p></section>`}
   </div>`;
 }
@@ -881,6 +886,7 @@ function vPainel() {
   const maxT = Math.max(1, ...tiposCom.map(x => x[1]));
   return `<div class="view">
     <div class="head"><div><h1>Painel</h1><p class="muted small">São pistas para observar, não diagnóstico.</p></div>
+      <button class="btn sm primary" data-act="preparo">Preparar minha próxima sessão</button>
       <button class="btn sm" data-act="go" data-v="relatorio">Relatório do mês${PLUS() ? "" : '<span class="mini">Plus</span>'}</button>
       <div class="seg" role="group" aria-label="Período">${[7, 14, 28].map(k => `<button data-act="periodo" data-n="${k}" aria-pressed="${n === k}">${k} dias</button>`).join("")}</div></div>
     <div class="score" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
@@ -910,12 +916,15 @@ function vPainel() {
     <section class="card"><h3>O que seus dados mostram</h3>
       ${comps.length ? comps.map(([v, txt, base]) => `<div class="insight"><span class="n">${v}</span><div><p>${txt}</p><p class="small muted">Base: ${base} dos últimos 28. Com poucos dias, trate como pista.</p></div></div>`).join("")
         : `<p class="muted">Registre o diário por pelo menos uma semana para aparecerem comparações.</p>`}</section>
-    <section class="card row between"><div><h3>Triagem ASRS</h3><p class="small muted">${ult ? `Última em ${fmtData(ult.date)}: ${ult.positives} de 6 respostas na faixa de atenção.` : "Ainda não respondida. 6 perguntas, 2 minutos."}</p></div>
-      <button class="btn" data-act="go" data-v="mais" data-anchor="triagem">${ult ? "Refazer" : "Responder"}</button></section>
+    ${TRIAGEM ? `<section class="card row between"><div><h3>Triagem ASRS</h3><p class="small muted">${ult ? `Última em ${fmtData(ult.date)}: ${ult.positives} de 6 respostas na faixa de atenção.` : "Ainda não respondida. 6 perguntas, 2 minutos."}</p></div>
+      <button class="btn" data-act="go" data-v="mais" data-anchor="triagem">${ult ? "Refazer" : "Responder"}</button></section>` : ""}
   </div>`;
 }
 
 /* ================= MAIS ================= */
+// A triagem só aparece com AGORA_CONFIG.triagem = true, depois de trocar o texto abaixo pela versão brasileira
+// validada da ASRS-18 (OMS) e confirmar a licença de uso. A redação atual é de trabalho.
+const TRIAGEM = CFG.triagem === true;
 const ASRS = [
   "Com que frequência você tem dificuldade para concluir os detalhes finais de um projeto, depois que as partes mais desafiadoras foram feitas?",
   "Com que frequência você tem dificuldade para pôr as coisas em ordem quando precisa fazer uma tarefa que exige organização?",
@@ -937,7 +946,7 @@ function vMais() {
     <section class="card stack" id="sec-planos"><h2>Planos</h2>${vPlanos()}</section>
 
     <section class="card stack" id="sec-servicos"><h2>Serviços da equipe</h2>
-      <p class="small muted">Terapia, grupos de treino de habilidades sociais da Lume, e-books e conteúdo para empresas. Opcional: o app segue completo sem nada disso.</p>
+      <p class="small muted">Terapia, grupos e treinos de habilidades sociais da Lume, aula aberta e e-books. Opcional: o app segue completo sem nada disso.</p>
       ${S.link?.pro ? `<p class="small">Você já é acompanhado por ${esc(S.link.pro)}. Converse com ${esc(S.link.pro.split(" ")[0])} sobre outros serviços.</p>` : ""}
       <div class="row"><button class="btn" data-act="servicos">Ver serviços${API && S.link?.token ? ", turmas e compras" : ""}</button></div></section>
 
@@ -946,16 +955,16 @@ function vMais() {
       <label class="check"><input type="checkbox" id="optBig" ${S.settings.big ? "checked" : ""}><span>Letra maior</span></label>
       <label class="check"><input type="checkbox" id="optCalm" ${S.settings.calm ? "checked" : ""}><span>Menos animação</span></label></section>
 
-    <section class="card stack" id="sec-triagem"><h2>Triagem ASRS 1.1 (parte A)</h2>
+    ${TRIAGEM ? `<section class="card stack" id="sec-triagem"><h2>Triagem ASRS 1.1 (parte A)</h2>
       <p class="small muted">Questionário de rastreio da Organização Mundial da Saúde para adultos. Considere os últimos 6 meses. O resultado <b>não é diagnóstico</b>: ele indica se vale procurar uma avaliação com psiquiatra ou psicólogo.</p>
       ${ASRS.map((q, i) => `<div class="q"><b>${i + 1}. ${esc(q)}</b><div class="opts" role="group" aria-label="Pergunta ${i + 1}">${ASRS_OPTS.map((o, j) =>
         `<button class="chip" aria-pressed="${asrsDraft[i] === j}" data-act="asrs" data-i="${i}" data-j="${j}">${o}</button>`).join("")}</div></div>`).join("")}
       <button class="btn primary" data-act="asrs-save" ${asrsDraft.includes(null) ? "disabled" : ""}>Ver resultado</button>
-      <div id="asrsRes">${asrsResultado(S.screenings.slice(-1)[0])}</div></section>
+      <div id="asrsRes">${asrsResultado(S.screenings.slice(-1)[0])}</div></section>` : ""}
 
     <section class="card stack" id="sec-terapia"><h2>Falar com um psicólogo</h2>
       <p class="small muted">Rotinas e tarefas prescritas no app, acompanhamento entre as sessões e um resumo pronto para cada consulta. Você escolhe o que compartilha.</p>
-      <div class="row">${L && L.pro ? `<button class="btn" data-act="contact">Pedir contato a ${esc(L.pro.split(" ")[0])}</button>` : `<button class="btn" data-act="ajuda">Onde buscar ajuda</button>`}</div>
+      <div class="row"><button class="btn primary" data-act="preparo">Preparar minha próxima sessão</button>${L && L.pro ? `<button class="btn" data-act="contact">Pedir contato a ${esc(L.pro.split(" ")[0])}</button>` : `<button class="btn" data-act="ajuda">Onde buscar ajuda</button>`}</div>
       <div id="contactRes"></div></section>
 
     <section class="card stack" id="sec-vinculo"><h2>Vincular ao seu profissional</h2>${vVinculo()}</section>
@@ -977,8 +986,9 @@ function vMais() {
     <section class="card stack"><h2>Seus dados</h2>
       <p class="small muted">Tudo fica neste aparelho. Só vai para a clínica o que você marcar no vínculo acima.</p>
       <div class="row"><button class="btn" data-act="export">Copiar backup</button><button class="btn" data-act="import">Restaurar backup</button><button class="btn ghost" data-act="wipe" style="color:var(--bad)">Apagar tudo</button></div>
+      ${copias().length ? `<div class="stack" id="copias"><span class="label">Cópias guardadas</span>${copias().map((c, i) => `<div class="row between"><span class="small">${new Date(c.quando).toLocaleString("pt-BR")} · ${esc(c.rotulo)}</span><button class="btn sm" data-act="copia-restaurar" data-i="${i}">Voltar a esta</button></div>`).join("")}</div>` : ""}
       <div id="dataBox"></div></section>
-    <p class="small muted">Agora 2.0 · Ferramenta de apoio à organização. Não faz diagnóstico nem substitui tratamento. Em crise, ligue 188 (CVV, 24h) ou 192 (SAMU).</p>
+    <p class="small muted">Agora 2.1 · Ferramenta de apoio à organização. Não faz diagnóstico nem substitui tratamento. Em crise, ligue 188 (CVV, 24h) ou 192 (SAMU).</p>
   </div>`;
 }
 function asrsResultado(r) {
@@ -1025,7 +1035,7 @@ function vPlanos() {
       <p class="small muted">Cancele quando quiser, sem multa. O pagamento é processado pelo provedor; o Agora não vê nem guarda dados do cartão.</p></div>`;
   return `<p class="small muted">As ferramentas para TDAH são de graça, sem limite de rotinas, tarefas ou cursos. O Plus cobre o que tem custo para manter.</p>
     <div class="plans">
-      <div class="card plan"><span class="label">Grátis</span><span class="price">R$ 0</span><ul><li>Agora, tarefas, cursos, rotinas e timer</li><li>Diário com humor, sono e atividade</li><li>Painel com gráficos e triagem ASRS</li><li>7 temas, lembretes e funciona sem internet</li></ul></div>
+      <div class="card plan"><span class="label">Grátis</span><span class="price">R$ 0</span><ul><li>Agora, tarefas, cursos, rotinas e timer</li><li>Diário com humor, sono e atividade</li><li>Painel com gráficos e preparo da sessão</li><li>7 temas, lembretes e funciona sem internet</li></ul></div>
       <div class="card plan featured"><span class="label">Plus</span><span class="price">${preco(mensal.valor)}<small class="small">/mês</small></span><span class="small muted">ou ${preco(anual.valor)} por ano</span>
         <ul><li>Cópia na nuvem: troca de aparelho sem perder nada</li><li>Sala de foco com outras pessoas</li><li>Relatório do mês para levar à consulta</li><li>Sons extras: chuva e ondas</li></ul>${acao}</div>
     </div>`;
@@ -1083,6 +1093,7 @@ function bind(root) {
     const el = $("#" + id, root); if (el) el.addEventListener("change", () => { S.settings[k] = el.checked; save(); render(); }); });
   const mk = $("#optMkt", root); if (mk) mk.addEventListener("change", async () => { try { await api("conta/marketing", { aceito: mk.checked }); S.link.marketing = mk.checked; lsSet(S); toast(mk.checked ? "Combinado." : "Você não recebe mais esses e-mails."); } catch (e) { toast(e.message); } });
   const cv = $("#convite", root); if (cv && S.conviteLink && !cv.value) cv.value = S.conviteLink;
+  if (VIEW === "preparo") ligarPreparo(root);
   const lr = $("#optLembRot", root); if (lr) lr.addEventListener("change", () => { S.settings.lembretes.rotinas = lr.checked; save({ noSync: true }); });
   const ld = $("#lembDiario", root); if (ld) ld.addEventListener("change", () => { S.settings.lembretes.diario = ld.value; save({ noSync: true }); toast(ld.value ? "Lembrete do diário às " + ld.value + "." : "Lembrete do diário desligado."); });
   const meds = $("#meds", root); if (meds) meds.addEventListener("change", () => draft.meds = meds.checked);
@@ -1156,6 +1167,9 @@ function acao(a, el) {
     case "imprimir": try { window.print(); } catch {} return;
     case "skin": S.settings.skin = el.dataset.x; aplicaTema(); save({ noSync: true }); break;
     case "export": return exportar();
+    case "copia-restaurar": { const c = copias()[+el.dataset.i]; if (!c) return; guardarCopia("versão antes de voltar a uma cópia", S); const link = S.link; S = JSON.parse(c.dados); S.link = link; S._demo = false; migrar(); lsSet(S); aplicaTema(); toast("Cópia restaurada. A versão anterior também ficou guardada."); return go("agora"); }
+    case "preparo": return go("preparo");
+    case "importar-cursos": return sheetImportarCursos();
     case "import": return importar();
     case "wipe": return confirmarApagar();
     case "register": case "login": return entrar(a);
@@ -1224,7 +1238,7 @@ function sheetComeco() {
 }
 function sheetPassos(x) {
   sheet(`<h2>Quebrar em passos</h2><p class="small muted">${esc(x.title)}</p>
-    <p class="small">Escreva passos tão pequenos que dê vergonha de não fazer. Um por linha.</p>
+    <p class="small">Escreva um passo pequeno o suficiente para começar, mesmo num dia difícil. Um por linha.</p>
     <textarea id="ps">${esc(x.steps.map(s => s.t).join("\n"))}</textarea>
     <button class="btn sm" id="sug">Sugerir um começo</button>
     <div class="row"><button class="btn primary" id="ok">Salvar passos</button><button class="btn ghost" data-close>Cancelar</button></div>`, sh => {
@@ -1351,13 +1365,25 @@ function terminarFoco(contar, completo) {
   const usados = Math.round(((f.paused || Date.now()) - (f.end - f.total * 1000)) / 60000);
   const min = completo ? Math.round(f.total / 60) : Math.max(0, usados);
   if (!contar || min < 1) { $("#layer").innerHTML = ""; render(); return; }
-  sheet(`<h2>${completo ? "Tempo!" : "Boa."} ${min} min de foco.</h2><p class="small muted">Como foi?</p>
-    <div class="row">${["fluiu", "ok", "travei"].map(k => `<button class="btn" data-feel="${k}">${k}</button>`).join("")}</div>
-    <label class="check"><input type="checkbox" id="fin"><span>${f.curso ? "Concluí uma aula" : "Terminei a tarefa"}</span></label>`, sh => {
-    $$("[data-feel]", sh).forEach(b => b.onclick = () => {
-      S.sessions.push({ date: hoje(), min, taskId: f.taskId, type: f.type, feel: b.dataset.feel });
-      if ($("#fin", sh).checked) { if (f.curso) aulaFeita(curso(f.taskId.slice(2))); else { const x = tarefa(f.taskId); if (x) concluir(x); } }
-      save(); fechar(); toast(`+${min} min hoje.`); });
+  // O tempo acabar não é a tarefa acabar: a pessoa diz como ficou e, se não terminou, deixa o primeiro passo da volta.
+  let feel = "ok";
+  sheet(`<h2>${completo ? "Tempo!" : "Boa."} ${min} min de foco.</h2>
+    <p class="small muted">Como foi?</p>
+    <div class="row" role="group" aria-label="Como foi">${["fluiu", "ok", "travei"].map(k => `<button class="chip" data-feel="${k}" aria-pressed="${k === "ok"}">${k}</button>`).join("")}</div>
+    <label class="f" for="fProx">Se não terminou: por onde começar da próxima vez? (opcional)<input type="text" id="fProx" maxlength="120" placeholder="ex.: reler o último parágrafo e escrever a conclusão"></label>
+    <p class="small muted">E ${f.curso ? "a aula" : "a tarefa"}?</p>
+    <div class="row"><button class="btn primary" data-fim="feita">${f.curso ? "Concluí a aula" : "Concluí"}</button><button class="btn" data-fim="avancei">Avancei um pouco</button><button class="btn ghost" data-fim="retomar">Vou retomar depois</button></div>`, sh => {
+    $$("[data-feel]", sh).forEach(b => b.onclick = () => { feel = b.dataset.feel; $$("[data-feel]", sh).forEach(c => c.setAttribute("aria-pressed", c === b)); });
+    $$("[data-fim]", sh).forEach(b => b.onclick = () => {
+      const fim = b.dataset.fim, prox = $("#fProx", sh).value.trim();
+      S.sessions.push({ date: hoje(), min, taskId: f.taskId, type: f.type, feel, fim });
+      if (fim === "feita") { if (f.curso) aulaFeita(curso(f.taskId.slice(2))); else { const x = tarefa(f.taskId); if (x) concluir(x); } }
+      else {
+        const x = f.curso ? curso(f.taskId.slice(2)) : tarefa(f.taskId);
+        if (x) { x.parou = { em: hoje(), prox: prox || null, como: fim };
+          if (prox && !f.curso) { const i = x.steps.findIndex(s => !s.done); x.steps.splice(i < 0 ? x.steps.length : i, 0, { t: prox, done: false }); } }
+      }
+      save(); fechar(); toast(fim === "feita" ? `+${min} min hoje. Feito.` : `+${min} min hoje. ${prox ? "O próximo passo ficou guardado." : "Fica na fila para você voltar."}`); });
   });
 }
 function bip() {
@@ -1602,13 +1628,19 @@ async function nuvemSalvar(manual, forcar) {
     S.link.nuvemEm = r.atualizado_em; S.link.nuvemVersao = r.versao; lsSet(S); if (manual) { toast("Cópia salva na nuvem."); render(); } }
   catch (e) { if (e.status === 409) return sheetConflito(e.extra); if (manual) toast(e.message); }
 }
+const COPIAS = "agora.copias";
+function copias() { try { return JSON.parse(localStorage.getItem(COPIAS) || "[]"); } catch { return []; } }
+function guardarCopia(rotulo, dados) {  // até 3 cópias, para desfazer uma troca de versão
+  try { const l = copias(); l.unshift({ quando: new Date().toISOString(), rotulo, dados: JSON.stringify(dados) }); localStorage.setItem(COPIAS, JSON.stringify(l.slice(0, 3))); return true; }
+  catch { return false; }
+}
 function sheetConflito(x) {
   if ($("#layer").innerHTML) return;
   sheet(`<h2>A nuvem tem uma versão mais nova</h2><p>Outro aparelho salvou em <b>${x?.atualizado_em ? new Date(x.atualizado_em).toLocaleString("pt-BR") : "outro momento"}</b>, depois da última vez que este aparelho sincronizou.</p>
-    <p class="small muted">Escolha qual vale. A outra versão é substituída.</p>
+    <p class="small muted">Escolha qual vale. A outra fica guardada neste aparelho por segurança: dá para voltar a ela em Mais › Seus dados › Cópias guardadas.</p>
     <div class="row"><button class="btn primary" id="cfN">Trazer a da nuvem</button><button class="btn" id="cfA">Manter a deste aparelho</button></div>`, sh => {
-    $("#cfA", sh).onclick = () => { fechar(); nuvemSalvar(true, true); };
-    $("#cfN", sh).onclick = async () => { try { const r = await api("nuvem"); const link = S.link; S = r.dados; S.link = link; S.link.nuvemVersao = r.versao; S.link.nuvemEm = r.atualizado_em; S._demo = false; migrar(); lsSet(S); aplicaTema(); $("#layer").innerHTML = ""; go("agora"); toast("Dados da nuvem trazidos para cá."); } catch (e) { toast(e.message); } };
+    $("#cfA", sh).onclick = async () => { try { const r = await api("nuvem"); if (r.dados) guardarCopia("versão da nuvem antes de manter a deste aparelho", r.dados); } catch {} fechar(); nuvemSalvar(true, true); };
+    $("#cfN", sh).onclick = async () => { try { const r = await api("nuvem"); guardarCopia("versão deste aparelho antes de trazer a da nuvem", S); const link = S.link; S = r.dados; S.link = link; S.link.nuvemVersao = r.versao; S.link.nuvemEm = r.atualizado_em; S._demo = false; migrar(); lsSet(S); aplicaTema(); $("#layer").innerHTML = ""; go("agora"); toast("Dados da nuvem trazidos para cá."); } catch (e) { toast(e.message); } };
   });
 }
 function nuvemRestaurar(aoEntrar) {
@@ -1667,7 +1699,7 @@ function evento(nome, item) { if (!API) return; try { fetch(API + "/api/eventos"
 async function carregarServicos(forcar) {
   if (!API) return;
   if (CAT && !forcar) return;
-  try { CAT = await api("catalogo"); CAT_ERRO = ""; } catch (e) { CAT_ERRO = e.message; }
+  try { CAT = await api("catalogo?contexto=app"); CAT_ERRO = ""; } catch (e) { CAT_ERRO = e.message; }
   if (S.link?.token) { try { MINHAS = await api("minhas"); } catch { MINHAS = null; } }
   if (VIEW === "servicos") render();
 }
@@ -1882,10 +1914,172 @@ async function pushSincronizar() {
   try { await api("push/lembretes", { lembretes: lembretesParaServidor(), fuso: Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Sao_Paulo" }); } catch {}
 }
 
+/* ================= preparar minha próxima sessão ================= */
+// Três perguntas abertas, escolha do período e do que entra, prévia revisável. Nada sai do aparelho sem um toque da pessoa.
+const PREP_INCL = [["roteiro", "O que quero levar (minhas respostas)"], ["tarefas", "Tarefas e foco"], ["bem", "Bem-estar: humor, energia, sono e atividade"], ["rotinas", "Rotinas"]];
+function prep() {  // sempre o mesmo objeto: os campos que faltam são completados no lugar
+  const d = { atrapalhou: "", situacoes: "", trabalhar: "", dias: 14, incl: { roteiro: true, tarefas: true, bem: true, rotinas: false } };
+  if (!S.preparo) S.preparo = d;
+  for (const k in d) if (S.preparo[k] === undefined) S.preparo[k] = d[k];
+  return S.preparo;
+}
+function textoPreparo() {
+  const P = prep(), n = P.dias, ini = diasAtras(n - 1), fim = hoje(), L = [];
+  const no = d => d >= ini && d <= fim;
+  L.push(`Preparo para a sessão${S.profile.name ? " · " + S.profile.name : ""} · ${new Date().toLocaleDateString("pt-BR")}`);
+  L.push(`Período: últimos ${n} dias (${fmtData(ini)} a ${fmtData(fim)})`, "");
+  if (P.incl.roteiro) {
+    L.push("O QUE QUERO LEVAR");
+    L.push(`- O que atrapalhou: ${P.atrapalhou.trim() || "(sem resposta)"}`);
+    L.push(`- Em quais situações: ${P.situacoes.trim() || "(sem resposta)"}`);
+    L.push(`- O que gostaria de trabalhar: ${P.trabalhar.trim() || "(sem resposta)"}`, "");
+  }
+  if (P.incl.tarefas) {
+    const ses = S.sessions.filter(s => no(s.date)), min = soma(ses.map(s => s.min));
+    const feel = k => ses.filter(s => s.feel === k).length;
+    const feitas = S.tasks.filter(t => t.done && t.doneAt && no(t.doneAt));
+    const paradas = [...S.tasks, ...S.courses].filter(x => x.parou && no(x.parou.em) && !x.done);
+    L.push("TAREFAS E FOCO");
+    L.push(`- Foco: ${r1(min / 60)} h em ${ses.length} ${ses.length === 1 ? "sessão" : "sessões"} (fluiu ${feel("fluiu")}, ok ${feel("ok")}, travei ${feel("travei")})`);
+    L.push(`- Tarefas concluídas: ${feitas.length}${feitas.length ? ": " + feitas.slice(-8).map(t => t.title).join("; ") : ""}`);
+    if (paradas.length) L.push(`- Paradas no meio: ${paradas.slice(0, 6).map(x => (x.title || x.name) + (x.parou.prox ? ` (próximo passo: ${x.parou.prox})` : "")).join("; ")}`);
+    L.push("");
+  }
+  if (P.incl.bem) {
+    const ck = Object.entries(S.checkins).filter(([d]) => no(d)).map(([, c]) => c);
+    const val = k => ck.map(c => c[k]).filter(v => v != null && v !== "");
+    L.push("BEM-ESTAR (registros do diário)");
+    L.push(`- Dias com registro: ${ck.length} de ${n}`);
+    if (ck.length) {
+      L.push(`- Humor médio: ${r1(media(val("mood")))} · energia média: ${r1(media(val("energy")))} (escala de 1 a 5)`);
+      L.push(`- Sono médio: ${r1(media(val("sleepH")))} h · qualidade percebida: ${r1(media(val("sleepQ")))} (1 a 5)`);
+      L.push(`- Atividade física: ${soma(val("activityMin"))} min no período`);
+      if (S.settings.showMeds) L.push(`- Medicação marcada: ${ck.filter(c => c.meds).length} dias`);
+    }
+    L.push("");
+  }
+  if (P.incl.rotinas) {
+    const runs = S.routineRuns.filter(r => no(r.date));
+    L.push("ROTINAS");
+    L.push(`- Execuções: ${runs.length} · completas: ${runs.filter(r => r.done >= r.total).length} · parciais: ${runs.filter(r => r.done < r.total).length}`, "");
+  }
+  L.push("Registrado pela própria pessoa no app Agora. Apoio para a conversa, não diagnóstico.");
+  return L.join("\n");
+}
+function vPreparo() {
+  const P = prep(), L = S.link;
+  const enviar = API && L?.token && L.pro;
+  return `<div class="view">
+    <div class="head"><div><h1>Preparar minha próxima sessão</h1><p class="muted small">Três perguntas e um resumo dos seus registros. Você revisa tudo antes de levar ou enviar.</p></div>
+      <button class="btn sm ghost" data-act="go" data-v="painel">Voltar</button></div>
+    <section class="card stack"><h2>O que quero levar</h2>
+      <label class="f" for="pr1">O que atrapalhou?<textarea id="pr1" data-prep="atrapalhou" maxlength="600" placeholder="ex.: comecei três coisas e não terminei nenhuma">${esc(P.atrapalhou)}</textarea></label>
+      <label class="f" for="pr2">Em quais situações?<textarea id="pr2" data-prep="situacoes" maxlength="600" placeholder="ex.: depois do almoço, quando o chefe muda a prioridade">${esc(P.situacoes)}</textarea></label>
+      <label class="f" for="pr3">O que gostaria de trabalhar?<textarea id="pr3" data-prep="trabalhar" maxlength="600" placeholder="ex.: como retomar depois de uma interrupção">${esc(P.trabalhar)}</textarea></label>
+      <p class="small muted">Fica guardado só neste aparelho até você copiar, baixar ou enviar.</p></section>
+    <section class="card stack"><h2>O que entra no resumo</h2>
+      <div class="seg" role="group" aria-label="Período">${[7, 14, 28].map(k => `<button data-prep-dias="${k}" aria-pressed="${P.dias === k}">${k} dias</button>`).join("")}</div>
+      ${PREP_INCL.map(([k, t]) => `<label class="check"><input type="checkbox" data-prep-incl="${k}" ${P.incl[k] ? "checked" : ""}><span>${t}</span></label>`).join("")}</section>
+    <section class="card stack"><h2>Prévia</h2>
+      <pre class="prep" id="prevPrep">${esc(textoPreparo())}</pre>
+      <div class="row"><button class="btn primary" id="prCopiar">Copiar</button><button class="btn" id="prBaixar">Baixar como texto</button>
+        ${enviar ? `<button class="btn" id="prEnviar">Enviar para ${esc(L.pro.split(" ")[0])}</button>` : ""}</div>
+      ${!enviar ? `<p class="small muted">Leve na consulta, cole numa mensagem para quem te acompanha ou guarde para você.${API ? " Vinculado a um profissional no Agora, dá para enviar direto." : ""}</p>` : ""}
+    </section></div>`;
+}
+function ligarPreparo(root) {
+  const P = prep(), atual = () => { const el = $("#prevPrep", root); if (el) el.textContent = textoPreparo(); };
+  $$("[data-prep]", root).forEach(t => t.addEventListener("input", () => { P[t.dataset.prep] = t.value.slice(0, 600); save({ noSync: true }); atual(); }));
+  $$("[data-prep-incl]", root).forEach(c => c.addEventListener("change", () => { P.incl[c.dataset.prepIncl] = c.checked; save({ noSync: true }); atual(); }));
+  $$("[data-prep-dias]", root).forEach(b => b.addEventListener("click", () => { P.dias = +b.dataset.prepDias; save({ noSync: true });
+    $$("[data-prep-dias]", root).forEach(x => x.setAttribute("aria-pressed", x === b)); atual(); }));
+  const cp = $("#prCopiar", root); if (cp) cp.onclick = () => navigator.clipboard?.writeText(textoPreparo()).then(() => toast("Copiado.")).catch(() => toast("Selecione o texto da prévia e copie."));
+  const bx = $("#prBaixar", root); if (bx) bx.onclick = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([textoPreparo()], { type: "text/plain;charset=utf-8" }));
+    a.download = `preparo-sessao-${hoje()}.txt`; document.body.appendChild(a); a.click(); a.remove(); };
+  const en = $("#prEnviar", root); if (en) en.onclick = async () => { try { await api("paciente/preparo", { texto: textoPreparo() }); toast(`Enviado. ${S.link.pro.split(" ")[0]} vê no painel antes da consulta.`); } catch (e) { toast(e.message); } };
+}
+
+/* ================= importar cursos (Lista Magna, painéis de cursos, planilhas) ================= */
+// Aceita HTML com tabela ou lista, CSV/planilha exportada ou uma linha por curso. Cada curso entra dividido em 10 blocos,
+// aproximação inicial que a pessoa ajusta depois. Nome repetido atualiza o curso em vez de duplicar.
+const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+function dataDe(txt) {
+  const m = String(txt || "").match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})|(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  if (m[4]) return `${m[4]}-${m[5]}-${m[6]}`;
+  const y = m[3].length === 2 ? "20" + m[3] : m[3];
+  return `${y}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+}
+function lerCursos(txt, nomeArq) {
+  txt = String(txt || ""); let linhas = [];
+  if (/<table|<li|<tr/i.test(txt)) {
+    const doc = new DOMParser().parseFromString(txt, "text/html");
+    const tabs = [...doc.querySelectorAll("table")];
+    tabs.forEach(t => { const rs = [...t.querySelectorAll("tr")].map(r => [...r.querySelectorAll("th,td")].map(c => c.textContent.replace(/\s+/g, " ").trim())); if (rs.length) linhas.push(...rs.map((r, i) => ({ r, cab: i === 0 }))); });
+    if (!tabs.length) linhas = [...doc.querySelectorAll("li")].map(li => ({ r: [li.textContent.replace(/\s+/g, " ").trim()], cab: false }));
+  } else {
+    const ls = txt.replace(/\r/g, "").split("\n").filter(l => l.trim());
+    const sep = ls[0] && ls[0].includes(";") && !ls[0].includes(",") ? ";" : ls[0] && ls[0].includes("\t") ? "\t" : ",";
+    const csv = l => { const o = []; let c = "", q = false; for (const ch of l) { if (ch === '"') q = !q; else if (ch === sep && !q) { o.push(c); c = ""; } else c += ch; } o.push(c); return o.map(x => x.trim()); };
+    linhas = ls.map((l, i) => ({ r: /[,;\t]/.test(l) ? csv(l) : [l.replace(/^\s*(?:[-*+]\s*)?(?:\[[ xX]?\]\s*)?(?:\d+[.)]\s*)?/, "").trim()], cab: i === 0 }));
+  }
+  // cabeçalho: a primeira linha com nomes de coluna reconhecíveis
+  const idx = linhas.findIndex(l => l.r.some(c => /curso|disciplina|t[ií]tulo|nome/i.test(c)) && l.r.length > 1);
+  const cab = idx >= 0 ? linhas[idx].r.map(c => norm(c)) : null;
+  const col = (...ps) => cab ? cab.findIndex(c => ps.some(p => c.includes(p))) : -1;
+  const cN = cab ? col("curso", "disciplina", "titulo", "nome") : 0, cP = col("prazo", "acesso", "vence", "expira", "limite", "data"),
+    cH = col("hora", "carga"), cS = col("status", "situacao"), cG = col("progresso", "concl", "%"), cPl = col("plataforma", "instituicao", "programa", "escola", "pos");
+  const corpo = idx >= 0 ? linhas.slice(idx + 1) : linhas.filter(l => !l.cab || !cab);
+  const vistos = new Set(), out = [];
+  for (const { r } of corpo) {
+    const nome = (r[cN >= 0 ? cN : 0] || "").trim();
+    if (!nome || nome.length > 160 || /^(curso|disciplina|total|nome)$/i.test(nome) || vistos.has(norm(nome))) continue;
+    vistos.add(norm(nome));
+    const st = norm(cS >= 0 ? r[cS] : "");
+    const pct = cG >= 0 ? parseFloat(String(r[cG]).replace(",", ".")) : NaN;
+    const horas = cH >= 0 ? parseFloat(String(r[cH]).replace(",", ".")) : NaN;
+    const concluido = /conclu|finaliz|aprovad/.test(st) || pct >= 100;
+    out.push({ name: nome, platform: (cPl >= 0 ? r[cPl] : "") || (nomeArq ? "" : ""), deadline: cP >= 0 ? dataDe(r[cP]) : null,
+      hours: isFinite(horas) && horas > 0 ? horas : null, total: 10, done: concluido ? 10 : isFinite(pct) ? Math.max(0, Math.min(10, Math.round(pct / 10))) : 0,
+      status: st, marcar: !/expir|abandon|cancel/.test(st) });
+  }
+  return out.slice(0, 300);
+}
+function sheetImportarCursos() {
+  let achados = [];
+  sheet(`<h2>Importar cursos</h2><p class="small muted">Lista Magna, painel de cursos salvo como página (.html), planilha (.csv) ou um curso por linha. Cada curso entra em 10 blocos, que você ajusta depois. Nome repetido atualiza o curso, sem duplicar.</p>
+    <label class="f" for="icArq">Arquivo<input type="file" id="icArq" accept=".html,.htm,.csv,.txt,.md,text/html,text/csv,text/plain"></label>
+    <label class="f" for="icTxt">Ou cole aqui<textarea id="icTxt" placeholder="Python para análise de dados&#10;Inteligência cibernética; 31/12/2026; 60"></textarea></label>
+    <div id="icPrev" class="stack"></div>
+    <div class="row"><button class="btn primary" id="icOk" disabled>Importar</button><button class="btn ghost" data-close>Cancelar</button></div>`, sh => {
+    const prev = $("#icPrev", sh), ok = $("#icOk", sh);
+    const mostra = (txt, nome) => {
+      achados = lerCursos(txt, nome);
+      const ex = new Set(S.courses.map(c => norm(c.name)));
+      prev.innerHTML = achados.length ? `<span class="label">${achados.length} curso(s) encontrados · ${achados.filter(c => ex.has(norm(c.name))).length} já existem e serão atualizados</span>
+        <div class="stack" style="max-height:300px;overflow:auto;gap:4px">${achados.map((c, i) => `<label class="check"><input type="checkbox" data-ic="${i}" ${c.marcar ? "checked" : ""}><span>${esc(c.name)}<span class="small muted">${c.deadline ? " · prazo " + fmtData(c.deadline) : ""}${c.hours ? " · " + c.hours + " h" : ""}${c.status ? " · " + esc(c.status) : ""}${ex.has(norm(c.name)) ? " · atualizar" : ""}</span></span></label>`).join("")}</div>` : `<p class="small muted">${txt.trim() ? "Não encontrei cursos nesse conteúdo." : ""}</p>`;
+      ok.disabled = !achados.length;
+    };
+    $("#icTxt", sh).addEventListener("input", e => mostra(e.target.value));
+    $("#icArq", sh).addEventListener("change", e => { const f = e.target.files[0]; if (!f) return; if (f.size > 5e6) return toast("Arquivo grande demais."); f.text().then(t => mostra(t, f.name)); });
+    ok.onclick = () => {
+      const marcados = achados.filter((_, i) => $(`[data-ic="${i}"]`, sh)?.checked);
+      let novos = 0, atual = 0;
+      marcados.forEach(c => {
+        const ja = S.courses.find(x => norm(x.name) === norm(c.name));
+        if (ja) { if (c.deadline) ja.deadline = c.deadline; if (c.hours) ja.hours = c.hours; if (c.done > ja.done && ja.total === 10) ja.done = c.done; atual++; }
+        else { S.courses.push({ id: uid(), created: hoje(), name: c.name, platform: c.platform || "", total: c.total, done: c.done, hours: c.hours, deadline: c.deadline,
+          priority: c.deadline && c.deadline <= diasAtras(-60) ? "alta" : "media", importado: true }); novos++; }
+      });
+      save(); fechar(); toast(`${novos} curso(s) novos, ${atual} atualizados.`);
+    };
+  });
+}
+
 /* ================= início ================= */
 aplicaTema();
 const ini = (location.hash || "").slice(1);
-if (["agora", "tarefas", "rotinas", "diario", "painel", "mais", "relatorio", "servicos"].includes(ini)) VIEW = ini;
+if (["agora", "tarefas", "rotinas", "diario", "painel", "mais", "relatorio", "servicos", "preparo"].includes(ini)) VIEW = ini;
 go(VIEW);
 (async () => {
   agendarLembretes();

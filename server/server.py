@@ -40,7 +40,7 @@ import push  # noqa: E402
 from config import Config  # noqa: E402
 from funil import Funil  # noqa: E402
 
-VERSAO = "2.0.0"
+VERSAO = "2.1.0"
 RAIZ = Path(__file__).resolve().parent.parent
 APP_DIR = RAIZ / "app"
 SITE_DIR = RAIZ / "site"
@@ -325,6 +325,8 @@ class API(Funil):
         ("POST", "paciente/consentimento"): "consentimento",
         ("POST", "paciente/sync"): "sync",
         ("POST", "paciente/contato"): "pedir_contato",
+        ("POST", "paciente/preparo"): "enviar_preparo",
+        ("POST", "pro/preparos/:id/visto"): "preparo_visto",
         ("POST", "paciente/desvincular"): "desvincular",
         ("POST", "pro/convite"): "convite",
         ("GET", "pro/pacientes"): "pacientes",
@@ -566,7 +568,7 @@ class API(Funil):
             for sql in ("DELETE FROM tokens WHERE usuario_id=?", "DELETE FROM snapshots WHERE paciente_id=?",
                         "DELETE FROM nuvem WHERE usuario_id=?", "DELETE FROM sala WHERE usuario_id=?",
                         "DELETE FROM vinculos WHERE paciente_id=? OR profissional_id=?", "DELETE FROM prescricoes WHERE paciente_id=? OR profissional_id=?",
-                        "DELETE FROM pedidos_contato WHERE paciente_id=? OR profissional_id=?", "DELETE FROM convites WHERE profissional_id=?",
+                        "DELETE FROM pedidos_contato WHERE paciente_id=? OR profissional_id=?", "DELETE FROM preparos WHERE paciente_id=? OR profissional_id=?", "DELETE FROM convites WHERE profissional_id=?",
                         "DELETE FROM resets_senha WHERE usuario_id=?", "DELETE FROM assinaturas WHERE usuario_id=?",
                         "DELETE FROM checkouts WHERE usuario_id=?", "DELETE FROM inscricoes WHERE usuario_id=?",
                         "DELETE FROM missoes_feitas WHERE usuario_id=?", "DELETE FROM push_inscricoes WHERE usuario_id=?",
@@ -714,6 +716,7 @@ class API(Funil):
         con = self.db.con()
         con.execute("UPDATE vinculos SET ativo=0 WHERE paciente_id=?", (u["id"],))
         con.execute("DELETE FROM snapshots WHERE paciente_id=?", (u["id"],))
+        con.execute("DELETE FROM preparos WHERE paciente_id=?", (u["id"],))  # desvincular leva junto o que foi enviado
         self.audita(con, u["id"], "desvinculo")
         con.commit()
         con.close()
@@ -747,6 +750,33 @@ class API(Funil):
         con.close()
         return {"ok": True, "encaminhado": bool(v)}
 
+    def enviar_preparo(self, corpo, cab, **_):
+        """O paciente envia o preparo da sessão (texto que ele revisou) ao profissional com quem está vinculado."""
+        u = self.usuario(cab, "paciente")
+        texto = str(corpo.get("texto", "")).strip()[:8000]
+        if not texto:
+            raise ErroAPI(400, "O preparo está vazio.")
+        con = self.db.con()
+        try:
+            v = con.execute("SELECT profissional_id FROM vinculos WHERE paciente_id=? AND ativo=1", (u["id"],)).fetchone()
+            if not v:
+                raise ErroAPI(400, "Para enviar, vincule-se ao seu profissional. Você ainda pode copiar ou baixar o preparo.")
+            con.execute("INSERT INTO preparos(paciente_id,profissional_id,texto,criado_em) VALUES (?,?,?,?)",
+                        (u["id"], v["profissional_id"], self.cifra(texto, "preparo"), agora_iso()))
+            self.audita(con, u["id"], "preparo_enviado", v["profissional_id"])
+            con.commit()
+        finally:
+            con.close()
+        return {"ok": True}
+
+    def preparo_visto(self, cab, ids, **_):
+        u = self.usuario(cab, "profissional")
+        con = self.db.con()
+        con.execute("UPDATE preparos SET visto=1 WHERE id=? AND profissional_id=?", (ids[0], u["id"]))
+        con.commit()
+        con.close()
+        return {"ok": True}
+
     # ---------- profissional ----------
     def convite(self, cab, **_):
         u = self.usuario(cab, "profissional")
@@ -776,12 +806,15 @@ class API(Funil):
             pend = {r["paciente_id"]: r["n"] for r in con.execute(
                 "SELECT paciente_id, COUNT(*) n FROM pedidos_contato WHERE profissional_id=? AND visto=0 GROUP BY paciente_id",
                 (u["id"],))}
+            prepn = {r["paciente_id"]: r["n"] for r in con.execute(
+                "SELECT paciente_id, COUNT(*) n FROM preparos WHERE profissional_id=? AND visto=0 GROUP BY paciente_id", (u["id"],))}
             out = []
             for r in rows:
                 dados = json.loads(self.decifra(r["dados"], "snapshot")) if r["dados"] else {}
                 out.append({"id": r["id"], "nome": r["nome"], "vinculadoEm": r["criado_em"],
                             "atualizadoEm": r["atualizado_em"], "consentimento": json.loads(r["consentimento"]),
-                            "adesao7": resumo_adesao(dados, 7), "pedidosContato": pend.get(r["id"], 0)})
+                            "adesao7": resumo_adesao(dados, 7), "pedidosContato": pend.get(r["id"], 0),
+                            "preparosNovos": prepn.get(r["id"], 0)})
             convites = [dict(x) for x in con.execute(
                 "SELECT codigo,criado_em FROM convites WHERE profissional_id=? AND usado_por IS NULL ORDER BY criado_em DESC LIMIT 5",
                 (u["id"],))]
@@ -812,13 +845,16 @@ class API(Funil):
                                 (u["id"], pid)).fetchall()
             ped = con.execute("SELECT id,motivo,criado_em,visto FROM pedidos_contato WHERE profissional_id=? AND paciente_id=? ORDER BY id DESC LIMIT 10",
                               (u["id"], pid)).fetchall()
+            prep = con.execute("SELECT id,texto,criado_em,visto FROM preparos WHERE profissional_id=? AND paciente_id=? ORDER BY id DESC LIMIT 5",
+                               (u["id"], pid)).fetchall()
             self.audita(con, u["id"], "visualizou", pid)
             con.commit()
             return {"id": p["id"], "nome": p["nome"], "consentimento": cons, "dados": dados,
                     "atualizadoEm": s["atualizado_em"] if s else None,
                     "adesao7": resumo_adesao(dados, 7), "adesao28": resumo_adesao(dados, 28),
                     "prescricoes": [{"id": r["id"], "tipo": r["tipo"], "conteudo": json.loads(r["conteudo"]), "criadoEm": r["criado_em"]} for r in presc],
-                    "pedidos": [{**dict(r), "motivo": self.decifra(r["motivo"], "pedido")} for r in ped]}
+                    "pedidos": [{**dict(r), "motivo": self.decifra(r["motivo"], "pedido")} for r in ped],
+                    "preparos": [{**dict(r), "texto": self.decifra(r["texto"], "preparo")} for r in prep]}
         finally:
             con.close()
 

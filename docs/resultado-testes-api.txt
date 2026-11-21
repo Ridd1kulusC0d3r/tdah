@@ -30,10 +30,10 @@ test_seed_idempotente (tests.test_api.TestSeed.test_seed_idempotente) ... [e-mai
 [e-mail não enviado: SMTP não configurado] para=rh@exemplo.invalid assunto=Recebemos seu contato: Palestra
 [e-mail não enviado: SMTP não configurado] para=contato@psicologotech.com.br assunto=[Agora] Novo interesse: Palestra
 ok
-test_simulado_desligado_em_producao (tests.test_api.TestSimuladoEmProducao.test_simulado_desligado_em_producao) ... {"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "POST", "caminho": "/api/registrar", "status": "200", "ms": 32}
-{"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "POST", "caminho": "/api/pagamentos/checkout", "status": "403", "ms": 3}
-{"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "GET", "caminho": "/api/pagamentos/simulado", "status": "404", "ms": 1}
-{"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "GET", "caminho": "/api/planos", "status": "200", "ms": 0}
+test_simulado_desligado_em_producao (tests.test_api.TestSimuladoEmProducao.test_simulado_desligado_em_producao) ... {"t": "2026-11-21T20:09:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "POST", "caminho": "/api/registrar", "status": "200", "ms": 38}
+{"t": "2026-11-21T20:09:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "POST", "caminho": "/api/pagamentos/checkout", "status": "403", "ms": 3}
+{"t": "2026-11-21T20:09:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "GET", "caminho": "/api/pagamentos/simulado", "status": "404", "ms": 1}
+{"t": "2026-11-21T20:09:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "GET", "caminho": "/api/planos", "status": "200", "ms": 0}
 ok
 test_01_assinatura_renovacao_e_cancelamento (tests.test_api.TestStripe.test_01_assinatura_renovacao_e_cancelamento) ... ok
 test_02_pagamento_unico (tests.test_api.TestStripe.test_02_pagamento_unico) ... ok
@@ -64,6 +64,7 @@ ok
 test_banco_da_versao_1_3_e_cifrado_na_partida (tests.test_producao.TestMigracao.test_banco_da_versao_1_3_e_cifrado_na_partida) ... ok
 test_admin_cli (tests.test_producao.TestOperacao.test_admin_cli) ... ok
 test_backup_cifrado_restaura_e_envia_para_s3 (tests.test_producao.TestOperacao.test_backup_cifrado_restaura_e_envia_para_s3) ... ok
+test_producao_exige_cryptography (tests.test_producao.TestOperacao.test_producao_exige_cryptography) ... ok
 test_producao_recusa_sem_chave (tests.test_producao.TestOperacao.test_producao_recusa_sem_chave) ... ok
 test_01_health_completo (tests.test_producao.TestSeguranca.test_01_health_completo) ... ok
 test_02_dois_fatores_ponta_a_ponta (tests.test_producao.TestSeguranca.test_02_dois_fatores_ponta_a_ponta) ... ok
@@ -71,10 +72,10 @@ test_03_limite_persiste_entre_reinicios (tests.test_producao.TestSeguranca.test_
 test_04_cabecalhos_csp_e_estaticos (tests.test_producao.TestSeguranca.test_04_cabecalhos_csp_e_estaticos) ... ok
 test_05_nuvem_cifrada_e_conflito (tests.test_producao.TestSeguranca.test_05_nuvem_cifrada_e_conflito) ... ok
 test_06_snapshot_e_pedido_cifrados_e_link_de_convite (tests.test_producao.TestSeguranca.test_06_snapshot_e_pedido_cifrados_e_link_de_convite) ... ok
-test_07_erro_interno_registrado_sem_vazar (tests.test_producao.TestSeguranca.test_07_erro_interno_registrado_sem_vazar) ... {"t": "2026-11-14T11:14:29+00:00", "nivel": "erro", "rota": "/api/health", "tipo": "ZeroDivisionError", "detalhe": "ZeroDivisionError: division by zero"}
+test_07_erro_interno_registrado_sem_vazar (tests.test_producao.TestSeguranca.test_07_erro_interno_registrado_sem_vazar) ... {"t": "2026-11-21T20:09:28+00:00", "nivel": "erro", "rota": "/api/health", "tipo": "ZeroDivisionError", "detalhe": "ZeroDivisionError: division by zero"}
 ok
 
 ----------------------------------------------------------------------
-Ran 57 tests in 9.742s
+Ran 58 tests in 8.943s
 
 OK

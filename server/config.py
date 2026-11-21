@@ -71,6 +71,9 @@ class Config:
         # criptografia dos dados guardados (obrigatória em produção)
         self.chave = env("AGORA_CHAVE")
         self.chaves_antigas = [c for c in env("AGORA_CHAVES_ANTIGAS").split(",") if c.strip()]
+        # Em produção a cifra usa a biblioteca mantida `cryptography`. A implementação em Python puro existe
+        # para desenvolvimento e testes; liberar em produção só com esta variável (não recomendado).
+        self.permitir_cifra_python = env("AGORA_PERMITIR_CIFRA_PYTHON", "0") == "1"
         # responsável técnico (aparece em todo serviço psicológico anunciado)
         self.responsavel_nome = env("AGORA_RESPONSAVEL_NOME", "Deivison Mendes")
         self.responsavel_crp = env("AGORA_RESPONSAVEL_CRP", "CRP-04/65709")
@@ -103,6 +106,8 @@ class Config:
         """Cofre de criptografia. Em produção exige AGORA_CHAVE; fora dela cria uma chave local."""
         import cripto
         antigas = [cripto.chave_de_texto(c) for c in self.chaves_antigas]
+        if self.producao and cripto._CC20 is None and not self.permitir_cifra_python:
+            raise SystemExit("Produção exige o pacote cryptography (biblioteca mantida e auditada). Instale com:  pip install cryptography")
         if self.chave:
             return cripto.Cofre(cripto.chave_de_texto(self.chave), antigas)
         if self.producao:
@@ -122,6 +127,12 @@ class Config:
         faltas = []
         if not self.chave:
             faltas.append("AGORA_CHAVE (criptografia dos dados)")
+        try:
+            import cripto
+            if cripto._CC20 is None and not self.permitir_cifra_python:
+                faltas.append("pacote cryptography (pip install cryptography)")
+        except Exception:
+            pass
         if not self.url_publica.startswith("https://"):
             faltas.append("AGORA_URL_PUBLICA com https://")
         if self.provedor == "simulado":

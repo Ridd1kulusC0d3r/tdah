@@ -1,10 +1,10 @@
-# Agora — especificação do produto (v2.0)
+# Agora — especificação do produto (v2.1)
 
 Documento de produto e engenharia. O manual ilustrado (`docs/manual.html`) explica o uso; este arquivo explica **o que foi construído, por quê e o que vem depois**.
 
 ## 1. Tese
 
-Apps de TDAH resolvem pedaços (timer, lista, rotina, humor) e deixam o profissional de fora. O Dietbox mostrou, na nutrição, que o modelo **profissional assina e prescreve, paciente usa de graça** funciona. Para TDAH não existe equivalente no Brasil.
+Apps de TDAH resolvem pedaços (timer, lista, rotina, humor) e deixam o profissional de fora. O Dietbox mostrou, na nutrição, que o modelo **profissional assina e prescreve, paciente usa de graça** funciona. Ainda falta uma pesquisa de mercado que mostre se já existe algo equivalente para TDAH no Brasil.
 
 O Agora junta as duas coisas:
 
@@ -147,26 +147,35 @@ Consentimento → campos enviados: `checkins`→checkins · `foco`→sessions ·
 
 **Métricas de produto:** ativação (1ª sessão de foco no dia 1), dias com diário por semana, minutos de foco por semana, retenção D1/D7/D30, conversão para Plus, pedidos de contato, adesão a rotinas prescritas.
 
-## 9. Roadmap
+## 9. Estado de cada parte (tabela única, 21/11/2026)
 
-| Versão | Item | Observação |
-|---|---|---|
-| 1.1 | Notificações (hora da rotina, lembrete do diário) | Exige HTTPS e serviço de push |
-| 1.1 | Pagamento do Plus (Pix e cartão) | Mercado Pago ou Stripe |
-| 1.1 | Hospedagem com HTTPS | Caddy ou Nginx na frente do `server.py`; HTTPS também libera instalar o PWA no celular fora da rede local |
-| 1.2 | Apps nas lojas | Empacotar o PWA (Capacitor/TWA) |
-| 1.2 | Sono e passos automáticos | Health Connect (Android) e HealthKit (iOS) |
-| 1.2 | Quebrar tarefa com IA (opcional, opt-in) | Sempre editável pelo usuário |
-| 1.3 | Bloqueio de apps distrativos | Só em app nativo |
-| 1.3 | Clínica com vários profissionais, 2FA, criptografia em repouso, exportação LGPD | — |
-| 1.3 | Pacotes de rotinas (casa, estudo, trabalho) | Inspirado no Sweepy |
+Esta é a única fonte de verdade sobre o que existe. **Implementado** = código e testes automáticos no repositório. **Simulado** = funciona contra um provedor de teste ou falso, sem conta real. **Homologado** = testado com a conta real do provedor. **Publicado** = no ar para o público.
 
-## 10. Limites conhecidos da v1.2
+| Parte | Implementado | Simulado | Homologado | Publicado |
+|---|---|---|---|---|
+| App do paciente (tarefas, cursos, rotinas, foco, diário, painel, relatório) | Sim | — | — | Protótipo estático pronto, aguardando hospedagem |
+| Preparar minha próxima sessão (roteiro, seleção, prévia, envio) | Sim (2.1) | — | — | Protótipo (sem o envio) |
+| Importar cursos (Lista Magna, painéis .html, planilhas) | Sim (2.1) | — | — | Protótipo |
+| Fim do foco com avanço parcial e "onde parei" | Sim (2.1) | — | — | Protótipo |
+| Triagem ASRS | Sim, **desligada** | — | — | Não: falta o texto brasileiro validado e a licença |
+| Contas, vínculo, consentimento, prescrições, resumo para a sessão | Sim | — | — | Não |
+| Painel do psicólogo | Sim | — | — | Não (protótipo mostra convite para o piloto) |
+| Pagamentos Mercado Pago e Stripe (assinatura, Pix, avulsos, estorno) | Sim | Sim (transporte falso nos testes) | Não | Não |
+| Google Play Billing | Sim (servidor) | Sim | Não | Não |
+| Catálogo, interesse, turmas, missões, e-books, administração | Sim | — | — | Catálogo em vitrine no protótipo |
+| E-mail (senha, confirmações, sequência de conteúdo) | Sim | Sim (caixa de saída local) | Não | Não |
+| Web Push | Sim | Sim (assinatura VAPID conferida; sem entrega real) | Não | Não |
+| Backup cifrado + S3 | Sim | Sim (envio falso nos testes) | Não | Não |
+| Cifra dos dados | Sim (`cryptography` obrigatória em produção) | — | — | Não |
+| App Android (Capacitor) | Projeto pronto | — | Build nunca rodou (Actions bloqueado por cobrança da conta) | Não |
+| Testes no GitHub Actions | Workflows prontos | — | Não rodaram (cobrança da conta) | — |
 
-- Sincronização é de mão única para dados (paciente → clínica) e de volta só para prescrições. Usar dois aparelhos com a mesma conta ainda não mescla históricos (fica para o Plus).
-- As datas do resumo de adesão usam o fuso do servidor; servidor e pacientes devem estar no mesmo fuso.
-- No navegador, lembretes só aparecem com o app aberto (Web Push com servidor fica para a próxima versão). No Android, chegam com o app fechado.
-- Pagamentos estão prontos mas foram testados com transporte simulado: falta a homologação com as contas reais do Mercado Pago ou do Stripe (ver o plano de implementação).
-- O build nativo do Android não foi compilado neste ambiente (sem Android SDK); ele roda no GitHub Actions.
-- Assinatura do Mercado Pago sem plano associado foi implementada no modo "pending" com redirecionamento ao init_point; confirmar na homologação se a conta aceita esse fluxo sem card_token_id.
-- O servidor embutido do Python atende bem uma clínica; para centenas de usuários simultâneos, trocar por um servidor de produção.
+## 10. Limites conhecidos e próximos passos
+
+- **Triagem:** trocar a redação de trabalho pela versão brasileira validada da ASRS-18 (OMS), conferir a licença e só então ligar `AGORA_CONFIG.triagem = true`.
+- **Sincronização:** em conflito, a pessoa escolhe qual versão vale; a outra fica guardada no aparelho (até 3 cópias) e pode ser restaurada. Ainda não há mesclagem de históricos.
+- **Afirmações de mercado:** nenhuma afirmação de exclusividade ("não existe equivalente", "nenhum concorrente") até haver pesquisa que a sustente.
+- **Catálogo no app:** o app mostra só a linha "Para você". Empresas e psicólogos têm páginas próprias no site.
+- O servidor embutido do Python atende uma clínica; para centenas de usuários simultâneos, trocar por um servidor de produção.
+- As datas do resumo de adesão usam o fuso do servidor.
+- Ordem de validação externa: GitHub Actions (resolver cobrança) → homologar pagamento com R$ 1 → e-mail real → build Android em aparelho real → push real.

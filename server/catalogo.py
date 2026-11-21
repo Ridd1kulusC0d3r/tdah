@@ -88,11 +88,12 @@ class Catalogo:
             return bool(v.get("android")) or v.get("modo") in ("interesse", "proposta")
         return True
 
-    def publico(self, plataforma="web", vinculado=False):
+    def publico(self, plataforma="web", vinculado=False, linhas=None):
+        """linhas: restringe a linhas do catálogo (o app do paciente pede só "pessoas"; empresas e psicólogos ficam no site)."""
         resp = self.responsavel()
         itens = []
         for it in self.dados["itens"]:
-            if not self.visivel(it, plataforma, vinculado):
+            if not self.visivel(it, plataforma, vinculado) or (linhas and it.get("linha") not in linhas):
                 continue
             v = it.get("venda") or {}
             marca = self.dados.get("marcas", {}).get(it.get("marca"), {})

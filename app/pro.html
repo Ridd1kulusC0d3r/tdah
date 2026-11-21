@@ -187,7 +187,7 @@ async function carregar(manterId) {
   const id = manterId || ATUAL_ID || LISTA.pacientes[0]?.id;
   if (id) await abrir(id, true); else desenhar();
 }
-function atencao(p) { const a = p.adesao7; return (p.pedidosContato ? 10 : 0) + (a.humorBaixoDias >= 3 ? 5 : 0) + (a.diasComCheckin <= 2 ? 2 : 0); }
+function atencao(p) { const a = p.adesao7; return (p.pedidosContato ? 10 : 0) + (p.preparosNovos ? 6 : 0) + (a.humorBaixoDias >= 3 ? 5 : 0) + (a.diasComCheckin <= 2 ? 2 : 0); }
 function desenhar() {
   const ps = [...LISTA.pacientes].sort((a, b) => atencao(b) - atencao(a) || a.nome.localeCompare(b.nome));
   $("#app").innerHTML = `<div class="wrap"><aside class="stack">
@@ -195,7 +195,7 @@ function desenhar() {
       <p class="small muted">Ordenados por quem pede atenção primeiro.</p>
       <div class="stack" style="gap:4px">${ps.map(p => { const a = p.adesao7; return `<button class="pt" data-id="${p.id}" aria-current="${p.id === ATUAL_ID}">
         <b>${esc(p.nome)}</b><span class="small muted">${p.atualizadoEm ? "sync " + fmtTS(p.atualizadoEm) : "sem dados"}</span>
-        <span class="meta">${p.pedidosContato ? `<span class="pill hot">pediu contato</span>` : ""}
+        <span class="meta">${p.pedidosContato ? `<span class="pill hot">pediu contato</span>` : ""}${p.preparosNovos ? `<span class="pill hot">enviou preparo</span>` : ""}
         <span class="pill ${a.diasComCheckin >= 5 ? "good" : a.diasComCheckin >= 3 ? "warn" : "bad"}">diário ${a.diasComCheckin}/7</span>
         <span class="pill">${a.minutosFoco} min foco</span>${a.humorBaixoDias >= 3 ? `<span class="pill bad">humor baixo ${a.humorBaixoDias}d</span>` : ""}</span></button>`; }).join("") || `<p class="muted small">Nenhum paciente vinculado ainda. Use "Convidar paciente".</p>`}</div></div>
     ${cartaoPlano()}
@@ -305,6 +305,8 @@ function ficha() {
       <div class="kpi"><span class="label">Atividade 7d</span><b>${c.checkins ? a.atividadeTotal + "′" : "–"}</b></div>
       <div class="kpi"><span class="label">Rotinas 7d</span><b>${c.rotinas ? a.rotinasConcluidas : "–"}</b></div>
     </div>
+    ${(p.preparos || []).map(x => `<details class="card prep" ${x.visto ? "" : "open"}><summary><b>Preparo para a sessão</b> · enviado em ${fmtTS(x.criado_em)}${x.visto ? "" : ` <span class="pill hot">novo</span>`}</summary>
+      <pre class="small" style="white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--f-mono,monospace)">${esc(x.texto)}</pre>${x.visto ? "" : `<button class="btn sm" data-prepvisto="${x.id}">Marcar como lido</button>`}</details>`).join("")}
     ${p.pedidos.filter(x => !x.visto).map(x => `<div class="note row" style="justify-content:space-between"><span><b>Pediu contato</b> em ${fmtTS(x.criado_em)}${x.motivo ? ": " + esc(x.motivo) : ""}</span><button class="btn sm" data-visto="${x.id}">Marcar como visto</button></div>`).join("")}
     <div class="card stack"><div class="row" style="justify-content:space-between"><h3>Últimos 28 dias</h3><div class="legend"><span style="--c:var(--accent)">foco (min)</span><span style="--c:var(--m1)">humor 1–5</span><span style="--c:var(--m2)">sono (0–12 h)</span></div></div>
       <div class="chart">${(c.checkins || c.foco) ? grafico(s28) : `<p class="muted small">O paciente não liberou diário nem foco.</p>`}</div></div>
@@ -334,6 +336,7 @@ function ficha() {
 function ligarFicha() {
   $$("[data-aba]").forEach(b => b.onclick = () => { ABA = b.dataset.aba; desenhar(); });
   $$("[data-visto]").forEach(b => b.onclick = async () => { await api("pro/pedidos/" + b.dataset.visto + "/visto", {}); carregar(ATUAL_ID); });
+  $$("[data-prepvisto]").forEach(b => b.onclick = async () => { await api("pro/preparos/" + b.dataset.prepvisto + "/visto", {}); carregar(ATUAL_ID); });
   $$("[data-arq]").forEach(b => b.onclick = async () => { await api("pro/prescricoes/" + b.dataset.arq + "/arquivar", {}); toast("Arquivada."); abrir(ATUAL_ID); });
   const cp = $("#cpres"); if (cp) cp.onclick = () => { const t = $("#resumo"); t.select(); navigator.clipboard?.writeText(t.value).then(() => toast("Copiado.")).catch(() => {}); };
   let tipo = "rotina";

@@ -1,1 +1,1 @@
-57 testes ok (2 pulados: comparam com a própria cryptography)
+58 testes ok (2 pulados: comparam com a própria cryptography)
