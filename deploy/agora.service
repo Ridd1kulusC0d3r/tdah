@@ -1,0 +1,20 @@
+# Alternativa sem Docker (systemd). Copie para /etc/systemd/system/agora.service,
+# ajuste os caminhos e rode: sudo systemctl enable --now agora
+[Unit]
+Description=Agora TDAH
+After=network-online.target
+
+[Service]
+User=agora
+WorkingDirectory=/opt/agora-tdah
+EnvironmentFile=/opt/agora-tdah/.env
+Environment=AGORA_HOST=127.0.0.1 AGORA_ATRAS_DE_PROXY=1
+ExecStart=/usr/bin/python3 /opt/agora-tdah/server/server.py --db /var/lib/agora/agora.db
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/agora
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

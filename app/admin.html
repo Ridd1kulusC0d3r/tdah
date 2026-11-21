@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agora · Administração</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* Layout: administração. Abas no topo; cada aba é uma lista/tabela sobre papel pedra. Mesma linguagem do painel clínico. */
+:root{
+  --bg:#edefea; --surface:#fff; --sunk:#e3e6df; --ink:#18211d; --muted:#59645f; --line:#d5d9d1;
+  --accent:#0b6b57; --accent-ink:#fff; --accent-soft:#ffe977; --hl:#ffe977; --hot:#b42318; --hot-soft:#f9e3df;
+  --good:#2e7d32; --warn:#946200; --bad:#b42318;
+  --m1:#5b6cb8; --m2:#8e9bd3; --m3:#9aa3ab; --m4:#f2c94c; --m5:#ee8f2a;
+  --f-display:"Atkinson Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-body:"Atkinson Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:var(--f-body);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111513; --surface:#191e1b; --sunk:#232925; --ink:#e7ebe6; --muted:#9aa49e; --line:#2c332f;
+  --accent:#4fbf9f; --accent-ink:#06150f; --accent-soft:#3d3a1c; --hl:#5b5222; --hot:#ff8a7a; --hot-soft:#3a201c;
+  --good:#7ad083; --warn:#e9c25a; --bad:#ff8a7a;
+  --m1:#8c9cf0; --m2:#a9b4f2; --m3:#a9b2ba; --m4:#f2cf63; --m5:#f5a24a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111513; --surface:#191e1b; --sunk:#232925; --ink:#e7ebe6; --muted:#9aa49e; --line:#2c332f;
+  --accent:#4fbf9f; --accent-ink:#06150f; --accent-soft:#3d3a1c; --hl:#5b5222; --hot:#ff8a7a; --hot-soft:#3a201c;
+  --good:#7ad083; --warn:#e9c25a; --bad:#ff8a7a;
+  --m1:#8c9cf0; --m2:#a9b4f2; --m3:#a9b2ba; --m4:#f2cf63; --m5:#f5a24a; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:780;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:1.6rem}h2{font-size:1.22rem}h3{font-size:1rem;letter-spacing:-.01em}
+p{margin:0}
+.muted{color:var(--muted)}.small{font-size:.86rem}
+.label{font-size:.84rem;font-weight:600;color:var(--muted)}
+.mono{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(16px,3vw,32px);border-bottom:1px solid var(--line);background:var(--bg);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px}
+.brand b{font:800 1.3rem/1 var(--f-display);letter-spacing:-.03em}
+.brand i{font-style:normal;font-size:.82rem;font-weight:600;color:var(--muted)}
+.wrap{padding-block:22px 40px;padding-inline:clamp(16px,3vw,32px);display:grid;grid-template-columns:minmax(300px,370px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.stack{display:grid;gap:12px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);padding:8px 14px;font-weight:650;cursor:pointer;min-height:40px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{background:color-mix(in srgb,var(--accent) 88%,var(--ink))}
+.btn.ghost{border-color:transparent;color:var(--muted);background:transparent}
+.btn.ghost:hover{background:var(--sunk);color:var(--ink)}
+.btn.sm{min-height:32px;padding:4px 10px;font-size:.85rem}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;min-height:42px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+textarea{min-height:90px;resize:vertical}
+label.f{display:grid;gap:5px;font-weight:650;font-size:.88rem}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:2px 8px;font-size:.76rem;font-weight:650;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.pill.good{color:var(--good)}.pill.warn{color:var(--warn)}.pill.bad{color:var(--bad)}.pill.hot{background:var(--hot-soft);color:var(--hot)}
+.pt{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:12px;border-radius:10px;border:1px solid transparent;cursor:pointer;text-align:left;background:none;width:100%}
+.pt:hover{background:var(--sunk)}
+.pt[aria-current="true"]{border-color:var(--ink);background:var(--surface)}
+.pt[aria-current="true"] b{background:linear-gradient(100deg,transparent .15em,var(--hl) .15em,var(--hl) calc(100% - .1em),transparent calc(100% - .1em)) 0 64% / 100% 48% no-repeat}
+.pt b{justify-self:start}
+.pt .meta{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+.flag{width:9px;height:9px;border-radius:50%;display:inline-block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font:750 1.6rem/1.1 var(--f-display);letter-spacing:-.02em}
+.chart{overflow-x:auto}.chart svg{display:block;width:100%;min-width:520px;height:auto}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:var(--c)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+th{font-size:.8rem;font-weight:650;color:var(--muted)}
+td.n{font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.code{font:780 2.1rem/1 var(--f-display);letter-spacing:.16em;user-select:all;color:var(--ink);background:var(--hl);padding:6px 10px;border-radius:6px;display:inline-block}
+.note{border-left:3px solid var(--accent);background:var(--surface);padding:10px 14px;border-radius:0 10px 10px 0}
+.empty{display:grid;gap:10px;justify-items:start;padding:28px}
+.caixa{position:fixed;inset:auto 16px 16px auto;z-index:8;width:min(400px,calc(100% - 32px));max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 10px 30px rgb(0 0 0 / .2)}
+.caixa input[readonly]{width:100%}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:650;z-index:9;max-width:calc(100% - 32px)}
+.auth{max-width:440px;margin:44px auto;padding-inline:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.adm{padding:20px clamp(16px,3vw,32px) 48px;display:grid;gap:18px;max-width:1240px;margin-inline:auto}
+.meta-bar{height:12px;border-radius:99px;background:var(--sunk);overflow:hidden}.meta-bar i{display:block;height:100%;background:var(--accent)}
+.funil{display:grid;gap:6px}.funil .lin{display:grid;grid-template-columns:minmax(130px,200px) 1fr auto;gap:10px;align-items:center;font-size:.9rem}
+.funil .b{height:10px;border-radius:4px;background:var(--accent);min-width:2px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start}
+.grid2 > .card,.stack{align-content:start}
+td.n{white-space:nowrap}
+td select{min-height:34px;padding:4px 8px}
+td input{min-height:34px;padding:4px 8px;max-width:120px}
+.msg{max-width:340px;white-space:pre-wrap;overflow-wrap:anywhere}
+details summary{cursor:pointer}
+</style>
+</head>
+<body>
+<header><div class="brand"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 16 L16 5 A11 11 0 0 1 26.4 12.6 Z" fill="var(--accent)"/></svg><b>Agora</b><i>Administração</i></div>
+<div class="row" id="who"></div></header>
+<main id="app"></main>
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const reais = v => "R$ " + ((v || 0) / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const data = s => s ? new Date(s.length <= 10 ? s + "T12:00" : s).toLocaleDateString("pt-BR") : "–";
+const dataHora = s => s ? new Date(s).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "–";
+const KEY = "agora.pro.token";
+let TOKEN = null; try { TOKEN = localStorage.getItem(KEY); } catch {}
+let ABA = "resumo";
+const ABAS = [["resumo", "Resumo"], ["interesses", "Contatos"], ["turmas", "Turmas"], ["compras", "Compras"], ["catalogo", "Catálogo"], ["erros", "Erros"]];
+const NOMES_FUNIL = { site_visita: "Visitas ao site", site_comecar: "Página Começar", site_servicos: "Serviços no site", ver_servicos: "Abriu Serviços no app", abrir_item: "Abriu um serviço", clicar_interesse: "Tocou em Tenho interesse", enviar_interesse: "Enviou contato", clicar_comprar: "Tocou em Comprar", ver_turmas: "Viu turmas", instalar_app: "Instalou o app" };
+const STATUS = { novo: "Novo", contatado: "Contatado", agendado: "Agendado", convertido: "Virou cliente", sem_resposta: "Sem resposta", descartado: "Descartado" };
+
+function toast(m) { $$(".toast").forEach(x => x.remove()); const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
+async function api(caminho, corpo) {
+  const r = await fetch("/api/" + caminho, { method: corpo ? "POST" : "GET", headers: Object.assign({ "Content-Type": "application/json" }, TOKEN ? { Authorization: "Bearer " + TOKEN } : {}), body: corpo ? JSON.stringify(corpo) : undefined });
+  const j = await r.json().catch(() => ({ erro: "Resposta inválida do servidor." }));
+  if (r.status === 401 && TOKEN && !corpo?.senha) { sair(true); }
+  if (!r.ok) { const e = new Error(j.erro || "Falha na conexão."); e.status = r.status; e.extra = j; throw e; }
+  return j;
+}
+function sair(expirou) { TOKEN = null; try { localStorage.removeItem(KEY); } catch {} login(); if (expirou) toast("Sessão expirada. Entre de novo."); }
+
+function login() {
+  $("#who").innerHTML = "";
+  $("#app").innerHTML = `<div class="auth card stack"><h1>Administração</h1><p class="small muted">Use a conta de profissional marcada como administradora (python3 server/admin.py promover EMAIL).</p>
+    <label class="f" for="email">E-mail<input id="email" type="email" autocomplete="email"></label>
+    <label class="f" for="senha">Senha<input id="senha" type="password" autocomplete="current-password"></label>
+    <label class="f" for="codigo">Código do app autenticador<input id="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="9"></label>
+    <button class="btn primary" id="go">Entrar</button><p id="err" class="small" style="color:var(--bad)" role="alert"></p></div>`;
+  const go = async () => { try { const r = await api("entrar", { email: $("#email").value, senha: $("#senha").value, codigo: $("#codigo").value });
+      TOKEN = r.token; try { localStorage.setItem(KEY, TOKEN); } catch {} iniciar(); } catch (e) { $("#err").textContent = e.message; } };
+  $("#go").onclick = go; $("#codigo").addEventListener("keydown", e => e.key === "Enter" && go());
+}
+async function iniciar() {
+  let eu; try { eu = await api("eu"); } catch { return login(); }
+  $("#who").innerHTML = `<span class="small">${esc(eu.nome)}</span><a class="btn sm ghost" href="pro.html">Painel clínico</a><button class="btn sm ghost" id="out">Sair</button>`;
+  $("#out").onclick = async () => { try { await api("sair", {}); } catch {} sair(); };
+  if (!eu.admin) { $("#app").innerHTML = `<div class="auth card stack"><h1>Sem acesso</h1><p>Esta conta não é administradora. Peça para quem cuida do servidor rodar <span class="mono">python3 server/admin.py promover ${esc(eu.email)}</span>.</p></div>`; return; }
+  if (eu.exige2fa) return ativar2fa();
+  desenhar();
+}
+async function ativar2fa() {
+  let r; try { r = await api("2fa/iniciar", {}); } catch (e) { $("#app").innerHTML = `<div class="auth card"><p>${esc(e.message)}</p></div>`; return; }
+  $("#app").innerHTML = `<div class="auth card stack"><h1>Ligue a verificação em duas etapas</h1>
+    <p class="small">A administração mostra contatos, pagamentos e turmas. Por isso ela só abre com senha + código do celular.</p>
+    <p class="small">${esc(r.instrucao)}</p><span class="code" style="font-size:1rem;letter-spacing:.08em;overflow-wrap:anywhere">${esc(r.segredo.match(/.{1,4}/g).join(" "))}</span>
+    <a class="btn sm" href="${esc(r.uri)}">Abrir no app autenticador deste aparelho</a>
+    <label class="f" for="c2">Código de 6 dígitos<input id="c2" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label>
+    <button class="btn primary" id="ok">Ligar e continuar</button><div id="rec"></div></div>`;
+  $("#ok").onclick = async () => { try { const x = await api("2fa/ativar", { codigo: $("#c2").value });
+    $("#rec").innerHTML = `<div class="note"><b>Guarde estes códigos de recuperação fora do celular.</b><pre class="small" style="user-select:all;white-space:pre-wrap">${x.recuperacao.join("\n")}</pre></div><button class="btn primary" id="seg">Já guardei, continuar</button>`;
+    $("#ok").remove(); $("#seg").onclick = desenhar; } catch (e) { toast(e.message); } };
+}
+function desenhar() {
+  $("#app").innerHTML = `<div class="adm"><div class="tabs" role="tablist">${ABAS.map(([k, n]) => `<button class="btn sm" role="tab" data-aba="${k}" aria-pressed="${ABA === k}">${n}</button>`).join("")}</div><div id="conteudo" class="stack"><p class="muted">Carregando...</p></div></div>`;
+  $$("[data-aba]").forEach(b => b.onclick = () => { ABA = b.dataset.aba; try { history.replaceState(null, "", "#" + ABA); } catch {} desenhar(); });
+  ({ resumo, interesses, turmas, compras, catalogo, erros })[ABA]().catch(e => { $("#conteudo").innerHTML = `<div class="card"><p>${esc(e.message)}</p></div>`; });
+}
+const C = () => $("#conteudo");
+
+async function resumo() {
+  const r = await api("admin/resumo");
+  const receita = r.receitaTotal30, pct = Math.min(100, Math.round(100 * receita / r.meta));
+  const f = r.funil30, maxF = Math.max(1, ...Object.values(f));
+  const ordem = Object.keys(NOMES_FUNIL).filter(k => f[k]);
+  C().innerHTML = `
+    <section class="card stack"><div class="row" style="justify-content:space-between"><h2>Receita dos últimos 30 dias</h2><span class="small muted">meta ${reais(r.meta)}/mês</span></div>
+      <b style="font:780 2.2rem/1 var(--f-display)">${reais(receita)}</b><div class="meta-bar" aria-label="${pct}% da meta"><i style="width:${pct}%"></i></div>
+      <p class="small muted">${pct}% da meta · assinaturas recorrentes somam ${reais(r.recorrenteMensal)}/mês${r.estornos30 ? ` · estornos ${reais(r.estornos30)}` : ""}</p></section>
+    <div class="kpis">
+      <div class="kpi"><span class="label">Pacientes</span><b>${r.usuarios.paciente || 0}</b></div><div class="kpi"><span class="label">Profissionais</span><b>${r.usuarios.profissional || 0}</b></div>
+      <div class="kpi"><span class="label">Contas novas (30 d)</span><b>${r.novos30}</b></div><div class="kpi"><span class="label">Ativos (7 d)</span><b>${r.ativos7}</b></div>
+      <div class="kpi"><span class="label">Contatos novos</span><b>${r.interessesNovos}</b></div><div class="kpi"><span class="label">Turmas abertas</span><b>${r.turmasAbertas}</b></div>
+      <div class="kpi"><span class="label">Erros (7 d)</span><b style="color:${r.erros7 ? "var(--bad)" : "inherit"}">${r.erros7}</b></div></div>
+    <div class="grid2">
+      <section class="card stack"><h2>Funil (30 dias, anônimo)</h2>${ordem.length ? `<div class="funil">${ordem.map(k => `<div class="lin"><span>${NOMES_FUNIL[k]}</span><span class="b" style="width:${100 * f[k] / maxF}%"></span><span class="mono">${f[k]}</span></div>`).join("")}</div>` : `<p class="small muted">Sem eventos ainda.</p>`}</section>
+      <section class="card stack"><h2>Receita por produto (30 dias)</h2><div class="tablewrap"><table><thead><tr><th>Produto</th><th>Vendas</th><th>Total</th></tr></thead><tbody>
+        ${r.receita30.map(x => `<tr><td>${esc(x.nome || x.plano)}</td><td class="n">${x.n}</td><td class="n">${reais(x.total)}</td></tr>`).join("") || `<tr><td colspan="3" class="muted">Nenhuma venda no período.</td></tr>`}</tbody></table></div>
+        <p class="small muted">Checkouts abertos: ${r.checkouts30.aberto || 0} · pagos: ${r.checkouts30.pago || 0} · recusados: ${r.checkouts30.recusado || 0}</p></section>
+      <section class="card stack"><h2>Assinaturas ativas</h2>${r.assinaturasAtivas.map(a => `<div class="row" style="justify-content:space-between"><span>${esc(a.nome || a.plano)}</span><b>${a.n}</b></div>`).join("") || `<p class="small muted">Nenhuma.</p>`}</section>
+    </div>`;
+}
+
+async function interesses() {
+  const r = await api("admin/interesses");
+  C().innerHTML = `<section class="card stack"><div class="row" style="justify-content:space-between"><h2>Contatos de interesse</h2><span class="small muted">mensagens cifradas no banco; apagadas após o prazo de retenção</span></div>
+    <div class="tablewrap"><table><thead><tr><th>Quando</th><th>Serviço</th><th>Pessoa</th><th>Mensagem</th><th>Origem</th><th>Situação</th></tr></thead><tbody>
+    ${r.interesses.map(i => `<tr><td>${dataHora(i.criado_em)}</td><td>${esc(i.itemNome)}</td>
+      <td><b>${esc(i.nome)}</b><br><a href="mailto:${esc(i.email)}">${esc(i.email)}</a>${i.contato ? `<br><span class="small">${esc(i.contato)}</span>` : ""}${i.marketing ? `<br><span class="pill">aceita conteúdo</span>` : ""}</td>
+      <td class="msg small">${esc(i.mensagem || "")}</td><td class="small">${esc(i.origem || "")}</td>
+      <td><select data-st="${i.id}" aria-label="Situação">${r.status.map(s => `<option value="${s}" ${s === i.status ? "selected" : ""}>${STATUS[s] || s}</option>`).join("")}</select></td></tr>`).join("") || `<tr><td colspan="6" class="muted">Nenhum contato ainda.</td></tr>`}
+    </tbody></table></div></section>`;
+  $$("[data-st]").forEach(s => s.onchange = async () => { try { await api("admin/interesses/" + s.dataset.st + "/status", { status: s.value }); toast("Situação atualizada."); } catch (e) { toast(e.message); } });
+}
+
+async function turmas() {
+  const r = await api("admin/turmas");
+  C().innerHTML = `<section class="card stack"><h2>Nova turma</h2>
+    <div class="grid2"><label class="f">Programa<select id="tItem">${r.itens.map(i => `<option value="${esc(i.id)}">${esc(i.nome)}</option>`).join("")}</select></label>
+      <label class="f">Nome da turma<input id="tNome" placeholder="ex.: Março · terças 19h"></label>
+      <label class="f">Início<input id="tIni" type="date"></label><label class="f">Fim<input id="tFim" type="date"></label>
+      <label class="f">Encontros<input id="tEnc" placeholder="ex.: 8 encontros semanais de 90 min"></label><label class="f">Local<input id="tLoc" placeholder="Online ou endereço"></label>
+      <label class="f">Vagas<input id="tVag" type="number" min="1" value="12"></label><label class="f">Preço em reais (vazio = do catálogo)<input id="tPre" type="number" min="0" step="1"></label>
+      <label class="f">Link da sala (só confirmados veem)<input id="tLink" type="url" placeholder="https://"></label></div>
+    <p class="small muted">Programas da Lume (treino de habilidades sociais) já vêm com as 8 missões semanais.</p>
+    <div class="row"><button class="btn primary" id="tCriar">Criar turma</button></div></section>
+    <section class="card stack"><h2>Turmas</h2><div class="tablewrap"><table><thead><tr><th>Turma</th><th>Início</th><th>Vagas</th><th>Espera</th><th>Preço</th><th></th></tr></thead><tbody>
+    ${r.turmas.map(t => `<tr><td><b>${esc(t.itemNome)}</b><br>${esc(t.nome)}${t.ativo ? "" : ` <span class="pill">encerrada</span>`}</td><td>${data(t.inicio)}</td><td class="n">${t.vagas - t.restam}/${t.vagas}</td><td class="n">${t.espera}</td><td class="n">${t.preco ? reais(t.preco) : "–"}</td>
+      <td><div class="row"><button class="btn sm" data-insc="${t.id}">Inscritos</button><button class="btn sm ghost" data-av="${t.id}">Avisar</button><button class="btn sm ghost" data-vag="${t.id}" data-v="${t.vagas}">Vagas</button><button class="btn sm ghost" data-at="${t.id}" data-a="${t.ativo ? 0 : 1}">${t.ativo ? "Encerrar" : "Reabrir"}</button></div></td></tr>`).join("") || `<tr><td colspan="6" class="muted">Nenhuma turma.</td></tr>`}
+    </tbody></table></div><div id="det"></div></section>`;
+  $("#tCriar").onclick = async () => {
+    const pre = $("#tPre").value;
+    try { await api("admin/turmas", { item: $("#tItem").value, nome: $("#tNome").value, inicio: $("#tIni").value, fim: $("#tFim").value, encontros: $("#tEnc").value,
+      local: $("#tLoc").value, vagas: +$("#tVag").value || 12, preco: pre === "" ? null : Math.round(+pre * 100), link: $("#tLink").value }); toast("Turma criada."); turmas(); } catch (e) { toast(e.message); } };
+  $$("[data-insc]").forEach(b => b.onclick = async () => { const x = await api("admin/turmas/" + b.dataset.insc + "/inscritos");
+    $("#det").innerHTML = `<h3>Inscritos</h3><div class="tablewrap"><table><thead><tr><th>Pessoa</th><th>Situação</th><th>Missões</th><th>Desde</th></tr></thead><tbody>${x.inscritos.map(i => `<tr><td><b>${esc(i.nome)}</b><br><a href="mailto:${esc(i.email)}">${esc(i.email)}</a></td><td>${esc(i.status)}</td><td class="n">${i.missoes}/${x.missoesTotal}</td><td>${data(i.criado_em)}</td></tr>`).join("") || `<tr><td colspan="4" class="muted">Ninguém ainda.</td></tr>`}</tbody></table></div>`; });
+  $$("[data-av]").forEach(b => b.onclick = () => { $("#det").innerHTML = `<h3>Aviso para os confirmados</h3><textarea id="avT" placeholder="ex.: O encontro desta semana muda para quinta, 19h."></textarea><div class="row"><button class="btn primary sm" id="avOk">Enviar por e-mail e notificação</button></div>`;
+    $("#avOk").onclick = async () => { try { const x = await api("admin/turmas/" + b.dataset.av + "/avisar", { texto: $("#avT").value }); toast(`Aviso enviado a ${x.enviados} pessoa(s).`); $("#det").innerHTML = ""; } catch (e) { toast(e.message); } }; });
+  $$("[data-vag]").forEach(b => b.onclick = async () => { const n = prompt("Total de vagas:", b.dataset.v); if (n === null) return; try { await api("admin/turmas/" + b.dataset.vag, { vagas: +n }); toast("Vagas atualizadas. Se abriu vaga, o primeiro da espera foi avisado."); turmas(); } catch (e) { toast(e.message); } });
+  $$("[data-at]").forEach(b => b.onclick = async () => { try { await api("admin/turmas/" + b.dataset.at, { ativo: b.dataset.a === "1" }); turmas(); } catch (e) { toast(e.message); } });
+}
+
+async function compras() {
+  const r = await api("admin/compras");
+  C().innerHTML = `<section class="card stack"><h2>Compras avulsas</h2><p class="small muted">Sessões, turmas e e-books. Sessão paga: escreva para a pessoa marcar o horário.</p>
+    <div class="tablewrap"><table><thead><tr><th>Quando</th><th>Pessoa</th><th>Produto</th><th>Valor</th><th>Meio</th><th>Situação</th><th></th></tr></thead><tbody>
+    ${r.compras.map(c => `<tr><td>${dataHora(c.criado_em)}</td><td>${c.nome ? `<b>${esc(c.nome)}</b><br><a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : `<span class="muted">conta excluída</span>`}</td>
+      <td>${esc(c.item_id)}<br><span class="small muted">${esc(c.entrega)}</span></td><td class="n">${reais(c.valor)}</td><td class="small">${esc(c.provedor)}</td>
+      <td>${c.status === "paga" ? `<span class="pill good">paga</span>` : `<span class="pill bad">estornada</span>`}</td>
+      <td>${c.status === "paga" ? `<button class="btn sm ghost" data-est="${c.id}">Estornar</button>` : ""}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">Nenhuma compra ainda.</td></tr>`}
+    </tbody></table></div></section>`;
+  $$("[data-est]").forEach(b => b.onclick = async () => {
+    if (b.dataset.ok !== "1") { b.dataset.ok = "1"; b.textContent = "Confirmar estorno"; b.classList.remove("ghost"); return; }
+    const motivo = prompt("Motivo do estorno (fica na auditoria):", "pedido da pessoa"); if (motivo === null) return;
+    try { await api("admin/compras/" + b.dataset.est + "/estornar", { motivo }); toast("Estorno pedido ao provedor. A vaga voltou para a turma."); compras(); } catch (e) { toast(e.message); } });
+}
+
+async function catalogo() {
+  const r = await api("admin/catalogo");
+  const linhas = Object.fromEntries(r.linhas.map(l => [l.id, l.nome]));
+  C().innerHTML = `<section class="card stack"><h2>Catálogo</h2>
+    <p class="small muted">Ligue ou desligue itens, ajuste preço e textos. Serviço psicológico não aceita termos de desconto, promoção ou promessa de resultado. Responsável técnico exibido: <b>${esc(r.responsavel.nome)}, ${esc(r.responsavel.crp)}</b>.</p>
+    <div class="tablewrap"><table><thead><tr><th>Item</th><th>Linha</th><th>Marca</th><th>No app</th><th>Ativo</th><th>Preço (R$)</th><th>Texto do valor</th><th></th></tr></thead><tbody>
+    ${r.itens.map(i => { const v = i.venda || {}; const vende = ["sessao", "turma", "ebook"].includes(v.modo);
+      return `<tr data-item="${esc(i.id)}"><td><b>${esc(i.nome)}</b><br><span class="small muted">${esc(v.modo || "")}${i.psicologico ? " · serviço psicológico" : ""}</span></td><td class="small">${esc(linhas[i.linha] || i.linha)}</td><td class="small">${esc(i.marca)}</td>
+        <td><input type="checkbox" data-k="noApp" ${i.noApp ? "checked" : ""} aria-label="Aparece no app"></td><td><input type="checkbox" data-k="ativo" ${i.ativo !== false ? "checked" : ""} aria-label="Ativo"></td>
+        <td>${vende ? `<input type="number" min="0" step="1" data-k="preco" value="${v.valor ? v.valor / 100 : ""}">` : `<span class="muted small">–</span>`}</td>
+        <td><input data-k="valor" value="${esc(i.valor || "")}" style="max-width:220px"></td><td><button class="btn sm" data-salvar>Salvar</button></td></tr>`; }).join("")}
+    </tbody></table></div></section>`;
+  $$("[data-salvar]").forEach(b => b.onclick = async () => {
+    const tr = b.closest("tr"), corpo = { item: tr.dataset.item };
+    $$("[data-k]", tr).forEach(el => { const k = el.dataset.k; corpo[k] = el.type === "checkbox" ? el.checked : k === "preco" ? (el.value === "" ? null : Math.round(+el.value * 100)) : el.value; });
+    try { await api("admin/catalogo", corpo); toast("Salvo."); } catch (e) { toast(e.message); } });
+}
+
+async function erros() {
+  const r = await api("admin/erros");
+  C().innerHTML = `<section class="card stack"><h2>Erros internos</h2><p class="small muted">O corpo das requisições nunca é guardado (pode conter dado de saúde). Configure AGORA_ALERTA_EMAIL para receber aviso.</p>
+    ${r.erros.map(e => `<details class="card"><summary><b>${esc(e.tipo)}</b> em <span class="mono">${esc(e.rota)}</span> · ${dataHora(e.quando)}</summary><pre class="small" style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(e.detalhe)}</pre></details>`).join("") || `<p class="muted">Nenhum erro registrado. Bom sinal.</p>`}</section>`;
+}
+
+(() => { const h = location.hash.slice(1); if (ABAS.some(([k]) => k === h)) ABA = h; if (TOKEN) iniciar(); else login(); })();
+</script>
+</body>
+</html>

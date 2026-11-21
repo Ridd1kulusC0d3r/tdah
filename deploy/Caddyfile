@@ -1,0 +1,20 @@
+# HTTPS automático. O Caddy pede e renova os certificados sozinho.
+{$DOMINIO} {
+	encode gzip
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+	reverse_proxy agora:8765
+}
+
+# Homologação (docker compose --profile homologacao up -d). Protegida por senha básica:
+# gere o hash com  docker compose exec caddy caddy hash-password  e troque abaixo.
+{$DOMINIO_HOMOLOGACAO} {
+	encode gzip
+	basic_auth {
+		equipe $2a$14$TROQUE.ESTE.HASH.GERADO.PELO.CADDY.hash-password
+	}
+	header X-Robots-Tag "noindex, nofollow"
+	reverse_proxy homologacao:8765
+}

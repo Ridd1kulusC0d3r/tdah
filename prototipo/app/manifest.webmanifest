@@ -1,0 +1,30 @@
+{
+  "name": "Agora TDAH",
+  "short_name": "Agora",
+  "description": "Uma ação por vez: tarefas, rotinas, foco, sono, humor e atividade para quem tem TDAH.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#edefea",
+  "theme_color": "#18211d",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

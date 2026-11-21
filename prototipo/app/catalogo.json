@@ -1,0 +1,355 @@
+{
+ "versao": "2026-11-14",
+ "linhas": [
+  {
+   "id": "pessoas",
+   "nome": "Para você",
+   "marca": "psicologotech e Lume",
+   "nota": "Serviço psicológico: sempre com nome e CRP"
+  },
+  {
+   "id": "empresas",
+   "nome": "Para empresas",
+   "marca": "Lume e Radar Psicossocial",
+   "nota": "Venda consultiva, por proposta"
+  }
+ ],
+ "itens": [
+  {
+   "id": "aula",
+   "linha": "pessoas",
+   "etapa": 0,
+   "nome": "Aula aberta mensal",
+   "resumo": "Uma hora ao vivo de psicoeducação sobre um tema, com perguntas. Conteúdo educativo, não atendimento.",
+   "paraQuem": "Quem quer entender um tema antes de decidir o que fazer.",
+   "formato": "Ao vivo, 60 minutos, uma vez por mês; gravação vira artigo e cortes",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "marcaNome": "psicologotech",
+   "modo": "interesse",
+   "valorTexto": "Grátis",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "ebooks",
+   "linha": "pessoas",
+   "etapa": 1,
+   "nome": "Ebooks",
+   "resumo": "Guias de cerca de 100 páginas: burnout em tech, burnout e TDAH, ansiedade, saúde mental, burnout na liderança.",
+   "paraQuem": "Quem prefere ler e entender sozinho primeiro.",
+   "formato": "PDF, compra única",
+   "marca": "psicologotech",
+   "psicologico": false,
+   "marcaNome": "psicologotech",
+   "modo": "ebook",
+   "preco": 3900,
+   "valorTexto": "R$ 39 cada",
+   "titulos": [
+    {
+     "id": "tdah-no-trabalho",
+     "titulo": "TDAH no trabalho: um guia prático"
+    },
+    {
+     "id": "burnout-em-tech",
+     "titulo": "Burnout em tech: reconhecer e pedir ajuda"
+    },
+    {
+     "id": "dia-ruim",
+     "titulo": "Rotinas que cabem num dia ruim"
+    }
+   ]
+  },
+  {
+   "id": "terapia",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Terapia individual",
+   "resumo": "Sessões online para burnout, TDAH adulto e ansiedade, com rotinas combinadas no Agora entre as sessões.",
+   "paraQuem": "Quem precisa de acompanhamento individual.",
+   "formato": "Online, 50 minutos, semanal",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "marcaNome": "psicologotech",
+   "modo": "sessao",
+   "preco": 18000,
+   "valorTexto": "R$ 180 por sessão",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "grupo-tdah",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Grupo terapêutico de TDAH adulto",
+   "resumo": "Grupo semanal contínuo, com tema do encontro, troca entre participantes e uma combinação prática para a semana no Agora.",
+   "paraQuem": "Adultos com TDAH que querem tratamento com custo menor e a companhia de quem vive o mesmo.",
+   "formato": "Online, até 8 pessoas, 90 minutos por semana; entrada após conversa inicial",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "marcaNome": "psicologotech",
+   "modo": "turma",
+   "preco": 36000,
+   "valorTexto": "R$ 360 por mês",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "grupo-burnout",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Grupo de burnout para profissionais de tech",
+   "resumo": "Programa fechado de 10 encontros: sinais, limites, carga de trabalho, conversa com a liderança, retorno ao ritmo.",
+   "paraQuem": "Devs, analistas, líderes técnicos e pessoas de segurança em esgotamento.",
+   "formato": "Online, até 8 pessoas, 10 encontros semanais de 90 minutos",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "marcaNome": "psicologotech",
+   "modo": "turma",
+   "preco": 90000,
+   "valorTexto": "R$ 900 pelo programa",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "ths-tdah",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Treino de habilidades sociais: TDAH adulto",
+   "resumo": "Treino prático e interativo: ouvir sem interromper, conversas difíceis, pedir e negar, combinar e cumprir. Cada encontro termina com uma missão da semana no Agora.",
+   "paraQuem": "Adultos com TDAH com atrito em relacionamentos, família e trabalho.",
+   "formato": "Online, 6 a 8 pessoas, 8 encontros de 90 minutos com ensaio em duplas",
+   "marca": "lume",
+   "psicologico": true,
+   "marcaNome": "Lume",
+   "modo": "turma",
+   "preco": 72000,
+   "valorTexto": "R$ 720 pelo programa",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "ths-tech",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Treino de habilidades sociais: profissionais de tech",
+   "resumo": "Ensaio de situações reais do trabalho: falar em reunião, dar e receber feedback, 1:1 com a liderança, discordar, entrevista, apresentar para não técnicos.",
+   "paraQuem": "Profissionais de tecnologia com ansiedade social ou em transição para liderança.",
+   "formato": "Online, 6 a 8 pessoas, 8 encontros de 90 minutos com simulações",
+   "marca": "lume",
+   "psicologico": true,
+   "marcaNome": "Lume",
+   "modo": "turma",
+   "preco": 72000,
+   "valorTexto": "R$ 720 pelo programa",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "opc",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Orientação profissional e de carreira",
+   "resumo": "Processo breve para decisões de carreira: mudar de área, aceitar liderança, voltar depois de um afastamento. É serviço psicológico, diferente da mentoria técnica.",
+   "paraQuem": "Quem está diante de uma decisão de carreira e trava.",
+   "formato": "Online, individual, 6 encontros de 50 minutos",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "marcaNome": "psicologotech",
+   "modo": "sessao",
+   "preco": 22000,
+   "valorTexto": "R$ 220 por encontro",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "manutencao",
+   "linha": "pessoas",
+   "etapa": 3,
+   "nome": "Encontro mensal de manutenção",
+   "resumo": "Reencontro mensal para quem concluiu um grupo ou treino: o que funcionou, o que travou, próxima meta.",
+   "paraQuem": "Ex-participantes dos grupos e treinos.",
+   "formato": "Online, até 12 pessoas, 90 minutos por mês",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "marcaNome": "psicologotech",
+   "modo": "turma",
+   "preco": 9000,
+   "valorTexto": "R$ 90 por encontro",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "relampago",
+   "linha": "empresas",
+   "etapa": 0,
+   "nome": "Diagnóstico Relâmpago",
+   "resumo": "Uma página com a exposição psicossocial pública de uma empresa, a partir de fontes abertas. Abre a conversa com o RH.",
+   "paraQuem": "RH e diretoria de empresas de tecnologia.",
+   "formato": "Relatório de uma página, feito por empresa",
+   "marca": "radar",
+   "psicologico": false,
+   "marcaNome": "Radar Psicossocial",
+   "modo": "interesse",
+   "valorTexto": "Grátis"
+  },
+  {
+   "id": "guia-nr1",
+   "linha": "empresas",
+   "etapa": 0,
+   "nome": "Guia da NR-1 para RH",
+   "resumo": "O que a norma exige sobre riscos psicossociais e como se preparar, em linguagem de RH.",
+   "paraQuem": "RH e segurança do trabalho.",
+   "formato": "Ebook em PDF",
+   "marca": "radar",
+   "psicologico": false,
+   "marcaNome": "Radar Psicossocial",
+   "modo": "interesse",
+   "valorTexto": "Grátis em troca do contato"
+  },
+  {
+   "id": "palestra",
+   "linha": "empresas",
+   "etapa": 1,
+   "nome": "Palestra",
+   "resumo": "Temas: burnout em times de tecnologia, TDAH no trabalho, segurança psicológica, fadiga de alerta em times de operação.",
+   "paraQuem": "Empresas que querem começar por algo pontual.",
+   "formato": "Online ou presencial, 60 a 90 minutos",
+   "marca": "lume",
+   "psicologico": true,
+   "marcaNome": "Lume",
+   "modo": "proposta",
+   "valorTexto": "R$ 2.500",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "workshop",
+   "linha": "empresas",
+   "etapa": 1,
+   "nome": "Workshop para lideranças",
+   "resumo": "Três horas práticas: reconhecer sinais de esgotamento no time, conversar sobre carga e prazos, encaminhar.",
+   "paraQuem": "Gestores e líderes técnicos.",
+   "formato": "Online ou presencial, 3 horas, até 20 pessoas",
+   "marca": "lume",
+   "psicologico": true,
+   "marcaNome": "Lume",
+   "modo": "proposta",
+   "valorTexto": "R$ 4.500",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "nr1",
+   "linha": "empresas",
+   "etapa": 2,
+   "nome": "Avaliação de riscos psicossociais (NR-1)",
+   "resumo": "Levantamento com questionário e entrevistas, relatório para o programa de gerenciamento de riscos e devolutiva com plano de ação.",
+   "paraQuem": "Empresas que precisam cumprir a NR-1.",
+   "formato": "Projeto de 4 a 6 semanas",
+   "marca": "radar",
+   "psicologico": true,
+   "marcaNome": "Radar Psicossocial",
+   "modo": "proposta",
+   "valorTexto": "A partir de R$ 6.000",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "ths-empresa",
+   "linha": "empresas",
+   "etapa": 2,
+   "nome": "Treino de habilidades sociais para lideranças técnicas",
+   "resumo": "O treino de tech em turma fechada da empresa: feedback, 1:1, conflito, reunião difícil, com casos do próprio time.",
+   "paraQuem": "Empresas promovendo pessoas técnicas à liderança.",
+   "formato": "Turma fechada de até 12 pessoas, 8 encontros de 90 minutos",
+   "marca": "lume",
+   "psicologico": true,
+   "marcaNome": "Lume",
+   "modo": "proposta",
+   "valorTexto": "R$ 9.600 por turma",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "radar",
+   "linha": "empresas",
+   "etapa": 3,
+   "nome": "Radar contínuo",
+   "resumo": "Reavaliação trimestral dos indicadores, acompanhamento do plano de ação e relatório para a diretoria.",
+   "paraQuem": "Empresas que já fizeram a avaliação.",
+   "formato": "Contrato mensal",
+   "marca": "radar",
+   "psicologico": true,
+   "marcaNome": "Radar Psicossocial",
+   "modo": "proposta",
+   "valorTexto": "A partir de R$ 2.500 por mês",
+   "responsavel": {
+    "nome": "Deivison Mendes",
+    "crp": "CRP-04/65709",
+    "contato": "contato@psicologotech.com.br"
+   }
+  },
+  {
+   "id": "agora-equipes",
+   "linha": "empresas",
+   "etapa": 3,
+   "nome": "Agora para equipes",
+   "resumo": "Licenças do Agora Plus como benefício. A empresa não vê dados de ninguém, só quantas licenças estão em uso.",
+   "paraQuem": "Empresas clientes da avaliação ou do treino.",
+   "formato": "Licença mensal por colaborador",
+   "marca": "agora",
+   "psicologico": false,
+   "marcaNome": "Agora",
+   "modo": "proposta",
+   "valorTexto": "R$ 6 por colaborador por mês"
+  }
+ ],
+ "responsavel": {
+  "nome": "Deivison Mendes",
+  "crp": "CRP-04/65709",
+  "contato": "contato@psicologotech.com.br"
+ },
+ "etapas": [
+  "Entrada gratuita",
+  "Primeiro passo pago",
+  "Serviço principal",
+  "Continuidade"
+ ]
+}

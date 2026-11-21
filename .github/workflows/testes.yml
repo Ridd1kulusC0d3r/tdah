@@ -1,0 +1,43 @@
+# Roda todos os testes a cada push e pull request: API, produção (cripto, 2FA, funil, push, backup) e navegador.
+name: Testes
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cryptography: ["sim", "nao"]   # o servidor tem de funcionar com e sem o pacote opcional
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - if: matrix.cryptography == 'sim'
+        run: pip install "cryptography>=43,<51"
+      - name: Testes da API e de produção
+        run: python3 -m unittest tests.test_api tests.test_producao -v
+  navegador:
+    runs-on: ubuntu-latest
+    needs: api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - run: pip install playwright "cryptography>=43,<51" && python3 -m playwright install --with-deps chromium
+      - name: Teste de ponta a ponta no Chromium
+        run: python3 tests/test_ui.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: capturas, path: docs/capturas/*.png }
+  imagem:
+    runs-on: ubuntu-latest
+    needs: api
+    steps:
+      - uses: actions/checkout@v4
+      - name: A imagem Docker constrói e responde no health
+        run: |
+          docker build -t agora:ci .
+          docker run -d --name agora -e AGORA_CHAVE=$(python3 -c "import base64,os;print(base64.b64encode(os.urandom(32)).decode())") -p 8765:8765 agora:ci
+          for i in $(seq 1 20); do curl -fsS http://localhost:8765/api/health && exit 0; sleep 1; done; docker logs agora; exit 1

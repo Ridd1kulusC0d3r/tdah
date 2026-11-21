@@ -1,0 +1,80 @@
+test_01_health_e_planos (tests.test_api.TestContas.test_01_health_e_planos) ... ok
+test_02_validacao_registro (tests.test_api.TestContas.test_02_validacao_registro) ... ok
+test_03_login_e_logout (tests.test_api.TestContas.test_03_login_e_logout) ... ok
+test_04_limite_de_tentativas (tests.test_api.TestContas.test_04_limite_de_tentativas) ... ok
+test_05_senha_e_token_nao_ficam_em_claro (tests.test_api.TestContas.test_05_senha_e_token_nao_ficam_em_claro) ... ok
+test_06_recuperacao_de_senha (tests.test_api.TestContas.test_06_recuperacao_de_senha) ... [e-mail não enviado: SMTP não configurado] para=esqueci@t.br assunto=Agora TDAH: criar senha nova
+ok
+test_07_papeis (tests.test_api.TestContas.test_07_papeis) ... ok
+test_08_fluxo_clinico_completo (tests.test_api.TestContas.test_08_fluxo_clinico_completo) ... ok
+test_09_limite_do_plano_gratis_do_profissional (tests.test_api.TestContas.test_09_limite_do_plano_gratis_do_profissional) ... ok
+test_10_exclusao_de_conta (tests.test_api.TestContas.test_10_exclusao_de_conta) ... ok
+test_11_estaticos_rotas_e_seguranca (tests.test_api.TestContas.test_11_estaticos_rotas_e_seguranca) ... ok
+test_12_cors_para_o_app_android (tests.test_api.TestContas.test_12_cors_para_o_app_android) ... ok
+test_01_jwt_rs256_valido (tests.test_api.TestGooglePlay.test_01_jwt_rs256_valido) ... ok
+test_02_compra_no_app_e_rtdn (tests.test_api.TestGooglePlay.test_02_compra_no_app_e_rtdn) ... ok
+test_01_assinatura_mensal_ponta_a_ponta (tests.test_api.TestMercadoPago.test_01_assinatura_mensal_ponta_a_ponta) ... ok
+test_02_pix_anual_e_estorno (tests.test_api.TestMercadoPago.test_02_pix_anual_e_estorno) ... ok
+test_03_manifesto_igual_ao_sdk_oficial (tests.test_api.TestMercadoPago.test_03_manifesto_igual_ao_sdk_oficial) ... ok
+test_01_plus_mensal_libera_recursos (tests.test_api.TestPlanosSimulados.test_01_plus_mensal_libera_recursos) ... ok
+test_02_recusado_nao_libera (tests.test_api.TestPlanosSimulados.test_02_recusado_nao_libera) ... ok
+test_03_anual_soma_365_dias_e_acumula (tests.test_api.TestPlanosSimulados.test_03_anual_soma_365_dias_e_acumula) ... ok
+test_04_confirmar_duas_vezes_e_idempotente (tests.test_api.TestPlanosSimulados.test_04_confirmar_duas_vezes_e_idempotente) ... ok
+test_05_cancelar_mantem_ate_o_fim_e_expira (tests.test_api.TestPlanosSimulados.test_05_cancelar_mantem_ate_o_fim_e_expira) ... ok
+test_06_plano_errado_para_o_papel_e_android (tests.test_api.TestPlanosSimulados.test_06_plano_errado_para_o_papel_e_android) ... ok
+test_07_pro_libera_pacientes_ilimitados (tests.test_api.TestPlanosSimulados.test_07_pro_libera_pacientes_ilimitados) ... ok
+test_seed_idempotente (tests.test_api.TestSeed.test_seed_idempotente) ... [e-mail não enviado: SMTP não configurado] para=carlos@exemplo.invalid assunto=Recebemos seu contato: Terapia individual
+[e-mail não enviado: SMTP não configurado] para=contato@psicologotech.com.br assunto=[Agora] Novo interesse: Terapia individual
+[e-mail não enviado: SMTP não configurado] para=julia@exemplo.invalid assunto=Recebemos seu contato: Treino de habilidades sociais: profissionais de tech
+[e-mail não enviado: SMTP não configurado] para=contato@psicologotech.com.br assunto=[Agora] Novo interesse: Treino de habilidades sociais: profissionais de tech
+[e-mail não enviado: SMTP não configurado] para=rh@exemplo.invalid assunto=Recebemos seu contato: Palestra
+[e-mail não enviado: SMTP não configurado] para=contato@psicologotech.com.br assunto=[Agora] Novo interesse: Palestra
+ok
+test_simulado_desligado_em_producao (tests.test_api.TestSimuladoEmProducao.test_simulado_desligado_em_producao) ... {"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "POST", "caminho": "/api/registrar", "status": "200", "ms": 32}
+{"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "POST", "caminho": "/api/pagamentos/checkout", "status": "403", "ms": 3}
+{"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "GET", "caminho": "/api/pagamentos/simulado", "status": "404", "ms": 1}
+{"t": "2026-11-14T11:14:25+00:00", "nivel": "acesso", "ip": "127.0.0.1", "metodo": "GET", "caminho": "/api/planos", "status": "200", "ms": 0}
+ok
+test_01_assinatura_renovacao_e_cancelamento (tests.test_api.TestStripe.test_01_assinatura_renovacao_e_cancelamento) ... ok
+test_02_pagamento_unico (tests.test_api.TestStripe.test_02_pagamento_unico) ... ok
+test_01_chacha20_poly1305_rfc8439 (tests.test_producao.TestCripto.test_01_chacha20_poly1305_rfc8439) ... ok
+test_02_poly1305_rfc8439 (tests.test_producao.TestCripto.test_02_poly1305_rfc8439) ... ok
+test_03_igual_a_biblioteca_cryptography (tests.test_producao.TestCripto.test_03_igual_a_biblioteca_cryptography) ... ok
+test_04_totp_rfc6238 (tests.test_producao.TestCripto.test_04_totp_rfc6238) ... ok
+test_05_es256_conferido_pela_cryptography (tests.test_producao.TestCripto.test_05_es256_conferido_pela_cryptography) ... ok
+test_06_cofre_rotacao_e_arquivo (tests.test_producao.TestCripto.test_06_cofre_rotacao_e_arquivo) ... ok
+test_07_sigv4_chave_de_assinatura_aws (tests.test_producao.TestCripto.test_07_sigv4_chave_de_assinatura_aws) ... ok
+test_08_sigv4_exemplo_get_object_aws (tests.test_producao.TestCripto.test_08_sigv4_exemplo_get_object_aws) ... ok
+test_01_catalogo_por_contexto (tests.test_producao.TestFunil.test_01_catalogo_por_contexto) ... ok
+test_02_interesse_cifrado_sequencia_e_descadastro (tests.test_producao.TestFunil.test_02_interesse_cifrado_sequencia_e_descadastro) ... [e-mail não enviado: SMTP não configurado] para=ana@t.br assunto=Recebemos seu contato: Terapia individual
+[e-mail não enviado: SMTP não configurado] para=contato@psicologotech.com.br assunto=[Agora] Novo interesse: Terapia individual
+[e-mail não enviado: SMTP não configurado] para=ana@t.br assunto=Três ajustes pequenos para a semana
+ok
+test_03_eventos_anonimos (tests.test_producao.TestFunil.test_03_eventos_anonimos) ... ok
+test_04_turma_pagamento_missoes_espera_e_estorno (tests.test_producao.TestFunil.test_04_turma_pagamento_missoes_espera_e_estorno) ... [e-mail não enviado: SMTP não configurado] para=aluno2@t.br assunto=Abriu vaga: Turma teste
+ok
+test_05_ebook_compra_e_download_assinado (tests.test_producao.TestFunil.test_05_ebook_compra_e_download_assinado) ... ok
+test_06_sessao_no_android_e_vinculado_bloqueado (tests.test_producao.TestFunil.test_06_sessao_no_android_e_vinculado_bloqueado) ... ok
+test_07_avulso_pelo_stripe (tests.test_producao.TestFunil.test_07_avulso_pelo_stripe) ... ok
+test_08_admin_catalogo_veta_publicidade_irregular (tests.test_producao.TestFunil.test_08_admin_catalogo_veta_publicidade_irregular) ... ok
+test_09_push_lembrete_vapid (tests.test_producao.TestFunil.test_09_push_lembrete_vapid) ... ok
+test_10_retencao_e_exclusao (tests.test_producao.TestFunil.test_10_retencao_e_exclusao) ... [e-mail não enviado: SMTP não configurado] para=ret@t.br assunto=Recebemos seu contato: Terapia individual
+[e-mail não enviado: SMTP não configurado] para=contato@psicologotech.com.br assunto=[Agora] Novo interesse: Terapia individual
+ok
+test_banco_da_versao_1_3_e_cifrado_na_partida (tests.test_producao.TestMigracao.test_banco_da_versao_1_3_e_cifrado_na_partida) ... ok
+test_admin_cli (tests.test_producao.TestOperacao.test_admin_cli) ... ok
+test_backup_cifrado_restaura_e_envia_para_s3 (tests.test_producao.TestOperacao.test_backup_cifrado_restaura_e_envia_para_s3) ... ok
+test_producao_recusa_sem_chave (tests.test_producao.TestOperacao.test_producao_recusa_sem_chave) ... ok
+test_01_health_completo (tests.test_producao.TestSeguranca.test_01_health_completo) ... ok
+test_02_dois_fatores_ponta_a_ponta (tests.test_producao.TestSeguranca.test_02_dois_fatores_ponta_a_ponta) ... ok
+test_03_limite_persiste_entre_reinicios (tests.test_producao.TestSeguranca.test_03_limite_persiste_entre_reinicios) ... ok
+test_04_cabecalhos_csp_e_estaticos (tests.test_producao.TestSeguranca.test_04_cabecalhos_csp_e_estaticos) ... ok
+test_05_nuvem_cifrada_e_conflito (tests.test_producao.TestSeguranca.test_05_nuvem_cifrada_e_conflito) ... ok
+test_06_snapshot_e_pedido_cifrados_e_link_de_convite (tests.test_producao.TestSeguranca.test_06_snapshot_e_pedido_cifrados_e_link_de_convite) ... ok
+test_07_erro_interno_registrado_sem_vazar (tests.test_producao.TestSeguranca.test_07_erro_interno_registrado_sem_vazar) ... {"t": "2026-11-14T11:14:29+00:00", "nivel": "erro", "rota": "/api/health", "tipo": "ZeroDivisionError", "detalhe": "ZeroDivisionError: division by zero"}
+ok
+
+----------------------------------------------------------------------
+Ran 57 tests in 9.742s
+
+OK

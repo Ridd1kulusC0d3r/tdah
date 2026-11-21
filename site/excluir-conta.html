@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Excluir conta · Agora TDAH</title>
+<link rel="icon" href="/app/icon.svg" type="image/svg+xml">
+
+<link rel="stylesheet" href="/doc.css">
+</head>
+<body><div class="wrap">
+<header><a href="/">Agora TDAH</a><nav><a href="/privacidade.html">Privacidade</a></nav></header>
+<h1>Excluir sua conta do Agora</h1>
+<p>Você pode excluir a conta aqui ou no app, em <b>Mais › Sua conta › Excluir conta</b>.</p>
+
+<h2>O que é apagado</h2>
+<ul>
+<li>Sua conta (nome, e-mail e senha).</li>
+<li>A cópia na nuvem dos seus registros.</li>
+<li>O vínculo com o profissional e tudo o que foi compartilhado com ele.</li>
+<li>Assinaturas que renovam sozinhas são canceladas.</li>
+</ul>
+<h2>O que fica</h2>
+<ul>
+<li>Registros de pagamento (plano, valor, data), por 5 anos, por obrigação fiscal, sem ligação com seu nome ou e-mail.</li>
+<li>Os dados guardados no seu próprio aparelho continuam lá até você apagar no app (Mais › Seus dados › Apagar tudo) ou desinstalar.</li>
+<li>Assinaturas do Google Play precisam ser canceladas também no Play Store.</li>
+</ul>
+
+<h2>Excluir agora</h2>
+<form class="card" id="f">
+  <label for="email">E-mail da conta<input id="email" type="email" autocomplete="email" required></label>
+  <label for="senha">Senha<input id="senha" type="password" autocomplete="current-password" required></label>
+  <button type="submit">Excluir minha conta para sempre</button>
+  <p id="msg" role="status"></p>
+</form>
+<p class="muted" style="margin-top:16px">Esqueceu a senha? Use "Esqueci minha senha" no app ou escreva para [privacidade@dominio] a partir do e-mail da conta.</p>
+</div>
+<script>
+document.getElementById("f").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const msg = document.getElementById("msg"), email = document.getElementById("email").value.trim(), senha = document.getElementById("senha").value;
+  msg.style.color = ""; msg.textContent = "Excluindo...";
+  try {
+    const r1 = await fetch("/api/entrar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, senha }) });
+    const j1 = await r1.json(); if (!r1.ok) throw new Error(j1.erro);
+    const r2 = await fetch("/api/conta/excluir", { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + j1.token }, body: JSON.stringify({ senha }) });
+    const j2 = await r2.json(); if (!r2.ok) throw new Error(j2.erro);
+    document.getElementById("f").innerHTML = '<p style="color:var(--good);font-weight:700">Conta excluída. Sentiremos sua falta.</p>';
+  } catch (e) { msg.style.color = "var(--bad)"; msg.textContent = e.message || "Não foi possível excluir agora. Tente de novo."; }
+});
+</script>
+</body>
+</html>

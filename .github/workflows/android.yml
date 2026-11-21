@@ -1,0 +1,46 @@
+# Gera o app Android a cada push na branch main (ou manualmente em Actions > Android > Run workflow).
+# Saídas (aba Actions > execução > Artifacts):
+#   agora-debug.apk     para instalar direto no celular e testar
+#   agora-release.aab   para enviar à Google Play (só se os secrets de assinatura existirem)
+name: Android
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["app/**", "android/**", ".github/workflows/android.yml"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AGORA_API_URL: ${{ secrets.AGORA_API_URL }}
+      AGORA_VERSION_CODE: ${{ github.run_number }}
+      AGORA_KEYSTORE_BASE64: ${{ secrets.AGORA_KEYSTORE_BASE64 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "21" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - uses: android-actions/setup-android@v3
+      - name: Instalar dependências
+        working-directory: android
+        run: npm ci || npm install
+      - name: Copiar o app web e sincronizar
+        working-directory: android
+        run: npm run sync
+      - name: APK de teste
+        working-directory: android/android
+        run: chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with: { name: agora-debug.apk, path: android/android/app/build/outputs/apk/debug/*.apk }
+      - name: AAB assinado para a Play Store
+        if: ${{ env.AGORA_KEYSTORE_BASE64 != '' }}
+        env:
+          AGORA_KEYSTORE_SENHA: ${{ secrets.AGORA_KEYSTORE_SENHA }}
+        working-directory: android/android
+        run: |
+          echo "$AGORA_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/agora.jks"
+          AGORA_KEYSTORE="$RUNNER_TEMP/agora.jks" ./gradlew bundleRelease --no-daemon
+      - uses: actions/upload-artifact@v4
+        if: ${{ hashFiles('android/android/app/build/outputs/bundle/release/*.aab') != '' }}
+        with: { name: agora-release.aab, path: android/android/app/build/outputs/bundle/release/*.aab }

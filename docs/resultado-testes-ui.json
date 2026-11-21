@@ -1,0 +1,530 @@
+{
+ "quando": "2026-11-14T08:14:14",
+ "resultados": [
+  {
+   "teste": "abre com banner de dados de exemplo",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "cartão Agora mostra uma próxima ação",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "painel desenha os gráficos (foco×humor, sono, atividade, dia da semana)",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "calendário do humor com carinhas",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "período de 28 dias muda o gráfico",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "painel mostra comparações",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "tarefas agrupadas por prioridade",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "tarefas mostram o tipo",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "filtro por tipo",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "lista de cursos com progresso",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "+1 aula atualiza o progresso",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "tema Matrix aplica fundo preto-esverdeado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "dados de exemplo somem",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "primeira tarefa vira a próxima ação",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "quebrar em passos cria 3 passos",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "marcar passo avança o destaque",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "duração muda o botão",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "modo foco abre com relógio 15:00",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sala de foco aparece (modo solo sem conta)",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sessão registrada (15 min no placar)",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "agora não troca a tarefa",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "fazer esta agora fixa a escolhida",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "ideia rápida vira tarefa",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "despejo cria várias tarefas",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "humor com carinhas no diário",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "diário salvo com sono 7,5 h e 30 min de caminhada",
+   "ok": true,
+   "detalhe": "{'mood': 4, 'energy': 3, 'sleepH': 7.5, 'sleepQ': 4, 'activityMin': 30, 'activityType': 'caminhada', 'meds': False, 'note': ''}"
+  },
+  {
+   "teste": "humor 1 abre apoio com CVV 188",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "player mostra passo 1 de 2",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "rotina concluída marca 'feita hoje'",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "ASRS: 4 respostas na faixa de atenção → sugere avaliação",
+   "ok": true,
+   "detalhe": "4 de 6 respostas na faixa de atenção.\n\nQuatro ou mais costuma indicar que vale u"
+  },
+  {
+   "teste": "seção de lembretes com rotina e diário",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "paciente vinculada à Dra. Ana",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "painel lista 4 pacientes",
+   "ok": true,
+   "detalhe": "['Marina Costa', 'Paula', 'Lucas Andrade', 'Rafael Souza']"
+  },
+  {
+   "teste": "quem pediu contato vem primeiro",
+   "ok": true,
+   "detalhe": "['Marina Costa', 'Paula', 'Lucas Andrade', 'Rafael Souza']"
+  },
+  {
+   "teste": "aviso de pedido de contato aparece",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "profissional de demonstração tem o Agora Pro",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "resumo para a sessão é gerado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "prescrição aparece como ativa no painel",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "rotina prescrita chega ao app da paciente",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "profissional recebe os minutos de foco da paciente",
+   "ok": true,
+   "detalhe": "{'diasComCheckin': 1, 'minutosFoco': 15, 'humorMedio': 1.0, 'sonoMedio': 7.5, 'atividadeTotal': 30, 'rotinasConcluidas': 1, 'humorBaixoDias': 1}"
+  },
+  {
+   "teste": "plano grátis aparece na conta",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "checkout mostra plano e valor",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "Plus ativo depois do pagamento",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "URL limpa depois do retorno",
+   "ok": true,
+   "detalhe": "http://localhost:32901/app/#mais"
+  },
+  {
+   "teste": "cópia na nuvem salva",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "cancelar mantém o Plus até o fim",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "relatório do mês abre para quem tem Plus",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sala de foco mostra pessoas (paciente vinculada/Plus)",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "plano grátis mostra 0 de 3 pacientes",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "Pro ativo depois do pagamento",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "pedido de nova senha responde sem revelar a conta",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "senha nova funciona",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "serviços listados por linha, com marca",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "serviço psicológico mostra nome e CRP do responsável",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "nenhum texto de desconto ou promessa",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "minhas turmas mostra a turma confirmada com 8 missões",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "link da sala só aparece para quem está confirmado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "marcar missão como feita",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "turmas abertas com vagas e preço",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "e-book comprado baixa em PDF",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "interesse sem aceite é recusado",
+   "ok": true,
+   "detalhe": "Para responder, precisamos que você aceite o uso destes dados para este contato."
+  },
+  {
+   "teste": "interesse enviado e confirmado na tela",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "checkout da turma mostra o programa e o valor",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "depois do Pix a vaga aparece em Minhas turmas",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "vinculado vê aviso e nenhum serviço psicológico",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "humor baixo mostra acolhimento, sem oferta de serviço",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "tela de ajuda traz CVV 188 e caminho pelo SUS",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "site lista serviços com CRP do responsável",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "pedido de proposta enviado pelo site",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "página Começar com 3 caminhos e o 188",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "convite traz link que já preenche o código",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "abrir o link do convite leva ao vínculo",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "verificação em duas etapas ligada com 8 códigos de recuperação",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sem o código, a administração não abre",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "resumo com receita, meta e funil",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "contatos com mensagem decifrada",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "inscritos com progresso das missões",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "catálogo recusa publicidade irregular de serviço psicológico",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "compras listadas com opção de estorno",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sem rolagem lateral no celular: agora",
+   "ok": true,
+   "detalhe": "390px"
+  },
+  {
+   "teste": "sem rolagem lateral no celular: tarefas",
+   "ok": true,
+   "detalhe": "390px"
+  },
+  {
+   "teste": "sem rolagem lateral no celular: rotinas",
+   "ok": true,
+   "detalhe": "390px"
+  },
+  {
+   "teste": "sem rolagem lateral no celular: diario",
+   "ok": true,
+   "detalhe": "390px"
+  },
+  {
+   "teste": "sem rolagem lateral no celular: painel",
+   "ok": true,
+   "detalhe": "390px"
+  },
+  {
+   "teste": "sem rolagem lateral no celular: mais",
+   "ok": true,
+   "detalhe": "390px"
+  },
+  {
+   "teste": "sem rolagem lateral no celular: serviços",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sem rolagem lateral no celular: /servicos",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sem rolagem lateral no celular: /comecar",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "sem rolagem lateral no celular: /app/admin.html",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "tema escuro aplica fundo escuro",
+   "ok": true,
+   "detalhe": "rgb(17, 21, 19)"
+  },
+  {
+   "teste": "sem servidor, vínculo explica como fazer",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "lembretes nativos agendados (3 rotinas + diário)",
+   "ok": true,
+   "detalhe": "['Arranque da manhã', 'Desligar o dia', 'Pausa de corpo', 'Como foi o seu dia?']"
+  },
+  {
+   "teste": "Android não mostra botão de compra do Plus",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "Android não tem link para pagamento externo",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "Android: lembretes chegam com o app fechado",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "página inicial com a promessa",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "preços vindos da API",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "botão principal abre o app",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "página /privacidade.html abre",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "página /termos.html abre",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "página /excluir-conta.html abre",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "exclusão de conta pela web funciona",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "site sem rolagem lateral no celular",
+   "ok": true,
+   "detalhe": "390px"
+  },
+  {
+   "teste": "nenhum erro de JavaScript em todo o percurso",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "nenhum pedido a servidores externos (fontes hospedadas no próprio app)",
+   "ok": true,
+   "detalhe": ""
+  }
+ ]
+}

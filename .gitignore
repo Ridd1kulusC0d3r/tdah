@@ -1,0 +1,14 @@
+dados/
+backups/
+.env
+__pycache__/
+*.pyc
+android/node_modules/
+android/www/
+android/android/app/build/
+android/android/.gradle/
+*.keystore
+*.jks
+chave-assinatura.*
+.env.homologacao
+dist/

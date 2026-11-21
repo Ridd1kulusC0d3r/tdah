@@ -1,0 +1,18 @@
+{
+  "appId": "br.com.agoratdah.app",
+  "appName": "Agora TDAH",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#18211d"
+  },
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_agora",
+      "iconColor": "#D9480F"
+    }
+  }
+}

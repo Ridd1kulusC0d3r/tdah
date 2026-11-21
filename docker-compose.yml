@@ -1,0 +1,56 @@
+# Sobe o Agora com HTTPS automático (Caddy + Let's Encrypt), backup cifrado diário e homologação opcional.
+# 1) Aponte o DNS do domínio (e do subdomínio de homologação, se usar) para o servidor.
+# 2) Copie .env.example para .env e preencha. Gere a chave: docker compose run --rm agora python3 server/admin.py chave
+# 3) docker compose up -d                       (produção)
+#    docker compose --profile homologacao up -d (produção + homologação com pagamento de teste)
+services:
+  agora:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      AGORA_ATRAS_DE_PROXY: "1"
+    volumes:
+      - dados:/dados
+    expose:
+      - "8765"
+  caddy:
+    image: caddy:2.8
+    restart: unless-stopped
+    depends_on: [agora]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMINIO: ${DOMINIO}
+      DOMINIO_HOMOLOGACAO: ${DOMINIO_HOMOLOGACAO:-homologacao.localhost}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_dados:/data
+      - caddy_config:/config
+  backup:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - dados:/dados
+      - ./backups:/backups
+    # 03:30 UTC (00:30 em Brasília) todo dia: cópia consistente, conferida, cifrada e enviada ao S3 (se configurado). Mantém 30 locais.
+    entrypoint: ["sh", "-c", "while true; do python3 server/backup.py --db /dados/agora.db --destino /backups --manter 30 || echo 'BACKUP FALHOU'; sleep $$(( (86400 + 12600 - $$(date +%s) % 86400) % 86400 + 60 )); done"]
+  homologacao:
+    profiles: ["homologacao"]
+    build: .
+    restart: unless-stopped
+    env_file: .env.homologacao
+    environment:
+      AGORA_ATRAS_DE_PROXY: "1"
+      AGORA_DB: /dados/homologacao.db
+    volumes:
+      - dados_homologacao:/dados
+    expose:
+      - "8765"
+volumes:
+  dados:
+  dados_homologacao:
+  caddy_dados:
+  caddy_config:

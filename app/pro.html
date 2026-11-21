@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agora Clínica</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* Layout: painel de consultório; lista de pacientes à esquerda, ficha do paciente à direita; empilha no celular.
+   Mesma linguagem do app (Agora 2.0): papel pedra, tinta verde-escura, ação em verde-pinho, marca-texto amarelo para o selecionado. */
+:root{
+  --bg:#edefea; --surface:#fff; --sunk:#e3e6df; --ink:#18211d; --muted:#59645f; --line:#d5d9d1;
+  --accent:#0b6b57; --accent-ink:#fff; --accent-soft:#ffe977; --hl:#ffe977; --hot:#b42318; --hot-soft:#f9e3df;
+  --good:#2e7d32; --warn:#946200; --bad:#b42318;
+  --m1:#5b6cb8; --m2:#8e9bd3; --m3:#9aa3ab; --m4:#f2c94c; --m5:#ee8f2a;
+  --f-display:"Atkinson Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-body:"Atkinson Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:var(--f-body);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111513; --surface:#191e1b; --sunk:#232925; --ink:#e7ebe6; --muted:#9aa49e; --line:#2c332f;
+  --accent:#4fbf9f; --accent-ink:#06150f; --accent-soft:#3d3a1c; --hl:#5b5222; --hot:#ff8a7a; --hot-soft:#3a201c;
+  --good:#7ad083; --warn:#e9c25a; --bad:#ff8a7a;
+  --m1:#8c9cf0; --m2:#a9b4f2; --m3:#a9b2ba; --m4:#f2cf63; --m5:#f5a24a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111513; --surface:#191e1b; --sunk:#232925; --ink:#e7ebe6; --muted:#9aa49e; --line:#2c332f;
+  --accent:#4fbf9f; --accent-ink:#06150f; --accent-soft:#3d3a1c; --hl:#5b5222; --hot:#ff8a7a; --hot-soft:#3a201c;
+  --good:#7ad083; --warn:#e9c25a; --bad:#ff8a7a;
+  --m1:#8c9cf0; --m2:#a9b4f2; --m3:#a9b2ba; --m4:#f2cf63; --m5:#f5a24a; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:780;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:1.6rem}h2{font-size:1.22rem}h3{font-size:1rem;letter-spacing:-.01em}
+p{margin:0}
+.muted{color:var(--muted)}.small{font-size:.86rem}
+.label{font-size:.84rem;font-weight:600;color:var(--muted)}
+.mono{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(16px,3vw,32px);border-bottom:1px solid var(--line);background:var(--bg);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px}
+.brand b{font:800 1.3rem/1 var(--f-display);letter-spacing:-.03em}
+.brand i{font-style:normal;font-size:.82rem;font-weight:600;color:var(--muted)}
+.wrap{padding-block:22px 40px;padding-inline:clamp(16px,3vw,32px);display:grid;grid-template-columns:minmax(300px,370px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.stack{display:grid;gap:12px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);padding:8px 14px;font-weight:650;cursor:pointer;min-height:40px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{background:color-mix(in srgb,var(--accent) 88%,var(--ink))}
+.btn.ghost{border-color:transparent;color:var(--muted);background:transparent}
+.btn.ghost:hover{background:var(--sunk);color:var(--ink)}
+.btn.sm{min-height:32px;padding:4px 10px;font-size:.85rem}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;min-height:42px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+textarea{min-height:90px;resize:vertical}
+label.f{display:grid;gap:5px;font-weight:650;font-size:.88rem}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:6px;padding:2px 8px;font-size:.76rem;font-weight:650;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.pill.good{color:var(--good)}.pill.warn{color:var(--warn)}.pill.bad{color:var(--bad)}.pill.hot{background:var(--hot-soft);color:var(--hot)}
+.pt{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:12px;border-radius:10px;border:1px solid transparent;cursor:pointer;text-align:left;background:none;width:100%}
+.pt:hover{background:var(--sunk)}
+.pt[aria-current="true"]{border-color:var(--ink);background:var(--surface)}
+.pt[aria-current="true"] b{background:linear-gradient(100deg,transparent .15em,var(--hl) .15em,var(--hl) calc(100% - .1em),transparent calc(100% - .1em)) 0 64% / 100% 48% no-repeat}
+.pt b{justify-self:start}
+.pt .meta{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+.flag{width:9px;height:9px;border-radius:50%;display:inline-block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font:750 1.6rem/1.1 var(--f-display);letter-spacing:-.02em}
+.chart{overflow-x:auto}.chart svg{display:block;width:100%;min-width:520px;height:auto}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:var(--c)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+th{font-size:.8rem;font-weight:650;color:var(--muted)}
+td.n{font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.code{font:780 2.1rem/1 var(--f-display);letter-spacing:.16em;user-select:all;color:var(--ink);background:var(--hl);padding:6px 10px;border-radius:6px;display:inline-block}
+.note{border-left:3px solid var(--accent);background:var(--surface);padding:10px 14px;border-radius:0 10px 10px 0}
+.empty{display:grid;gap:10px;justify-items:start;padding:28px}
+.caixa{position:fixed;inset:auto 16px 16px auto;z-index:8;width:min(400px,calc(100% - 32px));max-height:calc(100vh - 32px);overflow:auto;box-shadow:0 10px 30px rgb(0 0 0 / .2)}
+.caixa input[readonly]{width:100%}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:650;z-index:9;max-width:calc(100% - 32px)}
+.auth{max-width:440px;margin:44px auto;padding-inline:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+</style>
+</head>
+<body>
+<header><div class="brand"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 16 L16 5 A11 11 0 0 1 26.4 12.6 Z" fill="var(--accent)"/></svg><b>Agora</b><i>Clínica</i></div>
+<div class="row" id="who"></div></header>
+<div id="app"></div>
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2, "0");
+const dstr = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const diasAtras = n => { const d = new Date(); d.setDate(d.getDate() - n); return dstr(d); };
+const fmtData = s => s ? s.slice(8, 10) + "/" + s.slice(5, 7) : "–";
+const fmtTS = s => s ? new Date(s).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) : "–";
+const r1 = x => x == null ? "–" : (Math.round(x * 10) / 10).toLocaleString("pt-BR");
+const HUMOR = ["", "Muito pra baixo", "Pra baixo", "Neutro", "Bem", "Muito bem"];
+const BOCA = ["", "M12.5 29.5 Q20 22.5 27.5 29.5", "M13 28 Q20 24.5 27 28", "M13.5 26.5 L26.5 26.5", "M13 24.5 Q20 30 27 24.5", "M12 23 Q20 33 28 23"];
+const face = (n, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 40 40" aria-hidden="true" style="vertical-align:middle"><circle cx="20" cy="20" r="18.5" fill="var(--m${n})"/><circle cx="14.5" cy="17" r="2.4" fill="#18202e"/><circle cx="25.5" cy="17" r="2.4" fill="#18202e"/><path d="${BOCA[n]}" fill="${n === 5 ? "#18202e" : "none"}" stroke="#18202e" stroke-width="2.6" stroke-linecap="round"/></svg>`;
+const TIPON = { trabalho: "Trabalho", estudo: "Estudo", casa: "Casa", saude: "Saúde", financas: "Finanças", pessoal: "Pessoal" };
+const KEY = "agora.pro.token";
+let TOKEN = null; try { TOKEN = localStorage.getItem(KEY); } catch {}
+let LISTA = null, ATUAL = null, ATUAL_ID = null, ABA = "visao";
+
+function toast(m) { document.querySelectorAll(".toast").forEach(x => x.remove()); const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2600); }
+async function api(caminho, corpo) {
+  const r = await fetch("/api/" + caminho, { method: corpo ? "POST" : "GET", headers: Object.assign({ "Content-Type": "application/json" }, TOKEN ? { Authorization: "Bearer " + TOKEN } : {}), body: corpo ? JSON.stringify(corpo) : undefined });
+  const j = await r.json().catch(() => ({ erro: "Resposta inválida do servidor." }));
+  if (r.status === 401 && TOKEN) { sair(true); }
+  if (!r.ok) { const e = new Error(j.erro || "Falha na conexão."); e.status = r.status; e.recurso = j.recurso; e.extra = j; throw e; }
+  return j;
+}
+let EU = null;
+function caixa(html, onBind) {
+  document.querySelectorAll(".caixa").forEach(x => x.remove());
+  const box = document.createElement("div"); box.className = "card stack caixa"; box.setAttribute("role", "dialog");
+  box.innerHTML = html + `<div class="row"><button class="btn sm ghost" data-fechar>Fechar</button></div>`;
+  document.body.appendChild(box);
+  box.querySelectorAll("[data-fechar]").forEach(b => b.onclick = () => box.remove());
+  onBind && onBind(box); return box;
+}
+async function seguranca() {
+  try { EU = await api("eu"); } catch (e) { return toast(e.message); }
+  if (EU.doisFatores) return caixa(`<span class="label">Verificação em duas etapas</span><p class="small"><b>Ligada.</b> Para entrar, além da senha, você digita o código do app autenticador.</p>
+    <details><summary class="small">Desligar</summary><div class="stack"><label class="f" for="dsS">Senha<input id="dsS" type="password" autocomplete="current-password"></label>
+    <label class="f" for="dsC">Código atual ou de recuperação<input id="dsC" inputmode="numeric" autocomplete="one-time-code"></label><button class="btn sm" id="dsOk">Desligar verificação</button></div></details>`, b => {
+      $("#dsOk", b).onclick = async () => { try { await api("2fa/desativar", { senha: $("#dsS", b).value, codigo: $("#dsC", b).value }); b.remove(); toast("Verificação em duas etapas desligada."); } catch (e) { toast(e.message); } }; });
+  let r; try { r = await api("2fa/iniciar", {}); } catch (e) { return toast(e.message); }
+  const grupos = r.segredo.match(/.{1,4}/g).join(" ");
+  caixa(`<span class="label">Ligar verificação em duas etapas</span><p class="small">${esc(r.instrucao)}</p>
+    <p class="small">Chave para digitar no app:</p><span class="code" style="font-size:1rem;letter-spacing:.08em;overflow-wrap:anywhere">${esc(grupos)}</span>
+    <a class="btn sm" href="${esc(r.uri)}">Abrir no app autenticador deste aparelho</a>
+    <label class="f" for="tfC">Código de 6 dígitos<input id="tfC" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label>
+    <button class="btn primary sm" id="tfOk">Confirmar e ligar</button><div id="tfRec"></div>`, b => {
+    $("#tfOk", b).onclick = async () => { try { const x = await api("2fa/ativar", { codigo: $("#tfC", b).value });
+      $("#tfRec", b).innerHTML = `<div class="note"><b>Ligada.</b> ${esc(x.aviso)}</div><pre class="mono small" style="user-select:all;white-space:pre-wrap">${x.recuperacao.join("\n")}</pre>`;
+      $("#tfOk", b).remove(); carregar(ATUAL_ID); } catch (e) { toast(e.message); } }; });
+}
+function sair(expirou) { TOKEN = null; try { localStorage.removeItem(KEY); } catch {} LISTA = ATUAL = null; telaLogin(); if (expirou) toast("Sessão expirada. Entre de novo."); }
+
+/* ---------- login ---------- */
+function telaLogin(modo = "entrar") {
+  $("#who").innerHTML = "";
+  $("#app").innerHTML = `<div class="auth card stack"><h1>${modo === "entrar" ? "Entrar no painel" : "Criar conta de profissional"}</h1>
+    <p class="small muted">Acompanhe a adesão dos seus pacientes entre as sessões e prescreva rotinas no app deles.</p>
+    ${modo === "criar" ? `<label class="f" for="nome">Nome profissional<input id="nome" placeholder="ex.: Dra. Ana Ribeiro"></label>
+    <label class="f" for="reg">Registro (CRP)<input id="reg" placeholder="ex.: CRP 04/00000"></label>
+    <label class="f" for="cont">Contato que o paciente vê<input id="cont" placeholder="WhatsApp ou e-mail do consultório"></label>` : ""}
+    <label class="f" for="email">E-mail<input id="email" type="email" autocomplete="email"></label>
+    <label class="f" for="senha">Senha<input id="senha" type="password" autocomplete="current-password"></label>
+    <label class="f" for="codigo" id="codigoL" hidden>Código do app autenticador<input id="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="9"></label>
+    <button class="btn primary" id="go">${modo === "entrar" ? "Entrar" : "Criar conta"}</button>
+    <button class="btn ghost" id="swap">${modo === "entrar" ? "Ainda não tenho conta" : "Já tenho conta"}</button>
+    ${modo === "entrar" ? `<button class="btn ghost sm" id="esq">Esqueci minha senha</button>` : ""}
+    <p id="err" class="small" style="color:var(--bad)"></p></div>`;
+  $("#swap").onclick = () => telaLogin(modo === "entrar" ? "criar" : "entrar");
+  const esq = $("#esq"); if (esq) esq.onclick = async () => {
+    const email = $("#email").value.trim(); if (!email) { $("#err").textContent = "Digite o e-mail da conta e toque de novo."; return; }
+    try { const r = await api("senha/esqueci", { email }); $("#err").style.color = "var(--good)"; $("#err").textContent = r.mensagem; } catch (e) { $("#err").textContent = e.message; } };
+  const go = async () => {
+    try {
+      const body = { email: $("#email").value, senha: $("#senha").value, codigo: $("#codigo").value };
+      const r = modo === "entrar" ? await api("entrar", body) : await api("registrar", Object.assign(body, { papel: "profissional", nome: $("#nome").value, registro: $("#reg").value, contato: $("#cont").value }));
+      if (r.usuario.papel !== "profissional") throw new Error("Esta conta é de paciente. Use o app do paciente.");
+      TOKEN = r.token; try { localStorage.setItem(KEY, TOKEN); } catch {}
+      carregar();
+    } catch (e) { $("#err").textContent = e.message; if (e.extra?.precisa2fa) { $("#codigoL").hidden = false; $("#codigo").focus(); } }
+  };
+  $("#go").onclick = go; $("#senha").addEventListener("keydown", e => e.key === "Enter" && go());
+}
+
+/* ---------- painel ---------- */
+async function carregar(manterId) {
+  try { LISTA = await api("pro/pacientes"); } catch (e) { return; }
+  try { EU = await api("eu"); } catch { EU = {}; }
+  $("#who").innerHTML = `<span class="small">${esc(LISTA.profissional)}</span><button class="btn sm" id="inv">Convidar paciente</button>
+    <button class="btn sm ghost" id="seg">${EU.doisFatores ? "Segurança" : "Ligar verificação em 2 etapas"}</button>${EU.admin ? `<a class="btn sm ghost" href="admin.html">Administração</a>` : ""}<button class="btn sm ghost" id="out">Sair</button>`;
+  $("#inv").onclick = convidar; $("#seg").onclick = seguranca; $("#out").onclick = async () => { try { await api("sair", {}); } catch {} sair(); };
+  const id = manterId || ATUAL_ID || LISTA.pacientes[0]?.id;
+  if (id) await abrir(id, true); else desenhar();
+}
+function atencao(p) { const a = p.adesao7; return (p.pedidosContato ? 10 : 0) + (a.humorBaixoDias >= 3 ? 5 : 0) + (a.diasComCheckin <= 2 ? 2 : 0); }
+function desenhar() {
+  const ps = [...LISTA.pacientes].sort((a, b) => atencao(b) - atencao(a) || a.nome.localeCompare(b.nome));
+  $("#app").innerHTML = `<div class="wrap"><aside class="stack">
+    <div class="card stack"><div class="row" style="justify-content:space-between"><h2>Pacientes</h2><span class="pill">${ps.length}</span></div>
+      <p class="small muted">Ordenados por quem pede atenção primeiro.</p>
+      <div class="stack" style="gap:4px">${ps.map(p => { const a = p.adesao7; return `<button class="pt" data-id="${p.id}" aria-current="${p.id === ATUAL_ID}">
+        <b>${esc(p.nome)}</b><span class="small muted">${p.atualizadoEm ? "sync " + fmtTS(p.atualizadoEm) : "sem dados"}</span>
+        <span class="meta">${p.pedidosContato ? `<span class="pill hot">pediu contato</span>` : ""}
+        <span class="pill ${a.diasComCheckin >= 5 ? "good" : a.diasComCheckin >= 3 ? "warn" : "bad"}">diário ${a.diasComCheckin}/7</span>
+        <span class="pill">${a.minutosFoco} min foco</span>${a.humorBaixoDias >= 3 ? `<span class="pill bad">humor baixo ${a.humorBaixoDias}d</span>` : ""}</span></button>`; }).join("") || `<p class="muted small">Nenhum paciente vinculado ainda. Use "Convidar paciente".</p>`}</div></div>
+    ${cartaoPlano()}
+    ${LISTA.convitesAbertos.length ? `<div class="card stack"><span class="label">Convites ainda não usados</span>${LISTA.convitesAbertos.map(c => `<div class="row" style="justify-content:space-between"><span class="mono">${esc(c.codigo)}</span><span class="small muted">${fmtTS(c.criado_em)}</span></div>`).join("")}</div>` : ""}
+    </aside><section id="ficha">${ATUAL ? ficha() : `<div class="card empty"><h2>Comece convidando um paciente</h2><p class="muted">Gere um código, passe ao paciente e ele digita no app em Mais › Vincular. Você só vê o que ele autorizar.</p><button class="btn primary" id="inv2">Gerar código de convite</button></div>`}</section></div>`;
+  $$(".pt").forEach(b => b.onclick = () => abrir(+b.dataset.id));
+  const inv2 = $("#inv2"); if (inv2) inv2.onclick = convidar;
+  if (ATUAL) ligarFicha();
+  $$("[data-pro-act]").forEach(b => b.onclick = () => acaoPlano(b.dataset.proAct, b));
+}
+const reais = v => "R$ " + (v / 100).toFixed(2).replace(".", ",");
+let PRECO_PRO = 6900;
+function cartaoPlano() {
+  const d = LISTA.direitos || {}, n = LISTA.pacientes.length, lim = LISTA.limitePacientes;
+  const a = (LISTA.assinaturas || []).find(x => x.vigente && x.plano === "pro_mensal");
+  if (d.pro) return `<div class="card stack" id="plano"><div class="row" style="justify-content:space-between"><span class="label">Seu plano</span><span class="pill good">Agora Pro</span></div>
+    <p class="small">Pacientes ilimitados. ${a ? (a.cancelar_no_fim ? "Vale até " : "Renova em ") + fmtTS(a.fim_periodo) + "." : ""}</p>
+    ${a && a.recorrente && !a.cancelar_no_fim && !["cortesia", "google_play"].includes(a.provedor) ? `<button class="btn sm ghost" data-pro-act="cancelar" data-id="${a.id}" data-fim="${esc(a.fim_periodo)}">Cancelar renovação</button>` : ""}
+    ${a && a.provedor === "stripe" ? `<button class="btn sm ghost" data-pro-act="portal" data-id="${a.id}">Trocar cartão</button>` : ""}</div>`;
+  return `<div class="card stack" id="plano"><div class="row" style="justify-content:space-between"><span class="label">Seu plano</span><span class="pill">Grátis</span></div>
+    <p class="small"><b>${n} de ${lim}</b> pacientes vinculados no plano grátis.</p>
+    <div style="height:8px;border-radius:99px;background:var(--sunk);overflow:hidden"><i style="display:block;height:100%;width:${Math.min(100, 100 * n / lim)}%;background:${n >= lim ? "var(--hot)" : "var(--accent)"}"></i></div>
+    <button class="btn primary" data-pro-act="assinar">Assinar Agora Pro · ${reais(PRECO_PRO)}/mês</button>
+    <p class="small muted">Pacientes ilimitados. Cancele quando quiser.</p></div>`;
+}
+async function acaoPlano(acao, el) {
+  try {
+    if (acao === "assinar") { const r = await api("pagamentos/checkout", { plano: "pro_mensal" }); location.href = r.url; }
+    if (acao === "portal") { const r = await api("pagamentos/portal", { assinatura: +el.dataset.id }); location.href = r.url; }
+    if (acao === "cancelar") {
+      if (el.dataset.confirma !== "1") { el.dataset.confirma = "1"; el.textContent = "Confirmar: não renovar (vale até " + fmtTS(el.dataset.fim) + ")"; return; }
+      await api("pagamentos/cancelar", { assinatura: +el.dataset.id }); toast("Renovação cancelada."); carregar();
+    }
+  } catch (e) { toast(e.message); }
+}
+async function abrir(id, silencioso) {
+  try { ATUAL = await api("pro/pacientes/" + id); ATUAL_ID = id; desenhar(); } catch (e) { if (!silencioso) toast(e.message); }
+}
+async function convidar() {
+  try { const r = await api("pro/convite", {});
+    const texto = `Oi! Para acompanharmos sua rotina entre as sessões, abra este link, crie sua conta no Agora e confirme o vínculo: ${r.link}`;
+    const box = caixa(`<span class="label">Convite para um paciente</span><span class="code">${esc(r.codigo)}</span>
+      <p class="small">Mande o link: ao abrir, o app já preenche o código. Ou o paciente digita o código em <b>Mais › Vincular ao seu profissional</b>. Vale para uma pessoa.</p>
+      <input readonly value="${esc(r.link)}" class="mono small" id="lk" aria-label="Link do convite">
+      <div class="row"><button class="btn sm primary" id="cpL">Copiar link</button><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(texto)}">Enviar no WhatsApp</a><button class="btn sm ghost" id="cp">Copiar só o código</button></div>`);
+    $("#cp", box).onclick = () => navigator.clipboard?.writeText(r.codigo).then(() => toast("Código copiado.")).catch(() => {});
+    $("#cpL", box).onclick = () => navigator.clipboard?.writeText(r.link).then(() => toast("Link copiado.")).catch(() => { $("#lk", box).select(); });
+    box.querySelector("[data-fechar]").addEventListener("click", () => carregar());
+  } catch (e) {
+    if (e.status === 402) { toast(e.message); document.getElementById("plano")?.scrollIntoView({ block: "center" }); document.getElementById("plano")?.animate?.([{ outline: "3px solid var(--hot)" }, { outline: "0" }], 1600); return; }
+    toast(e.message);
+  }
+}
+
+/* ---------- ficha do paciente ---------- */
+function serie(d, n) {
+  const ck = d.checkins || {}, ss = d.sessions || [];
+  return [...Array(n)].map((_, i) => { const dia = diasAtras(n - 1 - i), c = ck[dia] || {};
+    return { d: dia, mood: c.mood ?? null, energy: c.energy ?? null, sleepH: c.sleepH ?? null, sleepQ: c.sleepQ ?? null, act: c.activityMin ?? null, meds: c.meds, note: c.note,
+      foco: ss.filter(s => s.date === dia).reduce((a, s) => a + s.min, 0) }; });
+}
+function grafico(s) {
+  const W = 760, H = 260, L = 44, R = 44, T = 26, B = 28, iw = W - L - R, ih = H - T - B, bw = iw / s.length;
+  const maxF = Math.max(60, ...s.map(x => x.foco)), top = Math.ceil(maxF / 30) * 30;
+  const yF = v => T + ih - v / top * ih, yM = v => T + ih - (v - 1) / 4 * ih, yS = v => T + ih - v / 12 * ih;
+  let g = "";
+  for (let k = 0; k <= 3; k++) { const v = top * k / 3; g += `<line x1="${L}" x2="${W - R}" y1="${yF(v)}" y2="${yF(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${yF(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${Math.round(v)}</text>`; }
+  [1, 3, 5].forEach(v => g += `<text x="${W - R + 6}" y="${yM(v) + 4}" font-size="11" fill="var(--muted)">${v}</text>`);
+  s.forEach((x, i) => { const cx = L + i * bw;
+    if (x.foco) g += `<rect x="${cx + bw * .15}" y="${yF(x.foco)}" width="${bw * .7}" height="${T + ih - yF(x.foco)}" rx="2" fill="var(--accent)" opacity=".8"><title>${fmtData(x.d)}: ${x.foco} min foco</title></rect>`;
+    if (x.sleepH != null) g += `<circle cx="${cx + bw / 2}" cy="${yS(x.sleepH)}" r="3" fill="var(--m2)"><title>${fmtData(x.d)}: ${r1(x.sleepH)} h sono</title></circle>`;
+    if (i % 4 === (s.length - 1) % 4) g += `<text x="${cx + bw / 2}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--muted)">${fmtData(x.d)}</text>`; });
+  let path = "", on = false;
+  s.forEach((x, i) => { if (x.mood) { path += (on ? "L" : "M") + (L + i * bw + bw / 2).toFixed(1) + " " + yM(x.mood).toFixed(1); on = true; } else on = false; });
+  g += `<path d="${path}" fill="none" stroke="var(--m1)" stroke-width="2.5"/>`;
+  s.forEach((x, i) => { if (x.mood) g += `<circle cx="${L + i * bw + bw / 2}" cy="${yM(x.mood)}" r="3.5" fill="var(--surface)" stroke="var(--m1)" stroke-width="2"><title>${fmtData(x.d)}: humor ${x.mood}</title></circle>`; });
+  g += `<text x="${L - 6}" y="12" text-anchor="end" font-size="10" fill="var(--muted)">min</text><text x="${W - R + 6}" y="12" font-size="10" fill="var(--muted)">humor</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Foco diário em barras, humor em linha e sono em pontos, últimos ${s.length} dias">${g}</svg>`;
+}
+function resumoSessao() {
+  const p = ATUAL, a = p.adesao7, a28 = p.adesao28, d = p.dados;
+  const linhas = [`Paciente: ${p.nome}. Período: últimos 7 dias (comparado com 28).`];
+  if (p.consentimento.checkins) {
+    linhas.push(`Diário preenchido em ${a.diasComCheckin} de 7 dias. Humor médio ${r1(a.humorMedio)} (28 dias: ${r1(a28.humorMedio)}). ${a.humorBaixoDias} dia(s) com humor 1–2.`);
+    linhas.push(`Sono médio ${r1(a.sonoMedio)} h (28 dias: ${r1(a28.sonoMedio)} h). Atividade física: ${a.atividadeTotal} min na semana.`);
+    const notas = serie(d, 7).filter(x => x.note).map(x => `${fmtData(x.d)} "${x.note}"`);
+    if (notas.length) linhas.push("Anotações do paciente: " + notas.join("; ") + ".");
+  }
+  if (p.consentimento.foco) linhas.push(`Foco registrado: ${a.minutosFoco} min na semana (média 28 dias: ${Math.round(a28.minutosFoco / 4)} min/semana).`);
+  if (p.consentimento.rotinas) linhas.push(`Rotinas concluídas: ${a.rotinasConcluidas} na semana.`);
+  if (p.consentimento.triagem && d.screenings?.length) { const s = d.screenings.slice(-1)[0]; linhas.push(`Última ASRS parte A (${fmtData(s.date)}): ${s.positives}/6 itens na faixa de atenção.`); }
+  linhas.push("Dados autorrelatados no app; usar como apoio à entrevista clínica.");
+  return linhas.join("\n");
+}
+function ficha() {
+  const p = ATUAL, a = p.adesao7, d = p.dados, c = p.consentimento;
+  const s28 = serie(d, 28);
+  const rot = d.routines || [], runs = d.routineRuns || [];
+  const abas = [["visao", "Visão geral"], ["diario", "Diário"], ["prescrever", "Prescrever"], ["sessao", "Resumo p/ sessão"]];
+  let corpo = "";
+  if (ABA === "visao") corpo = `
+    <div class="kpis">
+      <div class="kpi"><span class="label">Diário 7d</span><b>${c.checkins ? a.diasComCheckin + "/7" : "–"}</b></div>
+      <div class="kpi"><span class="label">Humor médio</span><b>${c.checkins ? r1(a.humorMedio) : "–"}</b></div>
+      <div class="kpi"><span class="label">Sono médio</span><b>${c.checkins ? r1(a.sonoMedio) + " h" : "–"}</b></div>
+      <div class="kpi"><span class="label">Foco 7d</span><b>${c.foco ? a.minutosFoco + "′" : "–"}</b></div>
+      <div class="kpi"><span class="label">Atividade 7d</span><b>${c.checkins ? a.atividadeTotal + "′" : "–"}</b></div>
+      <div class="kpi"><span class="label">Rotinas 7d</span><b>${c.rotinas ? a.rotinasConcluidas : "–"}</b></div>
+    </div>
+    ${p.pedidos.filter(x => !x.visto).map(x => `<div class="note row" style="justify-content:space-between"><span><b>Pediu contato</b> em ${fmtTS(x.criado_em)}${x.motivo ? ": " + esc(x.motivo) : ""}</span><button class="btn sm" data-visto="${x.id}">Marcar como visto</button></div>`).join("")}
+    <div class="card stack"><div class="row" style="justify-content:space-between"><h3>Últimos 28 dias</h3><div class="legend"><span style="--c:var(--accent)">foco (min)</span><span style="--c:var(--m1)">humor 1–5</span><span style="--c:var(--m2)">sono (0–12 h)</span></div></div>
+      <div class="chart">${(c.checkins || c.foco) ? grafico(s28) : `<p class="muted small">O paciente não liberou diário nem foco.</p>`}</div></div>
+    ${c.rotinas ? `<div class="card stack"><h3>Adesão às rotinas (28 dias)</h3><div class="tablewrap"><table><thead><tr><th>Rotina</th><th>Origem</th><th>Feitas</th><th>Últimos 14 dias</th></tr></thead><tbody>
+      ${rot.map(r => { const feitos = new Set(runs.filter(x => x.routineId === r.id && x.done > 0).map(x => x.date)); const n28 = s28.filter(x => feitos.has(x.d)).length;
+        return `<tr><td>${esc(r.name)}</td><td>${r.from ? `<span class="pill hot">prescrita</span>` : `<span class="pill">própria</span>`}</td><td class="n">${n28}/28</td><td><span class="row" style="gap:3px">${s28.slice(-14).map(x => `<span title="${fmtData(x.d)}" style="width:10px;height:14px;border-radius:3px;background:${feitos.has(x.d) ? "var(--good)" : "var(--sunk)"}"></span>`).join("")}</span></td></tr>`; }).join("") || `<tr><td colspan="4" class="muted">Sem rotinas.</td></tr>`}
+      </tbody></table></div></div>` : ""}
+    ${c.triagem && d.screenings?.length ? `<div class="card stack"><h3>Triagem ASRS 1.1 parte A</h3><div class="tablewrap"><table><thead><tr><th>Data</th><th>Itens na faixa</th><th>Leitura</th></tr></thead><tbody>${d.screenings.slice().reverse().map(s => `<tr><td>${fmtData(s.date)}</td><td class="n">${s.positives}/6</td><td>${s.positive ? `<span class="pill warn">acima do corte (≥4)</span>` : `<span class="pill">abaixo do corte</span>`}</td></tr>`).join("")}</tbody></table></div><p class="small muted">Rastreio autoaplicado. Não substitui a avaliação diagnóstica.</p></div>` : ""}
+    ${c.tarefas ? `<div class="card stack"><h3>Tarefas e cursos</h3>${(d.tasks || []).filter(t => !t.done).slice(0, 15).map(t => `<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding-block:6px"><span>${esc(t.title)}</span><span class="row" style="gap:4px">${t.type ? `<span class="pill">${TIPON[t.type] || t.type}</span>` : ""}${t.priority === "alta" ? `<span class="pill bad">prioridade alta</span>` : ""}${t.from ? `<span class="pill hot">prescrita</span>` : ""}${t.steps?.length ? `<span class="pill">${t.steps.filter(x => x.done).length}/${t.steps.length} passos</span>` : ""}</span></div>`).join("") || `<p class="muted small">Nenhuma.</p>`}
+      ${(d.courses || []).length ? `<span class="label" style="margin-top:8px">Cursos</span>${d.courses.map(k => `<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding-block:6px"><span>${esc(k.name)}</span><span class="row" style="gap:6px"><span class="mono small">${k.done}/${k.total} aulas</span>${k.deadline ? `<span class="pill">prazo ${fmtData(k.deadline)}</span>` : ""}</span></div>`).join("")}` : ""}</div>` : ""}`;
+  if (ABA === "diario") corpo = c.checkins ? `<div class="card"><div class="tablewrap"><table><thead><tr><th>Dia</th><th>Humor</th><th>Energia</th><th>Sono</th><th>Qualidade</th><th>Atividade</th><th>Medicação</th><th>Foco</th><th>Nota</th></tr></thead><tbody>
+    ${s28.slice().reverse().map(x => `<tr><td>${fmtData(x.d)}</td><td>${x.mood ? `${face(x.mood)} ${x.mood}` : "–"}</td><td class="n">${x.energy ?? "–"}</td><td class="n">${x.sleepH != null ? r1(x.sleepH) + " h" : "–"}</td><td class="n">${x.sleepQ ?? "–"}</td><td class="n">${x.act ? x.act + "′" : x.mood ? "0" : "–"}</td><td>${x.meds === true ? "sim" : x.meds === false && x.mood ? "não" : "–"}</td><td class="n">${c.foco ? (x.foco || 0) + "′" : "–"}</td><td>${esc(x.note || "")}</td></tr>`).join("")}</tbody></table></div></div>`
+    : `<div class="card"><p class="muted">O paciente não liberou o diário.</p></div>`;
+  if (ABA === "prescrever") corpo = `<div class="card stack"><h3>Nova prescrição</h3>
+    <div class="tabs" role="group" aria-label="Tipo">${[["rotina", "Rotina"], ["tarefa", "Tarefa"], ["mensagem", "Recado"]].map(([k, n]) => `<button class="btn sm" data-tipo="${k}" aria-pressed="${k === "rotina"}">${n}</button>`).join("")}</div>
+    <label class="f" for="pt">Título<input id="pt" placeholder="ex.: Pausa de corpo às 15h"></label>
+    <label class="f" for="ph" id="phBox">Horário (opcional)<input id="ph" type="time"></label>
+    <label class="f" for="pp" id="ppBox"><span id="ppLbl">Passos: um por linha, "passo | minutos"</span><textarea id="pp" placeholder="Levantar e alongar | 2&#10;Respirar 6 vezes na janela | 2"></textarea></label>
+    <div class="row"><button class="btn primary" id="psend">Enviar ao app do paciente</button><span class="small muted">Aparece no app na próxima sincronização.</span></div></div>
+    <div class="card stack"><h3>Prescrições ativas</h3>${p.prescricoes.map(x => `<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding-block:8px"><span><span class="pill">${x.tipo}</span> ${esc(x.conteudo.titulo)} <span class="small muted">${fmtTS(x.criadoEm)}</span></span><button class="btn sm ghost" data-arq="${x.id}">Arquivar</button></div>`).join("") || `<p class="muted small">Nenhuma.</p>`}</div>`;
+  if (ABA === "sessao") corpo = `<div class="card stack"><h3>Resumo para a próxima sessão</h3><p class="small muted">Texto pronto para colar no prontuário. Revise antes de usar.</p>
+    <textarea id="resumo" style="min-height:220px" readonly>${esc(resumoSessao())}</textarea><div class="row"><button class="btn" id="cpres">Copiar</button></div></div>`;
+  return `<div class="stack"><div class="card stack"><div class="row" style="justify-content:space-between"><div><h1>${esc(p.nome)}</h1><p class="small muted">${p.atualizadoEm ? "Dados de " + new Date(p.atualizadoEm).toLocaleString("pt-BR") : "O paciente ainda não sincronizou."}</p></div></div>
+    <div class="row" style="gap:6px"><span class="label">Liberado:</span>${[["checkins", "diário"], ["foco", "foco"], ["rotinas", "rotinas"], ["tarefas", "tarefas"], ["triagem", "triagem"]].map(([k, n]) => `<span class="pill ${c[k] ? "good" : ""}">${c[k] ? "✓" : "✕"} ${n}</span>`).join("")}</div>
+    <div class="tabs" role="tablist">${abas.map(([k, n]) => `<button class="btn sm" data-aba="${k}" aria-pressed="${ABA === k}">${n}</button>`).join("")}</div></div>${corpo}</div>`;
+}
+function ligarFicha() {
+  $$("[data-aba]").forEach(b => b.onclick = () => { ABA = b.dataset.aba; desenhar(); });
+  $$("[data-visto]").forEach(b => b.onclick = async () => { await api("pro/pedidos/" + b.dataset.visto + "/visto", {}); carregar(ATUAL_ID); });
+  $$("[data-arq]").forEach(b => b.onclick = async () => { await api("pro/prescricoes/" + b.dataset.arq + "/arquivar", {}); toast("Arquivada."); abrir(ATUAL_ID); });
+  const cp = $("#cpres"); if (cp) cp.onclick = () => { const t = $("#resumo"); t.select(); navigator.clipboard?.writeText(t.value).then(() => toast("Copiado.")).catch(() => {}); };
+  let tipo = "rotina";
+  $$("[data-tipo]").forEach(b => b.onclick = () => { tipo = b.dataset.tipo; $$("[data-tipo]").forEach(x => x.setAttribute("aria-pressed", x === b));
+    $("#phBox").hidden = tipo !== "rotina"; $("#ppLbl").textContent = tipo === "rotina" ? 'Passos: um por linha, "passo | minutos"' : tipo === "tarefa" ? "Passos (um por linha, opcional)" : "Texto do recado"; });
+  const send = $("#psend"); if (send) send.onclick = async () => {
+    const titulo = $("#pt").value.trim(), txt = $("#pp").value;
+    const conteudo = { titulo };
+    if (tipo === "rotina") { conteudo.horario = $("#ph").value; conteudo.passos = txt.split(/\n+/).map(l => l.trim()).filter(Boolean).map(l => { const [t, m] = l.split("|"); return { t: t.trim(), min: parseInt(m) || 5 }; }); }
+    else if (tipo === "tarefa") conteudo.passos = txt.split(/\n+/).map(l => l.trim()).filter(Boolean);
+    else conteudo.texto = txt.trim();
+    try { await api("pro/pacientes/" + ATUAL_ID + "/prescrever", { tipo, conteudo }); toast("Enviado ao app do paciente."); abrir(ATUAL_ID); } catch (e) { toast(e.message); }
+  };
+}
+
+/* ---------- início ---------- */
+(async () => {
+  try { const r = await fetch("/api/health"); if (!(await r.json()).ok) throw 0; }
+  catch { $("#app").innerHTML = `<div class="auth card stack"><h1>Abra pelo servidor do Agora</h1><p>O painel do profissional precisa do servidor ligado. Dê dois cliques no lançador da sua plataforma (veja o COMECE-AQUI) e abra <span class="mono">http://localhost:8765/app/pro.html</span>.</p></div>`; return; }
+  fetch("/api/planos").then(r => r.json()).then(j => { const p = (j.planos || []).find(x => x.id === "pro_mensal"); if (p) PRECO_PRO = p.valor; }).catch(() => {});
+  const q = new URLSearchParams(location.search);
+  if (q.get("pagamento")) { try { history.replaceState(null, "", location.pathname); } catch {} }
+  if (TOKEN) {
+    await carregar();
+    if (q.get("pagamento") === "retorno") {
+      toast("Confirmando o pagamento...");
+      for (let i = 0; i < 15 && !(LISTA && LISTA.direitos && LISTA.direitos.pro); i++) { await new Promise(r => setTimeout(r, 2000)); await carregar(); }
+      toast(LISTA?.direitos?.pro ? "Agora Pro ativo. Pacientes ilimitados." : "O pagamento ainda está sendo confirmado.");
+    }
+    if (q.get("pagamento") === "falha") toast("O pagamento não foi concluído. Nada foi cobrado.");
+  } else telaLogin();
+})();
+</script>
+</body>
+</html>

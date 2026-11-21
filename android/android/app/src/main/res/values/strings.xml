@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Agora TDAH</string>
+    <string name="title_activity_main">Agora TDAH</string>
+    <string name="package_name">br.com.agoratdah.app</string>
+    <string name="custom_url_scheme">br.com.agoratdah.app</string>
+</resources>

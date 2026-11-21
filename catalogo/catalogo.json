@@ -1,0 +1,847 @@
+{
+ "versao": "2026-11-14",
+ "aviso": "Valores sugeridos, a ajustar pelo painel de administração. Nada aqui foi validado com o CRP-04.",
+ "etapas": [
+  "Entrada gratuita",
+  "Primeiro passo pago",
+  "Serviço principal",
+  "Continuidade"
+ ],
+ "linhas": [
+  {
+   "id": "pessoas",
+   "nome": "Para você",
+   "marca": "psicologotech e Lume",
+   "nota": "Serviço psicológico: sempre com nome e CRP"
+  },
+  {
+   "id": "empresas",
+   "nome": "Para empresas",
+   "marca": "Lume e Radar Psicossocial",
+   "nota": "Venda consultiva, por proposta"
+  },
+  {
+   "id": "psicologos",
+   "nome": "Para psicólogos",
+   "marca": "Lume e Agora",
+   "nota": "Colegas como clientes e como rede"
+  },
+  {
+   "id": "carreira",
+   "nome": "Carreira em tech",
+   "marca": "marca separada",
+   "nota": "Não é serviço psicológico: fora do site, sem CRP"
+  }
+ ],
+ "itens": [
+  {
+   "id": "ferramentas",
+   "linha": "pessoas",
+   "etapa": 0,
+   "nome": "Ferramentas e testes gratuitos",
+   "status": "existe",
+   "resumo": "Mais de 50 recursos anônimos no site: teste de ansiedade, Pomodoro de foco, respiração guiada.",
+   "paraQuem": "Quem pesquisa burnout, TDAH e ansiedade e ainda não quer falar com ninguém.",
+   "formato": "Páginas do site, sem cadastro",
+   "valor": "Grátis",
+   "horas": "Nenhuma por pessoa",
+   "escala": "Cada ferramenta ganha o botão guardar no Agora. É a maior porta de entrada que você já tem.",
+   "onde": "psicologotech.com.br/ferramentas",
+   "marca": "psicologotech",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "serie",
+   "linha": "pessoas",
+   "etapa": 0,
+   "nome": "Série Além do status",
+   "status": "em produção",
+   "resumo": "Reels e vídeos curtos sobre burnout, TDAH, ansiedade e a vida de quem trabalha com tecnologia.",
+   "paraQuem": "Quem ainda não procura ajuda, mas se reconhece no tema.",
+   "formato": "Vídeos de até 90 segundos, duas temporadas de 10 temas",
+   "valor": "Grátis",
+   "horas": "Só produção",
+   "escala": "Cada episódio aponta para uma ferramenta do site, nunca para uma oferta. Peça que divulgar serviço leva nome e CRP.",
+   "onde": "Instagram, YouTube e site",
+   "marca": "psicologotech",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "aula",
+   "linha": "pessoas",
+   "etapa": 0,
+   "nome": "Aula aberta mensal",
+   "status": "novo",
+   "resumo": "Uma hora ao vivo de psicoeducação sobre um tema, com perguntas. Conteúdo educativo, não atendimento.",
+   "paraQuem": "Quem quer entender um tema antes de decidir o que fazer.",
+   "formato": "Ao vivo, 60 minutos, uma vez por mês; gravação vira artigo e cortes",
+   "valor": "Grátis",
+   "horas": "1 h por mês",
+   "escala": "Uma hora sua alcança dezenas de pessoas e alimenta um mês de conteúdo. É onde as turmas dos grupos se enchem.",
+   "onde": "Inscrição pelo formulário único",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "agora",
+   "linha": "pessoas",
+   "etapa": 0,
+   "nome": "Agora",
+   "status": "pronto",
+   "resumo": "App que escolhe a próxima ação, com rotinas, foco e diário. Os dados ficam no aparelho da pessoa.",
+   "paraQuem": "Adultos com TDAH ou rotina caótica.",
+   "formato": "App web e Android",
+   "valor": "Grátis",
+   "horas": "Nenhuma por usuário",
+   "escala": "Mantém a pessoa por perto todos os dias. A tela de serviços aparece só para quem não tem vínculo com outro psicólogo.",
+   "onde": "Site do Agora",
+   "marca": "agora",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "ebooks",
+   "linha": "pessoas",
+   "etapa": 1,
+   "nome": "Ebooks",
+   "status": "em produção",
+   "resumo": "Guias de cerca de 100 páginas: burnout em tech, burnout e TDAH, ansiedade, saúde mental, burnout na liderança.",
+   "paraQuem": "Quem prefere ler e entender sozinho primeiro.",
+   "formato": "PDF, compra única",
+   "valor": "R$ 39 cada",
+   "horas": "Nenhuma depois de escritos",
+   "escala": "Produto sem hora sua. Cada ebook termina indicando o grupo ou o treino do mesmo tema.",
+   "onde": "Site, com entrega pela conta do Agora",
+   "sim": {
+    "rotulo": "Ebooks vendidos por mês",
+    "padrao": 60,
+    "max": 300,
+    "receita": 39,
+    "horas": 0
+   },
+   "marca": "psicologotech",
+   "psicologico": false,
+   "venda": {
+    "modo": "ebook",
+    "valor": 3900,
+    "android": false,
+    "titulos": [
+     {
+      "id": "tdah-no-trabalho",
+      "titulo": "TDAH no trabalho: um guia prático"
+     },
+     {
+      "id": "burnout-em-tech",
+      "titulo": "Burnout em tech: reconhecer e pedir ajuda"
+     },
+     {
+      "id": "dia-ruim",
+      "titulo": "Rotinas que cabem num dia ruim"
+     }
+    ]
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "plus",
+   "linha": "pessoas",
+   "etapa": 1,
+   "nome": "Agora Plus",
+   "status": "pronto",
+   "resumo": "Cópia na nuvem, sala de foco com outras pessoas, relatório do mês e sons extras.",
+   "paraQuem": "Quem já usa o Agora todo dia.",
+   "formato": "Assinatura mensal ou anual",
+   "valor": "R$ 9,90 por mês ou R$ 89 por ano",
+   "horas": "Nenhuma",
+   "escala": "Receita recorrente sem hora sua. Aqui desconto e teste grátis são permitidos, porque é software.",
+   "onde": "Site (Mercado Pago)",
+   "sim": {
+    "rotulo": "Assinantes do Plus",
+    "padrao": 150,
+    "max": 2000,
+    "receita": 9.9,
+    "horas": 0
+   },
+   "marca": "agora",
+   "psicologico": false,
+   "venda": {
+    "modo": "assinatura"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "terapia",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Terapia individual",
+   "status": "existe",
+   "resumo": "Sessões online para burnout, TDAH adulto e ansiedade, com rotinas combinadas no Agora entre as sessões.",
+   "paraQuem": "Quem precisa de acompanhamento individual.",
+   "formato": "Online, 50 minutos, semanal",
+   "valor": "R$ 180 por sessão",
+   "horas": "1 h por sessão",
+   "porHora": 180,
+   "escala": "Não escala. Fica com teto de horários e lista de espera; quem espera recebe a opção de grupo.",
+   "onde": "Site, app e WhatsApp",
+   "sim": {
+    "rotulo": "Sessões individuais por semana",
+    "padrao": 5,
+    "max": 20,
+    "receita": 720,
+    "horas": 1
+   },
+   "marca": "psicologotech",
+   "psicologico": true,
+   "venda": {
+    "modo": "sessao",
+    "valor": 18000,
+    "android": true
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "grupo-tdah",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Grupo terapêutico de TDAH adulto",
+   "status": "novo",
+   "resumo": "Grupo semanal contínuo, com tema do encontro, troca entre participantes e uma combinação prática para a semana no Agora.",
+   "paraQuem": "Adultos com TDAH que querem tratamento com custo menor e a companhia de quem vive o mesmo.",
+   "formato": "Online, até 8 pessoas, 90 minutos por semana; entrada após conversa inicial",
+   "valor": "R$ 360 por mês",
+   "horas": "1,5 h por semana por grupo",
+   "porHora": 480,
+   "escala": "Oito pessoas na mesma hora e meia. É o serviço de maior valor por hora do catálogo clínico.",
+   "onde": "Site e app",
+   "sim": {
+    "rotulo": "Grupos de TDAH ativos",
+    "padrao": 1,
+    "max": 4,
+    "receita": 2880,
+    "horas": 1.5
+   },
+   "marca": "psicologotech",
+   "psicologico": true,
+   "venda": {
+    "modo": "turma",
+    "valor": 36000,
+    "android": false
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "grupo-burnout",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Grupo de burnout para profissionais de tech",
+   "status": "novo",
+   "resumo": "Programa fechado de 10 encontros: sinais, limites, carga de trabalho, conversa com a liderança, retorno ao ritmo.",
+   "paraQuem": "Devs, analistas, líderes técnicos e pessoas de segurança em esgotamento.",
+   "formato": "Online, até 8 pessoas, 10 encontros semanais de 90 minutos",
+   "valor": "R$ 900 pelo programa",
+   "horas": "1,5 h por semana por turma",
+   "porHora": 480,
+   "escala": "Turma com começo e fim: enche pela aula aberta e pela lista de espera, e o mesmo roteiro vira versão in-company.",
+   "onde": "Site e app",
+   "sim": {
+    "rotulo": "Turmas de burnout ativas",
+    "padrao": 1,
+    "max": 3,
+    "receita": 2880,
+    "horas": 1.5
+   },
+   "marca": "psicologotech",
+   "psicologico": true,
+   "venda": {
+    "modo": "turma",
+    "valor": 90000,
+    "android": false
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "ths-tdah",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Treino de habilidades sociais: TDAH adulto",
+   "status": "novo",
+   "resumo": "Treino prático e interativo: ouvir sem interromper, conversas difíceis, pedir e negar, combinar e cumprir. Cada encontro termina com uma missão da semana no Agora.",
+   "paraQuem": "Adultos com TDAH com atrito em relacionamentos, família e trabalho.",
+   "formato": "Online, 6 a 8 pessoas, 8 encontros de 90 minutos com ensaio em duplas",
+   "valor": "R$ 720 pelo programa",
+   "horas": "1,5 h por semana por turma",
+   "porHora": 480,
+   "escala": "As missões no app são o que nenhum concorrente tem: a prática continua entre os encontros e você vê a adesão.",
+   "onde": "Site e app",
+   "sim": {
+    "rotulo": "Turmas do treino (TDAH) ativas",
+    "padrao": 0,
+    "max": 3,
+    "receita": 2880,
+    "horas": 1.5
+   },
+   "marca": "lume",
+   "psicologico": true,
+   "venda": {
+    "modo": "turma",
+    "valor": 72000,
+    "android": false
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "ths-tech",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Treino de habilidades sociais: profissionais de tech",
+   "status": "novo",
+   "resumo": "Ensaio de situações reais do trabalho: falar em reunião, dar e receber feedback, 1:1 com a liderança, discordar, entrevista, apresentar para não técnicos.",
+   "paraQuem": "Profissionais de tecnologia com ansiedade social ou em transição para liderança.",
+   "formato": "Online, 6 a 8 pessoas, 8 encontros de 90 minutos com simulações",
+   "valor": "R$ 720 pelo programa",
+   "horas": "1,5 h por semana por turma",
+   "porHora": 480,
+   "escala": "É o produto-ponte: a mesma estrutura vira treino para lideranças dentro das empresas, com valor por turma maior.",
+   "onde": "Site e app",
+   "sim": {
+    "rotulo": "Turmas do treino (tech) ativas",
+    "padrao": 1,
+    "max": 3,
+    "receita": 2880,
+    "horas": 1.5
+   },
+   "marca": "lume",
+   "psicologico": true,
+   "venda": {
+    "modo": "turma",
+    "valor": 72000,
+    "android": false
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "opc",
+   "linha": "pessoas",
+   "etapa": 2,
+   "nome": "Orientação profissional e de carreira",
+   "status": "novo",
+   "resumo": "Processo breve para decisões de carreira: mudar de área, aceitar liderança, voltar depois de um afastamento. É serviço psicológico, diferente da mentoria técnica.",
+   "paraQuem": "Quem está diante de uma decisão de carreira e trava.",
+   "formato": "Online, individual, 6 encontros de 50 minutos",
+   "valor": "R$ 220 por encontro",
+   "horas": "1 h por encontro",
+   "porHora": 220,
+   "escala": "Tem começo e fim, o que libera horário. É a forma de falar de carreira dentro do psicologotech sem misturar com a mentoria.",
+   "onde": "Site e app",
+   "sim": {
+    "rotulo": "Encontros de orientação de carreira por mês",
+    "padrao": 4,
+    "max": 16,
+    "receita": 220,
+    "horas": 0.25
+   },
+   "marca": "psicologotech",
+   "psicologico": true,
+   "venda": {
+    "modo": "sessao",
+    "valor": 22000,
+    "android": true
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "manutencao",
+   "linha": "pessoas",
+   "etapa": 3,
+   "nome": "Encontro mensal de manutenção",
+   "status": "novo",
+   "resumo": "Reencontro mensal para quem concluiu um grupo ou treino: o que funcionou, o que travou, próxima meta.",
+   "paraQuem": "Ex-participantes dos grupos e treinos.",
+   "formato": "Online, até 12 pessoas, 90 minutos por mês",
+   "valor": "R$ 90 por encontro",
+   "horas": "1,5 h por mês",
+   "porHora": 720,
+   "escala": "Mantém o vínculo sem ocupar a agenda semanal e é de onde saem as indicações.",
+   "onde": "App",
+   "marca": "psicologotech",
+   "psicologico": true,
+   "venda": {
+    "modo": "turma",
+    "valor": 9000,
+    "android": false
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "relampago",
+   "linha": "empresas",
+   "etapa": 0,
+   "nome": "Diagnóstico Relâmpago",
+   "status": "em produção",
+   "resumo": "Uma página com a exposição psicossocial pública de uma empresa, a partir de fontes abertas. Abre a conversa com o RH.",
+   "paraQuem": "RH e diretoria de empresas de tecnologia.",
+   "formato": "Relatório de uma página, feito por empresa",
+   "valor": "Grátis",
+   "horas": "Cerca de 1 h por empresa",
+   "escala": "Usa o que você já sabe fazer com fontes abertas. Vira semi-automático com um modelo.",
+   "onde": "Envio direto e LinkedIn",
+   "marca": "radar",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "guia-nr1",
+   "linha": "empresas",
+   "etapa": 0,
+   "nome": "Guia da NR-1 para RH",
+   "status": "em produção",
+   "resumo": "O que a norma exige sobre riscos psicossociais e como se preparar, em linguagem de RH.",
+   "paraQuem": "RH e segurança do trabalho.",
+   "formato": "Ebook em PDF",
+   "valor": "Grátis em troca do contato",
+   "horas": "Nenhuma depois de escrito",
+   "escala": "Gera a lista de empresas interessadas sem prospecção ativa.",
+   "onde": "Página de empresas",
+   "marca": "radar",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "palestra",
+   "linha": "empresas",
+   "etapa": 1,
+   "nome": "Palestra",
+   "status": "novo",
+   "resumo": "Temas: burnout em times de tecnologia, TDAH no trabalho, segurança psicológica, fadiga de alerta em times de operação.",
+   "paraQuem": "Empresas que querem começar por algo pontual.",
+   "formato": "Online ou presencial, 60 a 90 minutos",
+   "valor": "R$ 2.500",
+   "horas": "Cerca de 3 h com preparo",
+   "porHora": 833,
+   "escala": "Primeiro contrato fácil de aprovar. Termina com a proposta da avaliação de riscos.",
+   "onde": "Proposta",
+   "sim": {
+    "rotulo": "Palestras por mês",
+    "padrao": 1,
+    "max": 6,
+    "receita": 2500,
+    "horas": 0.75
+   },
+   "marca": "lume",
+   "psicologico": true,
+   "venda": {
+    "modo": "proposta"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "workshop",
+   "linha": "empresas",
+   "etapa": 1,
+   "nome": "Workshop para lideranças",
+   "status": "novo",
+   "resumo": "Três horas práticas: reconhecer sinais de esgotamento no time, conversar sobre carga e prazos, encaminhar.",
+   "paraQuem": "Gestores e líderes técnicos.",
+   "formato": "Online ou presencial, 3 horas, até 20 pessoas",
+   "valor": "R$ 4.500",
+   "horas": "Cerca de 5 h com preparo",
+   "porHora": 900,
+   "escala": "Amostra do treino de lideranças. Quem gosta contrata a turma completa.",
+   "onde": "Proposta",
+   "sim": {
+    "rotulo": "Workshops por mês",
+    "padrao": 0,
+    "max": 4,
+    "receita": 4500,
+    "horas": 1.25
+   },
+   "marca": "lume",
+   "psicologico": true,
+   "venda": {
+    "modo": "proposta"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "nr1",
+   "linha": "empresas",
+   "etapa": 2,
+   "nome": "Avaliação de riscos psicossociais (NR-1)",
+   "status": "novo",
+   "resumo": "Levantamento com questionário e entrevistas, relatório para o programa de gerenciamento de riscos e devolutiva com plano de ação.",
+   "paraQuem": "Empresas que precisam cumprir a NR-1.",
+   "formato": "Projeto de 4 a 6 semanas",
+   "valor": "A partir de R$ 6.000",
+   "horas": "Cerca de 12 h por projeto",
+   "porHora": 500,
+   "escala": "O questionário e o relatório saem de um modelo. Com a plataforma do Radar, a coleta deixa de ocupar hora sua.",
+   "onde": "Proposta",
+   "sim": {
+    "rotulo": "Projetos de NR-1 por mês",
+    "padrao": 1,
+    "max": 4,
+    "receita": 6000,
+    "horas": 3
+   },
+   "marca": "radar",
+   "psicologico": true,
+   "venda": {
+    "modo": "proposta"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "ths-empresa",
+   "linha": "empresas",
+   "etapa": 2,
+   "nome": "Treino de habilidades sociais para lideranças técnicas",
+   "status": "novo",
+   "resumo": "O treino de tech em turma fechada da empresa: feedback, 1:1, conflito, reunião difícil, com casos do próprio time.",
+   "paraQuem": "Empresas promovendo pessoas técnicas à liderança.",
+   "formato": "Turma fechada de até 12 pessoas, 8 encontros de 90 minutos",
+   "valor": "R$ 9.600 por turma",
+   "horas": "1,5 h por semana por turma",
+   "porHora": 800,
+   "escala": "Mesmo roteiro do treino aberto, quase o dobro por hora. É o serviço que mais aproxima da meta sem abrir horário de sessão.",
+   "onde": "Proposta",
+   "sim": {
+    "rotulo": "Turmas in-company ativas",
+    "padrao": 0,
+    "max": 3,
+    "receita": 4800,
+    "horas": 1.5
+   },
+   "marca": "lume",
+   "psicologico": true,
+   "venda": {
+    "modo": "proposta"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "radar",
+   "linha": "empresas",
+   "etapa": 3,
+   "nome": "Radar contínuo",
+   "status": "novo",
+   "resumo": "Reavaliação trimestral dos indicadores, acompanhamento do plano de ação e relatório para a diretoria.",
+   "paraQuem": "Empresas que já fizeram a avaliação.",
+   "formato": "Contrato mensal",
+   "valor": "A partir de R$ 2.500 por mês",
+   "horas": "Cerca de 4 h por mês por empresa",
+   "porHora": 625,
+   "escala": "Transforma projeto em receita recorrente. Três empresas pagam mais que 40 sessões individuais.",
+   "onde": "Renovação após a avaliação",
+   "sim": {
+    "rotulo": "Empresas no Radar contínuo",
+    "padrao": 0,
+    "max": 10,
+    "receita": 2500,
+    "horas": 1
+   },
+   "marca": "radar",
+   "psicologico": true,
+   "venda": {
+    "modo": "proposta"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "agora-equipes",
+   "linha": "empresas",
+   "etapa": 3,
+   "nome": "Agora para equipes",
+   "status": "novo",
+   "resumo": "Licenças do Agora Plus como benefício. A empresa não vê dados de ninguém, só quantas licenças estão em uso.",
+   "paraQuem": "Empresas clientes da avaliação ou do treino.",
+   "formato": "Licença mensal por colaborador",
+   "valor": "R$ 6 por colaborador por mês",
+   "horas": "Nenhuma",
+   "escala": "Uma venda coloca o app na mão de centenas de pessoas e alimenta a linha Para você.",
+   "onde": "Contrato com a empresa",
+   "sim": {
+    "rotulo": "Colaboradores com Agora pela empresa",
+    "padrao": 0,
+    "max": 2000,
+    "receita": 6,
+    "horas": 0
+   },
+   "marca": "agora",
+   "psicologico": false,
+   "venda": {
+    "modo": "proposta"
+   },
+   "noApp": true,
+   "ativo": true
+  },
+  {
+   "id": "pro-gratis",
+   "linha": "psicologos",
+   "etapa": 0,
+   "nome": "Agora Pro, até 3 pacientes",
+   "status": "pronto",
+   "resumo": "Painel para prescrever rotinas e ver a adesão entre as sessões.",
+   "paraQuem": "Psicólogos que atendem TDAH.",
+   "formato": "Painel web",
+   "valor": "Grátis",
+   "horas": "Nenhuma",
+   "escala": "Cada colega traz os próprios pacientes para o app.",
+   "onde": "Site do Agora",
+   "marca": "agora",
+   "psicologico": false,
+   "venda": {
+    "modo": "assinatura"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "curso",
+   "linha": "psicologos",
+   "etapa": 1,
+   "nome": "Curso: clínica para profissionais de tecnologia",
+   "status": "novo",
+   "resumo": "Como é a rotina de quem trabalha com tecnologia, o vocabulário, as demandas mais comuns e como adaptar o atendimento.",
+   "paraQuem": "Psicólogos que querem atender esse público.",
+   "formato": "Gravado, cerca de 6 horas, com materiais",
+   "valor": "R$ 297",
+   "horas": "Nenhuma depois de gravado",
+   "escala": "Você grava uma vez. Forma a rede de colegas para quem encaminhar quando a agenda lota.",
+   "onde": "Página de psicólogos",
+   "sim": {
+    "rotulo": "Cursos vendidos por mês",
+    "padrao": 5,
+    "max": 60,
+    "receita": 297,
+    "horas": 0
+   },
+   "marca": "lume",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "supervisao",
+   "linha": "psicologos",
+   "etapa": 2,
+   "nome": "Supervisão em grupo",
+   "status": "novo",
+   "resumo": "Discussão de casos de burnout e TDAH adulto em público de tecnologia.",
+   "paraQuem": "Psicólogos que fizeram o curso ou usam o Agora Pro.",
+   "formato": "Online, até 8 colegas, 2 horas por mês",
+   "valor": "R$ 150 por encontro",
+   "horas": "2 h por mês",
+   "porHora": 600,
+   "escala": "Uma noite por mês. Mantém a rede ativa e melhora a qualidade de quem recebe os encaminhamentos.",
+   "onde": "Página de psicólogos",
+   "sim": {
+    "rotulo": "Colegas na supervisão mensal",
+    "padrao": 6,
+    "max": 8,
+    "receita": 150,
+    "horas": 0.08
+   },
+   "marca": "lume",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "formacao",
+   "linha": "psicologos",
+   "etapa": 2,
+   "nome": "Formação nos protocolos de grupo",
+   "status": "novo",
+   "resumo": "Roteiros dos treinos e grupos, materiais dos encontros e as missões prontas no Agora, para o colega aplicar com os pacientes dele.",
+   "paraQuem": "Psicólogos que querem conduzir grupos.",
+   "formato": "Turma online de 3 encontros, com os materiais",
+   "valor": "R$ 890",
+   "horas": "Cerca de 6 h por turma",
+   "escala": "Os seus protocolos passam a rodar sem você na sala, e cada colega formado assina o Agora Pro para usar as missões.",
+   "onde": "Página de psicólogos",
+   "sim": {
+    "rotulo": "Colegas formados por mês",
+    "padrao": 0,
+    "max": 10,
+    "receita": 890,
+    "horas": 0.25
+   },
+   "marca": "lume",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "pro",
+   "linha": "psicologos",
+   "etapa": 3,
+   "nome": "Agora Pro",
+   "status": "pronto",
+   "resumo": "Pacientes ilimitados, prescrição, adesão e resumo para a sessão.",
+   "paraQuem": "Psicólogos com mais de 3 pacientes no app.",
+   "formato": "Assinatura mensal",
+   "valor": "R$ 69 por mês",
+   "horas": "Nenhuma",
+   "escala": "Receita recorrente de valor fixo, sem comissão por paciente.",
+   "onde": "Site do Agora",
+   "sim": {
+    "rotulo": "Psicólogos no Agora Pro",
+    "padrao": 20,
+    "max": 300,
+    "receita": 69,
+    "horas": 0
+   },
+   "marca": "agora",
+   "psicologico": false,
+   "venda": {
+    "modo": "assinatura"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "rede",
+   "linha": "psicologos",
+   "etapa": 3,
+   "nome": "Equipe clínica da Lume",
+   "status": "novo",
+   "resumo": "Colegas atendendo pela clínica, com responsável técnico, quando a sua agenda e a lista de espera passarem do teto.",
+   "paraQuem": "Psicólogos formados no curso e na supervisão.",
+   "formato": "Contrato com a clínica (pessoa jurídica)",
+   "valor": "Definir com contador e advogado",
+   "horas": "Gestão",
+   "escala": "É o único caminho para a terapia individual crescer sem as suas horas. Sem porcentagem por encaminhamento: o paciente é da clínica.",
+   "onde": "Lume Clínica",
+   "marca": "lume",
+   "psicologico": false,
+   "venda": {
+    "modo": "interesse"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "mentoria",
+   "linha": "carreira",
+   "etapa": 2,
+   "nome": "Mentoria de carreira 1:1",
+   "status": "existe",
+   "resumo": "Plano de carreira em segurança e tecnologia: posicionamento, estudo, entrevistas, transição.",
+   "paraQuem": "Profissionais de tech em início ou mudança de carreira.",
+   "formato": "Online, ciclo de 4 encontros de 60 minutos",
+   "valor": "R$ 250 por encontro",
+   "horas": "1 h por encontro",
+   "porHora": 250,
+   "escala": "Fica na sua outra marca. Paciente de terapia não é convidado para a mentoria.",
+   "onde": "Página própria, fora do psicologotech",
+   "sim": {
+    "rotulo": "Encontros de mentoria por mês",
+    "padrao": 4,
+    "max": 20,
+    "receita": 250,
+    "horas": 0.25
+   },
+   "marca": "mentoria",
+   "psicologico": false,
+   "venda": {
+    "modo": "externo"
+   },
+   "noApp": false,
+   "ativo": true
+  },
+  {
+   "id": "mentoria-grupo",
+   "linha": "carreira",
+   "etapa": 3,
+   "nome": "Mentoria em turma",
+   "status": "novo",
+   "resumo": "Turma pequena com encontros quinzenais e uma trilha de estudo comum.",
+   "paraQuem": "Quem quer mentoria com custo menor.",
+   "formato": "Online, até 10 pessoas, 2 encontros por mês",
+   "valor": "R$ 180 por mês",
+   "horas": "3 h por mês por turma",
+   "porHora": 600,
+   "escala": "Mesma lógica dos grupos: várias pessoas na mesma hora.",
+   "onde": "Página própria, fora do psicologotech",
+   "marca": "mentoria",
+   "psicologico": false,
+   "venda": {
+    "modo": "externo"
+   },
+   "noApp": false,
+   "ativo": true
+  }
+ ],
+ "marcas": {
+  "lume": {
+   "nome": "Lume",
+   "descricao": "Clínica guarda-chuva: equipe, treinos de habilidades sociais e contratos com empresas."
+  },
+  "psicologotech": {
+   "nome": "psicologotech",
+   "descricao": "Clínica para quem trabalha com tecnologia."
+  },
+  "agora": {
+   "nome": "Agora",
+   "descricao": "O app de organização para TDAH."
+  },
+  "radar": {
+   "nome": "Radar Psicossocial",
+   "descricao": "Frente de empresas da Lume: NR-1 e acompanhamento."
+  },
+  "mentoria": {
+   "nome": "Mentoria de carreira",
+   "descricao": "Outra ocupação: página própria, sem CRP."
+  }
+ }
+}

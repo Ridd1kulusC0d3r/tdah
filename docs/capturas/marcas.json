@@ -1,0 +1,1025 @@
+{
+ "01-agora": {
+  "w": 1280,
+  "h": 1430,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 301,
+    "y": 401,
+    "rotulo": "A próxima ação escolhida pelo app"
+   },
+   {
+    "n": 2,
+    "x": 301,
+    "y": 447,
+    "rotulo": "Por que esta, em uma linha"
+   },
+   {
+    "n": 3,
+    "x": 301,
+    "y": 712,
+    "rotulo": "Botão grande para começar o foco"
+   },
+   {
+    "n": 4,
+    "x": 301,
+    "y": 788,
+    "rotulo": "Troque a duração do foco"
+   },
+   {
+    "n": 5,
+    "x": 944,
+    "y": 788,
+    "rotulo": "Agora não: volta amanhã, sem culpa"
+   },
+   {
+    "n": 6,
+    "x": 785,
+    "y": 261,
+    "rotulo": "Humor em um toque"
+   },
+   {
+    "n": 7,
+    "x": 276,
+    "y": 868,
+    "rotulo": "Placar do dia"
+   },
+   {
+    "n": 8,
+    "x": 1155,
+    "y": 785,
+    "rotulo": "Anotar ideia sem sair da tela"
+   }
+  ]
+ },
+ "05-painel": {
+  "w": 1280,
+  "h": 2796,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 276,
+    "y": 226,
+    "rotulo": "Resumo dos 14 dias"
+   },
+   {
+    "n": 2,
+    "x": 297,
+    "y": 554,
+    "rotulo": "Foco em barras, humor em linha"
+   },
+   {
+    "n": 3,
+    "x": 297,
+    "y": 1211,
+    "rotulo": "Sono e atividade física"
+   },
+   {
+    "n": 4,
+    "x": 297,
+    "y": 2318,
+    "rotulo": "Comparações dos seus próprios dados"
+   }
+  ]
+ },
+ "17-relatorio": {
+  "w": 1280,
+  "h": 2072,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 276,
+    "y": 174,
+    "rotulo": "Relatório de 30 dias"
+   },
+   {
+    "n": 2,
+    "x": 297,
+    "y": 270,
+    "rotulo": "Números do mês"
+   },
+   {
+    "n": 3,
+    "x": 297,
+    "y": 511,
+    "rotulo": "Humor dia a dia"
+   },
+   {
+    "n": 4,
+    "x": 788,
+    "y": 196,
+    "rotulo": "Imprimir ou salvar em PDF"
+   }
+  ]
+ },
+ "03b-tarefas-tipos": {
+  "w": 1280,
+  "h": 1149,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 675,
+    "rotulo": "Agrupadas por prioridade"
+   },
+   {
+    "n": 2,
+    "x": 276,
+    "y": 600,
+    "rotulo": "Filtro por tipo, com contagem"
+   },
+   {
+    "n": 3,
+    "x": 335,
+    "y": 744,
+    "rotulo": "Tipo da tarefa"
+   },
+   {
+    "n": 4,
+    "x": 337,
+    "y": 409,
+    "rotulo": "Escolha tipo e prioridade ao despejar"
+   }
+  ]
+ },
+ "03c-cursos": {
+  "w": 1280,
+  "h": 1023,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 891,
+    "y": 162,
+    "rotulo": "Tarefas ou cursos"
+   },
+   {
+    "n": 2,
+    "x": 987,
+    "y": 327,
+    "rotulo": "Progresso do curso"
+   },
+   {
+    "n": 3,
+    "x": 341,
+    "y": 342,
+    "rotulo": "Prazo e prioridade"
+   },
+   {
+    "n": 4,
+    "x": 448,
+    "y": 429,
+    "rotulo": "Marcar aula feita"
+   },
+   {
+    "n": 5,
+    "x": 276,
+    "y": 226,
+    "rotulo": "Cadastrar curso"
+   }
+  ]
+ },
+ "24-matrix": {
+  "w": 1280,
+  "h": 860,
+  "marcas": []
+ },
+ "25-matrix-painel": {
+  "w": 1280,
+  "h": 860,
+  "marcas": []
+ },
+ "26-temas": {
+  "w": 1280,
+  "h": 860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 1649,
+    "rotulo": "Sete temas"
+   },
+   {
+    "n": 2,
+    "x": 26,
+    "y": 675,
+    "rotulo": "Troca rápida no menu lateral"
+   }
+  ]
+ },
+ "27-clean": {
+  "w": 1280,
+  "h": 860,
+  "marcas": []
+ },
+ "04-rotinas": {
+  "w": 1280,
+  "h": 1244,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 915,
+    "y": 160,
+    "rotulo": "Criar rotina"
+   },
+   {
+    "n": 2,
+    "x": 456,
+    "y": 874,
+    "rotulo": "Rotina prescrita pela psicóloga"
+   },
+   {
+    "n": 3,
+    "x": 931,
+    "y": 491,
+    "rotulo": "Começar a rotina passo a passo"
+   }
+  ]
+ },
+ "02-foco": {
+  "w": 1280,
+  "h": 860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 490,
+    "y": 141,
+    "rotulo": "Tempo restante em anel"
+   },
+   {
+    "n": 2,
+    "x": 484,
+    "y": 467,
+    "rotulo": "Pausar sem perder o tempo"
+   },
+   {
+    "n": 3,
+    "x": 676,
+    "y": 532,
+    "rotulo": "Ruído branco, rosa ou marrom"
+   },
+   {
+    "n": 4,
+    "x": 370,
+    "y": 632,
+    "rotulo": "Sala de foco (body doubling)"
+   }
+  ]
+ },
+ "03-tarefas": {
+  "w": 1280,
+  "h": 1193,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 189,
+    "rotulo": "Despejo: uma linha por tarefa"
+   },
+   {
+    "n": 2,
+    "x": 642,
+    "y": 344,
+    "rotulo": "Quanta energia a tarefa pede"
+   },
+   {
+    "n": 3,
+    "x": 297,
+    "y": 596,
+    "rotulo": "Concluir com um toque"
+   },
+   {
+    "n": 4,
+    "x": 975,
+    "y": 596,
+    "rotulo": "Editar, dar prazo ou passos"
+   }
+  ]
+ },
+ "06-diario": {
+  "w": 1280,
+  "h": 1374,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 157,
+    "rotulo": "Humor com carinhas"
+   },
+   {
+    "n": 2,
+    "x": 297,
+    "y": 342,
+    "rotulo": "Energia de 1 a 5"
+   },
+   {
+    "n": 3,
+    "x": 874,
+    "y": 507,
+    "rotulo": "Horas de sono"
+   },
+   {
+    "n": 4,
+    "x": 297,
+    "y": 754,
+    "rotulo": "Minutos de atividade física"
+   },
+   {
+    "n": 5,
+    "x": 276,
+    "y": 1044,
+    "rotulo": "Salvar o dia"
+   }
+  ]
+ },
+ "07-apoio": {
+  "w": 1280,
+  "h": 860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 421,
+    "y": 293,
+    "rotulo": "Mensagem acolhedora"
+   },
+   {
+    "n": 2,
+    "x": 371,
+    "y": 420,
+    "rotulo": "Número do CVV, selecionável"
+   }
+  ]
+ },
+ "08-rotina-player": {
+  "w": 1280,
+  "h": 860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 556,
+    "y": 238,
+    "rotulo": "Em que passo você está"
+   },
+   {
+    "n": 2,
+    "x": 442,
+    "y": 300,
+    "rotulo": "Só o passo atual, grande"
+   },
+   {
+    "n": 3,
+    "x": 598,
+    "y": 361,
+    "rotulo": "Tempo do passo"
+   },
+   {
+    "n": 4,
+    "x": 370,
+    "y": 454,
+    "rotulo": "Feito, próximo"
+   }
+  ]
+ },
+ "09-mais": {
+  "w": 1280,
+  "h": 4175,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 1832,
+    "rotulo": "Triagem ASRS (rastreio, não diagnóstico)"
+   },
+   {
+    "n": 2,
+    "x": 276,
+    "y": 86,
+    "rotulo": "Sua conta: criar, entrar ou recuperar a senha"
+   },
+   {
+    "n": 3,
+    "x": 297,
+    "y": 705,
+    "rotulo": "Planos: grátis e Plus"
+   },
+   {
+    "n": 4,
+    "x": 276,
+    "y": 3266,
+    "rotulo": "Lembretes de rotina e do diário"
+   },
+   {
+    "n": 5,
+    "x": 297,
+    "y": 3914,
+    "rotulo": "Backup dos seus dados"
+   }
+  ]
+ },
+ "10-vinculo": {
+  "w": 1280,
+  "h": 4257,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 301,
+    "y": 3045,
+    "rotulo": "Você escolhe o que a profissional vê"
+   },
+   {
+    "n": 2,
+    "x": 456,
+    "y": 3228,
+    "rotulo": "Sincronizar agora"
+   }
+  ]
+ },
+ "11-pro-visao": {
+  "w": 1360,
+  "h": 1203,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 51,
+    "y": 168,
+    "rotulo": "Paciente aberto; selos de atenção"
+   },
+   {
+    "n": 2,
+    "x": 424,
+    "y": 259,
+    "rotulo": "Adesão dos últimos 7 dias"
+   },
+   {
+    "n": 3,
+    "x": 424,
+    "y": 348,
+    "rotulo": "Pedido de contato do paciente"
+   },
+   {
+    "n": 4,
+    "x": 443,
+    "y": 461,
+    "rotulo": "28 dias: foco, humor e sono"
+   },
+   {
+    "n": 5,
+    "x": 443,
+    "y": 833,
+    "rotulo": "Adesão a cada rotina"
+   }
+  ]
+ },
+ "13-pro-resumo": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 443,
+    "y": 339,
+    "rotulo": "Texto pronto para o prontuário"
+   },
+   {
+    "n": 2,
+    "x": 443,
+    "y": 571,
+    "rotulo": "Copiar"
+   }
+  ]
+ },
+ "12-pro-prescrever": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 443,
+    "y": 306,
+    "rotulo": "Rotina, tarefa ou recado"
+   },
+   {
+    "n": 2,
+    "x": 443,
+    "y": 377,
+    "rotulo": "Título"
+   },
+   {
+    "n": 3,
+    "x": 443,
+    "y": 540,
+    "rotulo": "Passos com minutos"
+   },
+   {
+    "n": 4,
+    "x": 443,
+    "y": 642,
+    "rotulo": "Enviar ao app do paciente"
+   }
+  ]
+ },
+ "14-planos": {
+  "w": 1280,
+  "h": 4257,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 276,
+    "y": 86,
+    "rotulo": "Sua conta e o plano atual"
+   },
+   {
+    "n": 2,
+    "x": 695,
+    "y": 704,
+    "rotulo": "Assinatura mensal (cartão)"
+   },
+   {
+    "n": 3,
+    "x": 695,
+    "y": 763,
+    "rotulo": "Anual, aceita Pix"
+   }
+  ]
+ },
+ "15-checkout": {
+  "w": 1280,
+  "h": 860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 411,
+    "y": 143,
+    "rotulo": "Ambiente de teste: sem dinheiro de verdade"
+   },
+   {
+    "n": 2,
+    "x": 721,
+    "y": 385,
+    "rotulo": "Valor e forma de cobrança"
+   },
+   {
+    "n": 3,
+    "x": 433,
+    "y": 501,
+    "rotulo": "Simular cartão aprovado"
+   },
+   {
+    "n": 4,
+    "x": 433,
+    "y": 571,
+    "rotulo": "Simular cartão recusado"
+   }
+  ]
+ },
+ "16-plus-ativo": {
+  "w": 1280,
+  "h": 4210,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 174,
+    "rotulo": "Plus ativo e até quando"
+   },
+   {
+    "n": 2,
+    "x": 759,
+    "y": 209,
+    "rotulo": "Cópia na nuvem"
+   },
+   {
+    "n": 3,
+    "x": 695,
+    "y": 805,
+    "rotulo": "Cancelar a renovação"
+   }
+  ]
+ },
+ "17b-relatorio-paula": {
+  "w": 1280,
+  "h": 1498,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 276,
+    "y": 55,
+    "rotulo": "Relatório de 30 dias"
+   },
+   {
+    "n": 2,
+    "x": 297,
+    "y": 151,
+    "rotulo": "Números do mês"
+   },
+   {
+    "n": 3,
+    "x": 297,
+    "y": 392,
+    "rotulo": "Humor dia a dia"
+   },
+   {
+    "n": 4,
+    "x": 788,
+    "y": 77,
+    "rotulo": "Imprimir ou salvar em PDF"
+   }
+  ]
+ },
+ "18-pro-plano": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 32,
+    "y": 240,
+    "rotulo": "Plano do profissional"
+   },
+   {
+    "n": 2,
+    "x": 51,
+    "y": 345,
+    "rotulo": "Assinar o Agora Pro"
+   }
+  ]
+ },
+ "40-servicos": {
+  "w": 1280,
+  "h": 4685,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 276,
+    "y": 108,
+    "rotulo": "Suas turmas, missões e compras"
+   },
+   {
+    "n": 2,
+    "x": 297,
+    "y": 279,
+    "rotulo": "Missões da semana do treino"
+   },
+   {
+    "n": 3,
+    "x": 276,
+    "y": 1409,
+    "rotulo": "Serviço com responsável técnico e CRP"
+   },
+   {
+    "n": 4,
+    "x": 674,
+    "y": 1828,
+    "rotulo": "Treino de habilidades sociais da Lume"
+   },
+   {
+    "n": 5,
+    "x": 674,
+    "y": 943,
+    "rotulo": "E-books: comprar ou baixar"
+   }
+  ]
+ },
+ "41-turmas": {
+  "w": 1280,
+  "h": 4860,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 297,
+    "y": 2671,
+    "rotulo": "Data, vagas e valor da turma"
+   },
+   {
+    "n": 2,
+    "x": 310,
+    "y": 2788,
+    "rotulo": "Garantir vaga (vai para o pagamento)"
+   }
+  ]
+ },
+ "42-interesse": {
+  "w": 1280,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 371,
+    "y": 238,
+    "rotulo": "Nome e e-mail já preenchidos pela conta"
+   },
+   {
+    "n": 2,
+    "x": 375,
+    "y": 580,
+    "rotulo": "Aceite para este contato"
+   },
+   {
+    "n": 3,
+    "x": 375,
+    "y": 641,
+    "rotulo": "E-mails de conteúdo: opcional"
+   }
+  ]
+ },
+ "43-ajuda": {
+  "w": 1280,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 371,
+    "y": 305,
+    "rotulo": "Onde buscar ajuda"
+   },
+   {
+    "n": 2,
+    "x": 411,
+    "y": 479,
+    "rotulo": "CVV 188, 24 horas"
+   }
+  ]
+ },
+ "44-site-servicos": {
+  "w": 1280,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 403,
+    "y": 111,
+    "rotulo": "Pedido de proposta"
+   },
+   {
+    "n": 2,
+    "x": 407,
+    "y": 596,
+    "rotulo": "Aceite para este contato"
+   }
+  ]
+ },
+ "45-site-comecar": {
+  "w": 1280,
+  "h": 1336,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 110,
+    "y": 358,
+    "rotulo": "App gratuito"
+   },
+   {
+    "n": 2,
+    "x": 467,
+    "y": 358,
+    "rotulo": "Triagem ASRS"
+   },
+   {
+    "n": 3,
+    "x": 825,
+    "y": 358,
+    "rotulo": "Serviços da equipe"
+   }
+  ]
+ },
+ "46-pro-convite": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 963,
+    "y": 561,
+    "rotulo": "Código de convite"
+   },
+   {
+    "n": 2,
+    "x": 963,
+    "y": 695,
+    "rotulo": "Link pronto para mandar"
+   },
+   {
+    "n": 3,
+    "x": 1063,
+    "y": 749,
+    "rotulo": "Enviar no WhatsApp"
+   }
+  ]
+ },
+ "47-pro-2fa": {
+  "w": 1360,
+  "h": 900,
+  "marcas": []
+ },
+ "50-admin-resumo": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 111,
+    "y": 230,
+    "rotulo": "Receita de 30 dias contra a meta"
+   },
+   {
+    "n": 2,
+    "x": 92,
+    "y": 304,
+    "rotulo": "Números da base"
+   },
+   {
+    "n": 3,
+    "x": 111,
+    "y": 445,
+    "rotulo": "Funil anônimo"
+   }
+  ]
+ },
+ "51-admin-contatos": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 1123,
+    "y": 236,
+    "rotulo": "Situação do contato"
+   },
+   {
+    "n": 2,
+    "x": 713,
+    "y": 221,
+    "rotulo": "Mensagem (cifrada no banco)"
+   }
+  ]
+ },
+ "52-admin-turmas": {
+  "w": 1360,
+  "h": 1019,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 111,
+    "y": 209,
+    "rotulo": "Criar turma de um programa"
+   },
+   {
+    "n": 2,
+    "x": 891,
+    "y": 646,
+    "rotulo": "Ver inscritos"
+   },
+   {
+    "n": 3,
+    "x": 111,
+    "y": 833,
+    "rotulo": "Inscritos e missões"
+   }
+  ]
+ },
+ "53-admin-catalogo": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 111,
+    "y": 677,
+    "rotulo": "Item, marca, preço e textos"
+   },
+   {
+    "n": 2,
+    "x": 727,
+    "y": 308,
+    "rotulo": "Aparece no app?"
+   }
+  ]
+ },
+ "54-admin-compras": {
+  "w": 1360,
+  "h": 900,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 1113,
+    "y": 270,
+    "rotulo": "Estornar (pede confirmação)"
+   }
+  ]
+ },
+ "20-mobile-agora": {
+  "w": 390,
+  "h": 844,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 41,
+    "y": 541,
+    "rotulo": "Próxima ação"
+   },
+   {
+    "n": 2,
+    "x": 41,
+    "y": 921,
+    "rotulo": "Começar"
+   },
+   {
+    "n": 3,
+    "x": 0,
+    "y": 778,
+    "rotulo": "Navegação no polegar"
+   }
+  ]
+ },
+ "48-mobile-servicos": {
+  "w": 390,
+  "h": 844,
+  "marcas": []
+ },
+ "21-mobile-foco": {
+  "w": 390,
+  "h": 844,
+  "marcas": []
+ },
+ "22-escuro": {
+  "w": 1280,
+  "h": 860,
+  "marcas": []
+ },
+ "23-pro-escuro": {
+  "w": 1360,
+  "h": 900,
+  "marcas": []
+ },
+ "28-android-planos": {
+  "w": 390,
+  "h": 5524,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 16,
+    "y": 210,
+    "rotulo": "Entrar libera o Plus já assinado"
+   },
+   {
+    "n": 2,
+    "x": 37,
+    "y": 1124,
+    "rotulo": "Plus sem botão de compra no Android"
+   }
+  ]
+ },
+ "30-site": {
+  "w": 1280,
+  "h": 5649,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 110,
+    "y": 165,
+    "rotulo": "A promessa em uma frase"
+   },
+   {
+    "n": 2,
+    "x": 110,
+    "y": 567,
+    "rotulo": "Abre o app"
+   },
+   {
+    "n": 3,
+    "x": 728,
+    "y": 212,
+    "rotulo": "Como o app funciona, de relance"
+   },
+   {
+    "n": 4,
+    "x": 110,
+    "y": 3622,
+    "rotulo": "Planos e preços"
+   },
+   {
+    "n": 5,
+    "x": 0,
+    "y": 5371,
+    "rotulo": "Links legais e contato de crise"
+   }
+  ]
+ },
+ "31-excluir-conta": {
+  "w": 1280,
+  "h": 1152,
+  "marcas": [
+   {
+    "n": 1,
+    "x": 292,
+    "y": 663,
+    "rotulo": "Excluir a conta pela web (exigência da Play Store)"
+   }
+  ]
+ },
+ "32-site-celular": {
+  "w": 390,
+  "h": 844,
+  "marcas": []
+ }
+}

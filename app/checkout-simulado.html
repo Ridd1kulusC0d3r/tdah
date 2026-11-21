@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Checkout de teste · Agora</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+/* Layout: cartão único centralizado que imita um checkout de provedor, com faixa de aviso de teste. */
+:root{--bg:#edefea;--surface:#fff;--sunk:#e3e6df;--ink:#18211d;--muted:#59645f;--line:#d5d9d1;--accent:#0b6b57;--accent-ink:#fff;--good:#2e7d32;--bad:#b42318;--warn-bg:#ffe977;--warn-ink:#18211d;
+--f-display:"Atkinson Next","Segoe UI",system-ui,sans-serif;--f-body:"Atkinson Next","Segoe UI",system-ui,sans-serif;--f-mono:var(--f-body)}
+@media (prefers-color-scheme:dark){:root{--bg:#111513;--surface:#191e1b;--sunk:#232925;--ink:#e7ebe6;--muted:#9aa49e;--line:#2c332f;--accent:#4fbf9f;--accent-ink:#06150f;--good:#7ad083;--bad:#ff8a7a;--warn-bg:#3d3a1c;--warn-ink:#f2e9a8;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f-body);min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.box{width:min(460px,100%);background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 18px 40px -28px rgb(0 0 0 / .35)}
+.aviso{background:var(--warn-bg);color:var(--warn-ink);padding:10px 18px;font-weight:700;font-size:.9rem}
+.corpo{padding:22px;display:grid;gap:16px}
+h1{font:780 1.4rem/1.2 var(--f-display);letter-spacing:-.02em;margin:0}.muted{color:var(--muted)}.small{font-size:.875rem}
+.valor{font:780 2.2rem/1 var(--f-display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.linha{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+button{font:inherit;font-weight:650;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:14px 16px;cursor:pointer;width:100%;min-height:50px}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.res{padding:12px 14px;border-radius:10px;background:var(--sunk);font-weight:700}.res.bad{color:var(--bad)}.res.good{color:var(--good)}
+</style>
+</head>
+<body>
+<main class="box" aria-live="polite">
+  <div class="aviso">Ambiente de teste: nenhum dinheiro de verdade é cobrado.</div>
+  <div class="corpo" id="corpo"><p class="muted">Carregando o pedido...</p></div>
+</main>
+<script>
+"use strict";
+const c = new URLSearchParams(location.search).get("c") || "";
+const el = document.getElementById("corpo");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, x => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
+const reais = v => "R$ " + (v / 100).toFixed(2).replace(".", ",");
+let destino = "/app/", ancora = "#mais";
+async function carregar() {
+  try {
+    const r = await fetch("/api/pagamentos/simulado?c=" + encodeURIComponent(c)); const j = await r.json();
+    if (!r.ok) throw new Error(j.erro);
+    const p = j.plano;
+    destino = p.publico === "profissional" ? "/app/pro.html" : "/app/";
+    ancora = destino === "/app/" ? (p.tipo === "avulso" ? "#servicos" : "#mais") : "";
+    const recorrente = p.tipo === "recorrente";
+    el.innerHTML = `<span class="small muted">Agora · pedido ${esc(j.checkout.slice(0, 12))}</span>
+      <h1>${esc(p.nome)}</h1><p class="small muted">${esc(p.descricao)}</p>
+      <div class="linha"><span>${recorrente ? "Por mês, renova sozinho" : "Pagamento único"}</span><span class="valor">${reais(p.valor)}</span></div>
+      <p class="small muted">Conta: ${esc(j.email)}</p>
+      ${j.status !== "aberto" ? `<p class="res">Este pedido já foi ${esc(j.status)}.</p><button class="primary" data-v="voltar">Voltar ao Agora</button>` : `
+      ${recorrente ? "" : `<button class="primary" data-r="pix">Pagar com Pix (teste)</button>`}
+      <button class="${recorrente ? "primary" : ""}" data-r="aprovado">Cartão aprovado (teste)</button>
+      <button data-r="recusado">Cartão recusado (teste)</button>
+      <button data-v="desistir">Desistir e voltar</button>`}`;
+    el.querySelectorAll("[data-r]").forEach(b => b.onclick = () => pagar(b.dataset.r));
+  } catch (e) { el.innerHTML = `<h1>Pedido não encontrado</h1><p class="muted">${esc(e.message || "Abra o checkout pelo app.")}</p><button data-v="voltar">Voltar ao Agora</button>`; }
+}
+el.addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (!b) return;
+  if (b.dataset.v === "voltar") voltar(); else location.href = destino + "?pagamento=falha" + ancora; });
+function voltar() { location.href = destino + ancora; }
+async function pagar(resultado) {
+  el.querySelectorAll("button").forEach(b => b.disabled = true);
+  const r = await fetch("/api/pagamentos/simulado/confirmar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ checkout: c, resultado }) });
+  const j = await r.json();
+  if (resultado === "recusado") {
+    el.insertAdjacentHTML("beforeend", `<p class="res bad">Pagamento recusado. Nada foi cobrado.</p>`);
+    setTimeout(() => location.href = destino + "?pagamento=falha" + ancora, 1200);
+    return;
+  }
+  el.insertAdjacentHTML("beforeend", `<p class="res good">Pagamento aprovado (${esc(j.resultado || "ok")}). Voltando ao app...</p>`);
+  setTimeout(() => location.href = destino + "?pagamento=retorno&c=" + encodeURIComponent(c) + ancora, 900);
+}
+carregar();
+</script>
+</body>
+</html>
