@@ -8,8 +8,9 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // Suba versionCode a cada envio para a Play Store (o CI usa o número da execução).
-        versionCode (System.getenv("AGORA_VERSION_CODE") ?: "13").toInteger()
-        versionName "1.3.0"
+        // Atribuição explícita: com "versionCode (x).toInteger()" o Groovy chamava versionCode(x) e aplicava toInteger() no retorno nulo.
+        versionCode = Integer.parseInt(System.getenv("AGORA_VERSION_CODE") ?: "21")
+        versionName = "2.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
