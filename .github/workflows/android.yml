@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22" }
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools   # o pacote antigo "tools" não existe mais no sdkmanager atual
       - name: Instalar dependências
         working-directory: android
         run: npm ci || npm install
