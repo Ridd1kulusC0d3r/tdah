@@ -28,7 +28,7 @@ O objeto `preparo` fica fora do snapshot automático e do backup na nuvem. O ser
 - `node tests/test_retomada_logic.cjs`: passaram as verificações de estado e handlers para tarefas, cursos, passos reduzidos, exportação, privacidade e escaping.
 - Sintaxe JavaScript/Python e `git diff --check` passaram.
 - Sete testes de regressão de navegador adicionados em `tests/test_retomada_ui.py`; a suíte anterior foi atualizada para a prévia editável e a confirmação de envio.
-- Navegador local bloqueado pelo ambiente (Chromium não conseguiu criar o socket necessário). A validação visual/mobile e a execução dos testes de navegador ficam para o CI; não são apresentadas como aprovadas neste relatório.
+- Navegador local bloqueado pelo ambiente (Chromium não conseguiu criar o socket necessário). A execução foi confirmada no CI: 121/121 verificações da suíte existente e 7/7 regressões novas passaram no Chromium, incluindo viewport de celular. Não houve inspeção visual manual das capturas.
 
 Comandos:
 
@@ -41,3 +41,5 @@ python3 ferramentas/gerar_prototipo.py
 ```
 
 Para usar um Chromium previamente instalado: `AGORA_CHROMIUM_EXECUTABLE=/caminho/chromium`. O projeto Android copia a mesma aplicação web pelo script de preparação já existente; nenhum build nativo foi realizado nesta alteração.
+
+CI confirmado para o código: [execução 45031967945](https://github.com/Ridd1kulusC0d3r/tdah/actions/runs/45031967945). API com/sem cryptography, lógica JavaScript, navegador e imagem Docker concluíram com sucesso.
