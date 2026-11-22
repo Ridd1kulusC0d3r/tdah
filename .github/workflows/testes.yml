@@ -16,6 +16,8 @@ jobs:
         with: { python-version: "3.13" }
       - if: matrix.cryptography == 'sim'
         run: pip install "cryptography>=43,<51"
+      - name: Regras de retomada e privacidade do paciente
+        run: node tests/test_retomada_logic.cjs
       - name: Testes da API e de produção
         run: python3 -m unittest tests.test_api tests.test_producao -v
   navegador:
@@ -27,7 +29,9 @@ jobs:
         with: { python-version: "3.13" }
       - run: pip install playwright "cryptography>=43,<51" && python3 -m playwright install --with-deps chromium
       - name: Teste de ponta a ponta no Chromium
-        run: python3 tests/test_ui.py
+        run: |
+          python3 tests/test_ui.py
+          python3 -m unittest tests.test_retomada_ui -v
       - uses: actions/upload-artifact@v4
         if: always()
         with: { name: capturas, path: docs/capturas/*.png }

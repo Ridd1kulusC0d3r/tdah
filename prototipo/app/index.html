@@ -284,7 +284,7 @@ label.f{display:grid;gap:6px;font-weight:650;font-size:.9rem}
 .delta.up{color:var(--good)} .delta.down{color:var(--bad)}
 
 /* mais */
-pre.prep{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--sunk);border-radius:var(--rs);padding:14px;font:13.5px/1.55 var(--f-mono);margin:0;max-height:420px;overflow:auto}
+.prep{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--sunk);border-radius:var(--rs);padding:14px;font:13.5px/1.55 var(--f-mono);margin:0;width:100%;max-height:420px;overflow:auto}
 .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 .svc h3{margin:0;font-size:1.12rem;line-height:1.25}.svc p{margin:0}
 .svc-ebook{border-top:1px solid var(--line);padding-top:8px}
@@ -523,7 +523,7 @@ function toast(msg) {
 function curso(id) { return S.courses.find(c => c.id === id); }
 function itemPorId(id) {
   if (String(id).startsWith("c:")) { const c = curso(id.slice(2)); if (!c) return null;
-    return { id, kind: "curso", course: c, title: `${c.name}: aula ${Math.min(c.done + 1, c.total)} de ${c.total}`, type: "estudo", priority: c.priority, energy: "media", steps: [], pin: c.pin, snooze: c.snooze, created: c.created }; }
+    return { id, kind: "curso", course: c, title: `${c.name}: aula ${Math.min(c.done + 1, c.total)} de ${c.total}`, type: "estudo", priority: c.priority, energy: "media", steps: [], pin: c.pin, snooze: c.snooze, created: c.created, parou: c.parou }; }
   return S.tasks.find(x => x.id === id) || null;
 }
 function tarefa(id) { return S.tasks.find(x => x.id === id); }
@@ -622,7 +622,7 @@ function vAgora() {
       <h2 id="nowt">${esc(rot.name)}</h2><p class="why">${ico("clock")}<span>É a hora dela. São ${rot.steps.length} passos, uns ${tot} min no total.</span></p></div>
       <div class="body"><ol class="steps">${rot.steps.slice(0, 3).map((s, i) => `<li class="${i ? "" : "cur"}"><span class="mono small">${s.min}′</span><span><span class="tx">${esc(s.t)}</span></span></li>`).join("")}</ol>
       <button class="btn primary huge" data-act="run-routine" data-id="${rot.id}">${ico("play")} Começar a rotina</button>
-      <div class="row"><button class="btn ghost" data-act="skip-routine" data-id="${rot.id}">Hoje não</button></div></div>
+      <div class="row"><button class="btn ghost" data-act="small-routine" data-id="${rot.id}">Hoje cabe menos</button><button class="btn ghost" data-act="skip-routine" data-id="${rot.id}">Hoje não</button></div></div>
     </section>`;
   } else if (top) {
     const x = top.x, pend = x.steps.filter(s => !s.done), cur = x.steps.findIndex(s => !s.done);
@@ -632,7 +632,7 @@ function vAgora() {
       <div class="top"><div class="kind"><span class="label">Sua próxima ação</span>${tipoTag(x.type)}${prioTag(x.priority)}${x.from ? `<span class="pill pro">da sua psicóloga</span>` : ""}<span class="pill">energia ${x.energy === "media" ? "média" : esc(x.energy || "média")}</span></div>
       <h2 id="nowt">${esc(x.title)}</h2>
       <p class="why">${ico("spark")}<span>Por que esta: ${esc(top.motivo.slice(0, 2).join(" e "))}.</span></p>
-      ${x.parou ? `<p class="why">${ico("clock")}<span>Onde você parou (${fmtData(x.parou.em)}): ${x.parou.prox ? esc(x.parou.prox) : x.parou.como === "avancei" ? "avançou um pouco" : "ficou para retomar"}.</span></p>` : ""}</div>
+      ${cartaoRetomada(x)}</div>
       <div class="body">
       ${c ? `<div class="stack" style="gap:6px"><div class="row between small"><span>${esc(c.platform || "Curso")}</span><span class="mono">${c.done}/${c.total} aulas · ${Math.round(100 * c.done / c.total)}%</span></div><div class="bar" style="--c:${cor}"><i style="width:${100 * c.done / c.total}%"></i></div></div>`
       : x.steps.length ? `<div class="segbar" aria-label="${x.steps.length - pend.length} de ${x.steps.length} passos feitos">${x.steps.map(s => `<i class="${s.done ? "on" : ""}"></i>`).join("")}</div>
@@ -642,6 +642,7 @@ function vAgora() {
       : `<div class="row"><button class="btn sm" data-act="split" data-id="${x.id}">Quebrar em passos</button><span class="small muted">Travou para começar? Passos pequenos ajudam.</span></div>`}
       <div class="stack">
         <button class="btn primary huge" data-act="focus" data-id="${x.id}">${ico("play")} Começar ${S.settings.focusMin} min</button>
+        <button class="btn ghost" data-act="small" data-id="${x.id}">Hoje cabe menos</button>
         <div class="row between">
           <div class="durs" role="group" aria-label="Duração do foco">${[10, 15, 25, 50].map(n => `<button class="chip" aria-pressed="${S.settings.focusMin === n}" data-act="dur" data-n="${n}">${n}′</button>`).join("")}</div>
           <div class="row"><button class="btn sm" data-act="done" data-id="${x.id}">${ico("check")} ${c ? "Fiz a aula" : "Terminei"}</button><button class="btn sm ghost" data-act="snooze" data-id="${x.id}">Agora não</button></div>
@@ -1115,6 +1116,8 @@ function acao(a, el) {
     case "step": { const x = tarefa(id); x.steps[+el.dataset.i].done = true; if (x.steps.every(s => s.done)) { concluir(x); toast("Todos os passos feitos. Tarefa concluída!"); } else toast("Passo feito. Próximo!"); save(); break; }
     case "split": return sheetPassos(tarefa(id));
     case "focus": return abrirFoco(id);
+    case "small": return sheetMenor(id);
+    case "small-routine": return sheetRotinaMenor(S.routines.find(r => r.id === id));
     case "done": { if (id.startsWith("c:")) aulaFeita(curso(id.slice(2))); else { concluir(tarefa(id)); toast("Feito. Uma a menos."); } save(); break; }
     case "snooze": { const x = alvo(id); x.snooze = diasAtras(-1); x.pin = false; save(); toast("Sem culpa. Ela volta amanhã."); break; }
     case "pin": { S.tasks.forEach(x => x.pin = false); S.courses.forEach(x => x.pin = false); const x = alvo(id); x.pin = true; x.snooze = null; save(); break; }
@@ -1194,10 +1197,10 @@ function acao(a, el) {
   const y = window.scrollY; render(); if (MANTEM_ROLAGEM.includes(a)) window.scrollTo(0, y);
 }
 function aulaFeita(c) {
-  if (!c) return; c.done = Math.min(c.total, c.done + 1); c.pin = false;
+  if (!c) return; c.done = Math.min(c.total, c.done + 1); c.pin = false; delete c.parou;
   toast(c.done >= c.total ? `Curso concluído: ${c.name}!` : `Aula ${c.done} de ${c.total} feita.`);
 }
-function concluir(x) { x.done = true; x.doneAt = hoje(); x.pin = false; x.steps.forEach(s => s.done = true); }
+function concluir(x) { delete x.parou; x.done = true; x.doneAt = hoje(); x.pin = false; x.steps.forEach(s => s.done = true); }
 function adicionarLinhas(txt, energia, tipo, prio) {
   const linhas = txt.split(/\n+/).map(s => s.trim()).filter(Boolean);
   if (!linhas.length) { toast("Escreva pelo menos uma linha."); return false; }
@@ -1317,14 +1320,49 @@ function apoio() {
   });
 }
 
+/* ================= retomada e um plano menor ================= */
+function cartaoRetomada(x) {
+  const p = x.parou; if (!p) return "";
+  return `<div class="note resume-context"><span class="label">Onde você parou (${fmtData(p.em)})</span>
+    ${p.avanco ? `<p><b>O que avançou:</b> ${esc(p.avanco)}</p>` : ""}
+    <p><b>Próximo passo:</b> ${esc(p.prox || (p.como === "avancei" ? "Retomar de onde conseguiu avançar." : "Escolher um pequeno começo."))}</p>
+    ${p.material ? `<p><b>Material / página:</b> ${esc(p.material)}</p>` : ""}</div>`;
+}
+function sheetMenor(id) {
+  const x = itemPorId(id); if (!x) return;
+  const sugestao = x.parou?.prox || x.steps.find(s => !s.done)?.t || (x.kind === "curso" ? "Abrir o material e ler um trecho" : "Separar o que preciso para começar");
+  sheet(`<h2>Hoje cabe menos</h2><p class="small muted">Escolha uma versão possível de “${esc(x.title)}”. O plano original continua guardado.</p>
+    <label class="f" for="smPasso">Qual pequeno passo cabe agora?<input id="smPasso" maxlength="120" value="${esc(sugestao)}"></label>
+    <label class="f" for="smMin">Tempo para experimentar<select id="smMin"><option value="2">2 minutos</option><option value="5">5 minutos</option><option value="10">10 minutos</option></select></label>
+    <div class="row"><button class="btn primary" id="smIniciar">Começar este passo</button><button class="btn ghost" data-close>Agora não</button></div>`, sh => {
+    $("#smIniciar", sh).onclick = () => { const texto = $("#smPasso", sh).value.trim().slice(0, 120), min = +$("#smMin", sh).value;
+      if (!texto) { toast("Escreva o pequeno passo que quer experimentar."); return; }
+      if (![2, 5, 10].includes(min)) return;
+      abrirFoco(id, { texto, min });
+    };
+  });
+}
+function sheetRotinaMenor(r) {
+  if (!r?.steps?.length) return;
+  sheet(`<h2>Hoje cabe menos</h2><p>Escolha os passos de “${esc(r.name)}” que quer fazer agora. A rotina original não muda.</p>
+    ${r.steps.map((s, i) => `<label class="check"><input type="checkbox" data-small-step="${i}" ${i === 0 ? "checked" : ""}><span>${esc(s.t)} · ${s.min} min</span></label>`).join("")}
+    <div class="row"><button class="btn primary" id="srIniciar">Começar os passos escolhidos</button><button class="btn ghost" data-close>Agora não</button></div>`, sh => {
+    $("#srIniciar", sh).onclick = () => { const selecao = $$("[data-small-step]:checked", sh).map(c => +c.dataset.smallStep);
+      if (!selecao.length) { toast("Escolha pelo menos um passo ou volte quando quiser."); return; }
+      abrirRotina(r, selecao);
+    };
+  });
+}
+
 /* ================= foco + sons + sala ================= */
 let FOCO = null, AUD = null;
-function abrirFoco(taskId) {
-  const x = itemPorId(taskId), total = S.settings.focusMin * 60;
+function abrirFoco(taskId, pequeno = null) {
+  const x = itemPorId(taskId), total = (pequeno ? pequeno.min : S.settings.focusMin) * 60;
   if (!x) return;
-  FOCO = { taskId, type: x.type, curso: x.kind === "curso", total, end: Date.now() + total * 1000, paused: null, nextCheck: Date.now() + 10 * 60 * 1000, lastHB: 0 };
+  FOCO = { taskId, pequeno, type: x.type, curso: x.kind === "curso", total, end: Date.now() + total * 1000, paused: null, nextCheck: Date.now() + 10 * 60 * 1000, lastHB: 0 };
   $("#layer").innerHTML = `<div class="overlay" role="dialog" aria-modal="true" aria-label="Modo foco"><div class="focusbox">
-    <span class="label">Foco em</span><div class="row" style="justify-content:center">${tipoTag(x.type)}</div><h2 style="overflow-wrap:anywhere">${esc(x.title)}</h2>
+    <span class="label">Foco em</span><div class="row" style="justify-content:center">${tipoTag(x.type)}</div><h2 style="overflow-wrap:anywhere">${esc(pequeno ? pequeno.texto : x.title)}</h2>
+    ${pequeno ? `<p class="small muted">Um passo de: ${esc(x.title)}. O plano original continua guardado.</p>` : cartaoRetomada(x)}
     <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--sunk)" stroke-width="10"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg>
       <div class="t"><b id="clock" aria-live="off">--:--</b><span class="small muted">restantes</span></div></div>
     <div class="row" style="justify-content:center"><button class="btn" id="fPause">Pausar</button><button class="btn" id="fDone">Terminei antes</button><button class="btn ghost" id="fStop">Sair</button></div>
@@ -1358,32 +1396,36 @@ function tick() {
   setTimeout(tick, 250);
 }
 function terminarFoco(contar, completo) {
-  const f = FOCO; FOCO = null; som("off"); document.title = "Agora TDAH";
+  const f = FOCO; if (!f) return; FOCO = null; som("off"); document.title = "Agora TDAH";
   try { NATIVO()?.cancel({ notifications: [{ id: 1950 }] }); } catch {}
   try { f.lock && f.lock.release(); } catch {}
   salaSair();
   const usados = Math.round(((f.paused || Date.now()) - (f.end - f.total * 1000)) / 60000);
-  const min = completo ? Math.round(f.total / 60) : Math.max(0, usados);
+  const min = completo ? Math.round(f.total / 60) : Math.max(0, Math.min(Math.round(f.total / 60), usados));
   if (!contar || min < 1) { $("#layer").innerHTML = ""; render(); return; }
   // O tempo acabar não é a tarefa acabar: a pessoa diz como ficou e, se não terminou, deixa o primeiro passo da volta.
   let feel = "ok";
+  const anterior = alvo(f.taskId)?.parou || {};
   sheet(`<h2>${completo ? "Tempo!" : "Boa."} ${min} min de foco.</h2>
     <p class="small muted">Como foi?</p>
     <div class="row" role="group" aria-label="Como foi">${["fluiu", "ok", "travei"].map(k => `<button class="chip" data-feel="${k}" aria-pressed="${k === "ok"}">${k}</button>`).join("")}</div>
+    <label class="f" for="fAvanco">O que consegui fazer? (opcional)<textarea id="fAvanco" maxlength="300" placeholder="ex.: li até a página 12 e anotei duas perguntas"></textarea></label>
+    <label class="f" for="fMaterial">Onde está o material? (opcional)<input id="fMaterial" maxlength="400" placeholder="Link, página, aula ou nome do arquivo" value="${esc(anterior.material || '')}"></label>
+    <p class="small muted">Estas notas acompanham tarefas/cursos se você autorizar essa categoria no vínculo.</p>
     <label class="f" for="fProx">Se não terminou: por onde começar da próxima vez? (opcional)<input type="text" id="fProx" maxlength="120" placeholder="ex.: reler o último parágrafo e escrever a conclusão"></label>
     <p class="small muted">E ${f.curso ? "a aula" : "a tarefa"}?</p>
-    <div class="row"><button class="btn primary" data-fim="feita">${f.curso ? "Concluí a aula" : "Concluí"}</button><button class="btn" data-fim="avancei">Avancei um pouco</button><button class="btn ghost" data-fim="retomar">Vou retomar depois</button></div>`, sh => {
+    <div class="row"><button class="btn primary" data-fim="feita">${f.pequeno ? "Concluí este pequeno passo" : f.curso ? "Concluí a aula" : "Concluí"}</button><button class="btn" data-fim="avancei">Avancei um pouco</button><button class="btn ghost" data-fim="retomar">Vou retomar depois</button></div>`, sh => {
     $$("[data-feel]", sh).forEach(b => b.onclick = () => { feel = b.dataset.feel; $$("[data-feel]", sh).forEach(c => c.setAttribute("aria-pressed", c === b)); });
     $$("[data-fim]", sh).forEach(b => b.onclick = () => {
-      const fim = b.dataset.fim, prox = $("#fProx", sh).value.trim();
-      S.sessions.push({ date: hoje(), min, taskId: f.taskId, type: f.type, feel, fim });
-      if (fim === "feita") { if (f.curso) aulaFeita(curso(f.taskId.slice(2))); else { const x = tarefa(f.taskId); if (x) concluir(x); } }
+      const fim = b.dataset.fim, prox = $("#fProx", sh).value.trim().slice(0, 120);
+      const avanco = $("#fAvanco", sh).value.trim().slice(0, 300), material = $("#fMaterial", sh).value.trim().slice(0, 400);
+      S.sessions.push({ date: hoje(), min, taskId: f.taskId, type: f.type, feel, fim: f.pequeno && fim === "feita" ? "passo" : fim, pequeno: !!f.pequeno });
+      if (fim === "feita" && !f.pequeno) { if (f.curso) aulaFeita(curso(f.taskId.slice(2))); else { const x = tarefa(f.taskId); if (x) concluir(x); } }
       else {
         const x = f.curso ? curso(f.taskId.slice(2)) : tarefa(f.taskId);
-        if (x) { x.parou = { em: hoje(), prox: prox || null, como: fim };
-          if (prox && !f.curso) { const i = x.steps.findIndex(s => !s.done); x.steps.splice(i < 0 ? x.steps.length : i, 0, { t: prox, done: false }); } }
+        if (x) { x.parou = { em: hoje(), prox: prox || null, como: f.pequeno && fim === "feita" ? "avancei" : fim, avanco: avanco || (f.pequeno && fim === "feita" ? f.pequeno.texto : ""), material }; }
       }
-      save(); fechar(); toast(fim === "feita" ? `+${min} min hoje. Feito.` : `+${min} min hoje. ${prox ? "O próximo passo ficou guardado." : "Fica na fila para você voltar."}`); });
+      save(); fechar(); toast(fim === "feita" && !f.pequeno ? `+${min} min hoje. Feito.` : `+${min} min hoje. ${prox ? "O próximo passo ficou guardado." : "Fica na fila para você voltar."}`); });
   });
 }
 function bip() {
@@ -1432,13 +1474,15 @@ function salaRender(pessoas, solo, bloqueado) {
 }
 async function salaEntrar() {
   if (!API || !S.link?.token) return salaRender([], true);
-  try { const r = await api("sala/entrar", { minutos: S.settings.focusMin, intencao: "" }); salaRender(r.pessoas); } catch (e) { salaRender([], true, e.status === 402); }
+  try { const r = await api("sala/entrar", { minutos: FOCO ? Math.ceil(FOCO.total / 60) : S.settings.focusMin, intencao: "" }); salaRender(r.pessoas); } catch (e) { salaRender([], true, e.status === 402); }
 }
 async function salaBatimento() { if (!API || !S.link?.token) return; try { const r = await api("sala/batimento", {}); salaRender(r.pessoas); } catch {} }
 async function salaSair() { if (!API || !S.link?.token) return; try { await api("sala/sair", {}); } catch {} }
 
 /* ================= player de rotina ================= */
-function abrirRotina(r) {
+function abrirRotina(r, selecao = null) {
+  const original = r;
+  if (selecao) r = { ...r, steps: selecao.map(i => original.steps[i]) };
   let i = 0, end = 0; const ini = Date.now();
   const desenha = () => {
     const s = r.steps[i]; end = Date.now() + s.min * 60000;
@@ -1455,9 +1499,9 @@ function abrirRotina(r) {
   };
   const fim = ok => {
     clearInterval(tm); document.title = "Agora TDAH";
-    S.routineRuns.push({ date: hoje(), routineId: r.id, done: ok ? r.steps.length : i, total: r.steps.length });
+    S.routineRuns.push({ date: hoje(), routineId: r.id, done: ok ? r.steps.length : i, total: original.steps.length, reduzida: !!selecao });
     const min = Math.round((Date.now() - ini) / 60000); save();
-    $("#layer").innerHTML = ""; render(); toast(ok ? `Rotina feita${min ? " em " + min + " min" : ""}.` : `${i} de ${r.steps.length} passos. Conta também.`);
+    $("#layer").innerHTML = ""; render(); toast(ok && !selecao ? `Rotina feita${min ? " em " + min + " min" : ""}.` : `${ok ? r.steps.length : i} de ${original.steps.length} passos. Conta também.`);
   };
   const tm = setInterval(() => { const c = $("#rclock"); if (!c) return clearInterval(tm);
     const rest = Math.round((end - Date.now()) / 1000);
@@ -1529,7 +1573,7 @@ async function salvarConsent() {
 }
 async function desvincular() { try { await api("paciente/desvincular", {}); S.link.pro = null; S.notes = S.notes.filter(n => !n.presc); S.routines = S.routines.filter(r => !r.prescId || r.prescId < 0); save({ noSync: true }); render(); toast("Desvinculado. A clínica não recebe mais seus dados."); } catch (e) { toast(e.message); } }
 function snapshot() {
-  const { link, _demo, _keepDemo, dismiss, interest, ...resto } = S;
+  const { link, _demo, _keepDemo, dismiss, interest, preparo, ...resto } = S;
   return resto;
 }
 async function sincronizar(manual) {
@@ -1640,7 +1684,7 @@ function sheetConflito(x) {
     <p class="small muted">Escolha qual vale. A outra fica guardada neste aparelho por segurança: dá para voltar a ela em Mais › Seus dados › Cópias guardadas.</p>
     <div class="row"><button class="btn primary" id="cfN">Trazer a da nuvem</button><button class="btn" id="cfA">Manter a deste aparelho</button></div>`, sh => {
     $("#cfA", sh).onclick = async () => { try { const r = await api("nuvem"); if (r.dados) guardarCopia("versão da nuvem antes de manter a deste aparelho", r.dados); } catch {} fechar(); nuvemSalvar(true, true); };
-    $("#cfN", sh).onclick = async () => { try { const r = await api("nuvem"); guardarCopia("versão deste aparelho antes de trazer a da nuvem", S); const link = S.link; S = r.dados; S.link = link; S.link.nuvemVersao = r.versao; S.link.nuvemEm = r.atualizado_em; S._demo = false; migrar(); lsSet(S); aplicaTema(); $("#layer").innerHTML = ""; go("agora"); toast("Dados da nuvem trazidos para cá."); } catch (e) { toast(e.message); } };
+    $("#cfN", sh).onclick = async () => { try { const r = await api("nuvem"); guardarCopia("versão deste aparelho antes de trazer a da nuvem", S); const link = S.link, preparoLocal = S.preparo; S = r.dados; delete S.preparo; if (preparoLocal) S.preparo = preparoLocal; S.link = link; S.link.nuvemVersao = r.versao; S.link.nuvemEm = r.atualizado_em; S._demo = false; migrar(); lsSet(S); aplicaTema(); $("#layer").innerHTML = ""; go("agora"); toast("Dados da nuvem trazidos para cá."); } catch (e) { toast(e.message); } };
   });
 }
 function nuvemRestaurar(aoEntrar) {
@@ -1648,7 +1692,7 @@ function nuvemRestaurar(aoEntrar) {
     <div class="row"><button class="btn primary" id="ok">Restaurar</button><button class="btn ghost" data-close>Agora não</button></div>`, sh => {
     $("#ok", sh).onclick = async () => {
       try { const r = await api("nuvem"); if (!r.dados) return toast("Não há cópia salva.");
-        const link = S.link; S = r.dados; S.link = link; S.link.nuvemVersao = r.versao; S._demo = false; migrar(); lsSet(S); aplicaTema(); $("#layer").innerHTML = ""; go("agora"); toast("Seus dados voltaram."); }
+        const link = S.link, preparoLocal = S.preparo; S = r.dados; delete S.preparo; if (preparoLocal) S.preparo = preparoLocal; S.link = link; S.link.nuvemVersao = r.versao; S._demo = false; migrar(); lsSet(S); aplicaTema(); $("#layer").innerHTML = ""; go("agora"); toast("Seus dados voltaram."); }
       catch (e) { toast(e.message); }
     };
   });
@@ -1918,9 +1962,10 @@ async function pushSincronizar() {
 // Três perguntas abertas, escolha do período e do que entra, prévia revisável. Nada sai do aparelho sem um toque da pessoa.
 const PREP_INCL = [["roteiro", "O que quero levar (minhas respostas)"], ["tarefas", "Tarefas e foco"], ["bem", "Bem-estar: humor, energia, sono e atividade"], ["rotinas", "Rotinas"]];
 function prep() {  // sempre o mesmo objeto: os campos que faltam são completados no lugar
-  const d = { atrapalhou: "", situacoes: "", trabalhar: "", dias: 14, incl: { roteiro: true, tarefas: true, bem: true, rotinas: false } };
+  const d = { atrapalhou: "", situacoes: "", trabalhar: "", dias: 14, incl: { roteiro: true, tarefas: true, bem: false, rotinas: false } };
   if (!S.preparo) S.preparo = d;
   for (const k in d) if (S.preparo[k] === undefined) S.preparo[k] = d[k];
+  S.preparo.incl = Object.assign({}, d.incl, S.preparo.incl || {});
   return S.preparo;
 }
 function textoPreparo() {
@@ -1938,7 +1983,7 @@ function textoPreparo() {
     const ses = S.sessions.filter(s => no(s.date)), min = soma(ses.map(s => s.min));
     const feel = k => ses.filter(s => s.feel === k).length;
     const feitas = S.tasks.filter(t => t.done && t.doneAt && no(t.doneAt));
-    const paradas = [...S.tasks, ...S.courses].filter(x => x.parou && no(x.parou.em) && !x.done);
+    const paradas = [...S.tasks.filter(x => !x.done), ...S.courses.filter(c => c.done < c.total)].filter(x => x.parou && no(x.parou.em));
     L.push("TAREFAS E FOCO");
     L.push(`- Foco: ${r1(min / 60)} h em ${ses.length} ${ses.length === 1 ? "sessão" : "sessões"} (fluiu ${feel("fluiu")}, ok ${feel("ok")}, travei ${feel("travei")})`);
     L.push(`- Tarefas concluídas: ${feitas.length}${feitas.length ? ": " + feitas.slice(-8).map(t => t.title).join("; ") : ""}`);
@@ -1981,22 +2026,52 @@ function vPreparo() {
       <div class="seg" role="group" aria-label="Período">${[7, 14, 28].map(k => `<button data-prep-dias="${k}" aria-pressed="${P.dias === k}">${k} dias</button>`).join("")}</div>
       ${PREP_INCL.map(([k, t]) => `<label class="check"><input type="checkbox" data-prep-incl="${k}" ${P.incl[k] ? "checked" : ""}><span>${t}</span></label>`).join("")}</section>
     <section class="card stack"><h2>Prévia</h2>
-      <pre class="prep" id="prevPrep">${esc(textoPreparo())}</pre>
+      <label class="f" for="prevPrep">Revise ou edite o texto que será copiado, baixado ou enviado.</label>
+      <textarea class="prep" id="prevPrep" rows="14" maxlength="8000">${esc(textoPreparoFinal())}</textarea>
+      <p class="small muted" id="prEstado" role="status"></p>
+      <button class="btn sm ghost" id="prGerar">Gerar novamente a partir das escolhas</button>
       <div class="row"><button class="btn primary" id="prCopiar">Copiar</button><button class="btn" id="prBaixar">Baixar como texto</button>
         ${enviar ? `<button class="btn" id="prEnviar">Enviar para ${esc(L.pro.split(" ")[0])}</button>` : ""}</div>
       ${!enviar ? `<p class="small muted">Leve na consulta, cole numa mensagem para quem te acompanha ou guarde para você.${API ? " Vinculado a um profissional no Agora, dá para enviar direto." : ""}</p>` : ""}
     </section></div>`;
 }
+function textoPreparoFinal() {
+  const P = prep();
+  return typeof P.editado === "string" ? P.editado : textoPreparo();
+}
 function ligarPreparo(root) {
-  const P = prep(), atual = () => { const el = $("#prevPrep", root); if (el) el.textContent = textoPreparo(); };
-  $$("[data-prep]", root).forEach(t => t.addEventListener("input", () => { P[t.dataset.prep] = t.value.slice(0, 600); save({ noSync: true }); atual(); }));
-  $$("[data-prep-incl]", root).forEach(c => c.addEventListener("change", () => { P.incl[c.dataset.prepIncl] = c.checked; save({ noSync: true }); atual(); }));
-  $$("[data-prep-dias]", root).forEach(b => b.addEventListener("click", () => { P.dias = +b.dataset.prepDias; save({ noSync: true });
-    $$("[data-prep-dias]", root).forEach(x => x.setAttribute("aria-pressed", x === b)); atual(); }));
-  const cp = $("#prCopiar", root); if (cp) cp.onclick = () => navigator.clipboard?.writeText(textoPreparo()).then(() => toast("Copiado.")).catch(() => toast("Selecione o texto da prévia e copie."));
-  const bx = $("#prBaixar", root); if (bx) bx.onclick = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([textoPreparo()], { type: "text/plain;charset=utf-8" }));
-    a.download = `preparo-sessao-${hoje()}.txt`; document.body.appendChild(a); a.click(); a.remove(); };
-  const en = $("#prEnviar", root); if (en) en.onclick = async () => { try { await api("paciente/preparo", { texto: textoPreparo() }); toast(`Enviado. ${S.link.pro.split(" ")[0]} vê no painel antes da consulta.`); } catch (e) { toast(e.message); } };
+  const P = prep();
+  const aviso = () => {
+    const mudou = typeof P.editado === "string" && P.baseEdicao !== textoPreparo();
+    const longo = textoPreparoFinal().length > 8000;
+    $("#prEstado", root).textContent = longo ? "Reduza a prévia para até 8.000 caracteres antes de compartilhar." : mudou ? "Suas escolhas mudaram. O texto editado foi preservado; gere novamente para aplicar as novas escolhas antes de compartilhar." : "Só o texto desta prévia será compartilhado. O rascunho fica neste aparelho.";
+    ["#prCopiar", "#prBaixar", "#prEnviar"].forEach(id => { const b = $(id, root); if (b) b.disabled = longo || mudou || !textoPreparoFinal().trim(); });
+  };
+  const atual = () => { $("#prevPrep", root).value = textoPreparoFinal(); aviso(); };
+  const guardar = () => { save({ noSync: true }); atual(); };
+  $$("[data-prep]", root).forEach(t => t.addEventListener("input", () => { P[t.dataset.prep] = t.value.slice(0, 600); guardar(); }));
+  $$("[data-prep-incl]", root).forEach(c => c.addEventListener("change", () => { P.incl[c.dataset.prepIncl] = c.checked; guardar(); }));
+  $$("[data-prep-dias]", root).forEach(b => b.addEventListener("click", () => { P.dias = +b.dataset.prepDias;
+    $$("[data-prep-dias]", root).forEach(x => x.setAttribute("aria-pressed", x === b)); guardar(); }));
+  $("#prevPrep", root).oninput = e => {
+    if (typeof P.editado !== "string") P.baseEdicao = textoPreparo();
+    P.editado = e.target.value.slice(0, 8000); save({ noSync: true }); aviso();
+  };
+  $("#prGerar", root).onclick = () => {
+    const gerar = () => { delete P.editado; delete P.baseEdicao; save({ noSync: true }); fechar(); };
+    if (typeof P.editado !== "string") return gerar();
+    sheet(`<h2>Substituir o texto editado?</h2><p>O novo resumo usará as categorias e o período escolhidos. As edições manuais serão substituídas.</p><div class="row"><button class="btn primary" id="prConfirmarGerar">Gerar novo resumo</button><button class="btn ghost" data-close>Manter minhas edições</button></div>`, sh => { $("#prConfirmarGerar", sh).onclick = gerar; });
+  };
+  $("#prCopiar", root).onclick = async () => { try { await navigator.clipboard.writeText(textoPreparoFinal()); toast("Copiado."); } catch { $("#prevPrep", root).select(); toast("Selecione o texto da prévia e copie."); } };
+  $("#prBaixar", root).onclick = () => { const a = document.createElement("a"); const url = URL.createObjectURL(new Blob([textoPreparoFinal()], { type: "text/plain;charset=utf-8" })); a.href = url;
+    a.download = `preparo-sessao-${hoje()}.txt`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); };
+  const en = $("#prEnviar", root); if (en) en.onclick = () => {
+    const texto = textoPreparoFinal(), destinatario = S.link.pro;
+    sheet(`<h2>Enviar este resumo?</h2><p>Destinatário: ${esc(destinatario)}. Apenas o texto abaixo será enviado; isso não altera suas permissões de compartilhamento.</p><pre class="prep">${esc(texto)}</pre><div class="row"><button class="btn primary" id="prConfirmarEnvio">Confirmar envio</button><button class="btn ghost" data-close>Voltar e revisar</button></div>`, sh => {
+      $("#prConfirmarEnvio", sh).onclick = async e => { e.target.disabled = true; try { await api("paciente/preparo", { texto }); fechar(); toast(`Enviado. ${destinatario.split(" ")[0]} vê no painel antes da consulta.`); } catch (err) { e.target.disabled = false; toast(err.message); } };
+    });
+  };
+  aviso();
 }
 
 /* ================= importar cursos (Lista Magna, painéis de cursos, planilhas) ================= */

@@ -80,7 +80,7 @@ def main():
     hoje10 = datetime.now().replace(hour=10, minute=5, second=0, microsecond=0)
 
     with sync_playwright() as p:
-        nav = p.chromium.launch()
+        nav = p.chromium.launch(executable_path=os.environ.get("AGORA_CHROMIUM_EXECUTABLE"))
 
         def nova(vp, escuro=False):
             ctx = nav.new_context(viewport=vp, color_scheme="dark" if escuro else "light", locale="pt-BR",
@@ -257,13 +257,14 @@ def main():
         pg.wait_for_selector("#prevPrep")
         pg.fill("#pr1", "comecei três coisas e não terminei nenhuma")
         pg.fill("#pr3", "como retomar depois de interrupção")
-        ok("preparo: a prévia mostra as respostas na hora", "não terminei nenhuma" in pg.locator("#prevPrep").inner_text())
+        ok("preparo: a prévia mostra as respostas na hora", "não terminei nenhuma" in pg.locator("#prevPrep").input_value())
         pg.click("[data-prep-dias='28']")
         pg.check("[data-prep-incl=rotinas]")
-        prev = pg.locator("#prevPrep").inner_text()
+        pg.check("[data-prep-incl=bem]")
+        prev = pg.locator("#prevPrep").input_value()
         ok("preparo: período e categorias mudam o resumo", "últimos 28 dias" in prev and "ROTINAS" in prev and "BEM-ESTAR" in prev, prev[:300])
         pg.uncheck("[data-prep-incl=bem]")
-        ok("preparo: tirar uma categoria tira do resumo", "BEM-ESTAR" not in pg.locator("#prevPrep").inner_text())
+        ok("preparo: tirar uma categoria tira do resumo", "BEM-ESTAR" not in pg.locator("#prevPrep").input_value())
         with pg.expect_download() as dl:
             pg.click("#prBaixar")
         ok("preparo: baixa como texto", dl.value.suggested_filename.startswith("preparo-sessao-"))
@@ -500,6 +501,7 @@ def main():
         pg.wait_for_selector("#prEnviar")
         pg.fill("#pr1", "semana com muitas interrupções")
         pg.click("#prEnviar")
+        pg.click("#prConfirmarEnvio")
         pg.wait_for_selector(".toast:has-text('Enviado')")
         ok("vinculado envia o preparo ao profissional", True)
         pp.reload()
