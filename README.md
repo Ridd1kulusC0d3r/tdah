@@ -19,3 +19,7 @@ python3 ferramentas/gerar_prototipo.py    # regenera prototipo/ depois de mudar 
 
 Responsável técnico pelos serviços psicológicos: Deivison Mendes, CRP-04/65709.
 Ferramenta de apoio à organização: não faz diagnóstico nem substitui tratamento. Em crise: CVV 188, SAMU 192.
+
+## Retomada e preparação da sessão
+
+O app agora guarda contexto para retomar tarefas e cursos, permite experimentar um plano menor sem alterar o original e oferece resumo editável antes do compartilhamento. Veja [comportamento e validação](docs/RETOMADA-E-PREPARO.md).

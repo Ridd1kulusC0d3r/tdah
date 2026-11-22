@@ -245,8 +245,9 @@ class TestSeguranca(Producao):
         uid = self.uid("nv@t.br")
         self.sql("INSERT INTO assinaturas(usuario_id,plano,direito,provedor,status,fim_periodo,criado_em,atualizado_em) "
                  "VALUES (?,?,?,?,?,?,?,?)", (uid, "plus_anual", "plus", "cortesia", "ativa", "2099-01-01T00:00:00+00:00", "x", "x"))
-        s, j = self.req("/api/nuvem", {"dados": {"tasks": [{"t": "consulta sexta"}]}}, token=tok)
+        s, j = self.req("/api/nuvem", {"dados": {"tasks": [{"t": "consulta sexta"}], "preparo": {"trabalhar": "rascunho privado"}}}, token=tok)
         self.assertEqual((s, j["versao"]), (200, 1))
+        self.assertNotIn("preparo", self.req("/api/nuvem", token=tok)[1]["dados"])
         self.assertNotIn("consulta", self.sql("SELECT dados FROM nuvem WHERE usuario_id=?", (uid,))[0]["dados"])
         self.assertEqual(self.req("/api/nuvem", {"dados": {"a": 1}, "versao_base": 1}, token=tok)[1]["versao"], 2)
         s, j = self.req("/api/nuvem", {"dados": {"a": 2}, "versao_base": 1}, token=tok)  # aparelho atrasado

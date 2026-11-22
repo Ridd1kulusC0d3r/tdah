@@ -643,7 +643,7 @@ class API(Funil):
         con = self.db.con()
         try:
             self._exige_plus(con, u)
-            txt = json.dumps(dados, ensure_ascii=False)
+            txt = json.dumps({k: v for k, v in dados.items() if k != "preparo"}, ensure_ascii=False)
             if len(txt) > MAX_CORPO:
                 raise ErroAPI(413, "Seus dados passaram do limite da cópia na nuvem.")
             with _lock:
