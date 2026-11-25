@@ -180,14 +180,14 @@ def testes_html():
 def main():
     n_ui, t_ui, n_api, t_api, quando, linhas_ui, linhas_api = testes_html()
     corpo = f'''
-<header class="top"><div class="brand"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 16 L16 5 A11 11 0 0 1 26.4 12.6 Z" fill="var(--accent)"/></svg><b>Agora</b><i>TDAH</i></div><span class="pill mono">Manual, versão 2.1</span></header>
+<header class="top"><div class="brand"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 16 L16 5 A11 11 0 0 1 26.4 12.6 Z" fill="var(--accent)"/></svg><b>Agora</b><i>TDAH</i></div><span class="pill mono">Manual, versão 2.2</span></header>
 <div class="layout">
 <nav class="toc" aria-label="Seções do manual"><span class="label">Neste manual</span>
 <a href="#agir">Faça isto primeiro</a><a href="#como">Como funciona</a><a href="#instalar">Instalação</a><a href="#paciente">Uso: paciente</a><a href="#profissional">Uso: profissional</a><a href="#servicos">Serviços e turmas</a><a href="#admin">Administração</a><a href="#relatorios">Relatórios</a><a href="#pagamentos">Planos e pagamentos</a><a href="#publicar">Publicar na internet</a><a href="#seguranca">Segurança e operação</a><a href="#android">App Android</a><a href="#site">Site público</a><a href="#problemas">Solução de problemas</a><a href="#glossario">Glossário</a><a href="#tecnico">Seção técnica</a></nav>
 <main>
 <section class="hero"><h1>Uma coisa por vez.</h1><p class="lead">O Agora é um sistema para TDAH em duas partes: um <b>app gratuito para o paciente</b> (celular e computador) e um <b>painel para o psicólogo</b> acompanhar e prescrever rotinas entre as sessões, no mesmo modelo do Dietbox. </p>
 <p class="lead">A <b>versão 2.0</b> deixa o sistema pronto para produção e vira um funil de cuidado: tela de <b>Serviços</b> com terapia, turmas de treino de habilidades sociais da Lume com missões semanais e e-books; <b>painel de administração</b> com receita contra a meta, funil, contatos, turmas, compras e estornos; dados de saúde <b>cifrados no banco</b>, <b>verificação em duas etapas</b>, backup cifrado fora do servidor, lembretes com o app fechado e convite por link.</p>
-<p class="lead">A <b>versão 2.1</b> responde três perguntas: <b>"O que consigo começar agora?"</b>, <b>"Onde parei?"</b> e <b>"O que quero levar para a próxima conversa?"</b>. Traz o preparo da sessão, a importação de cursos, o fim do foco que separa o tempo da tarefa e o placar de dias em que você voltou.</p></section>
+<p class="lead">A <b>versão 2.2</b> responde três perguntas: <b>"O que consigo começar agora?"</b>, <b>"Onde parei?"</b> e <b>"O que quero levar para a próxima conversa?"</b>. Traz o preparo da sessão, a importação de cursos, o fim do foco que separa o tempo da tarefa e o placar de dias em que você voltou. E chega pronta para publicar: site, app instalável no celular (funciona sem internet) e kit da Google Play.</p></section>
 
 <section id="agir" class="act"><span class="label">Faça isto primeiro · uma ação</span><h2>Dê dois cliques no lançador do seu sistema</h2>
 <div class="tabs" role="tablist" data-tabs="go">
@@ -340,16 +340,16 @@ def main():
 <ol class="steps">
 <li><b>Suba o projeto para o GitHub</b> (repositório privado).</li>
 <li><b>Gere a chave de assinatura uma única vez:</b> <code>android/gerar-chave.sh</code>. Guarde o arquivo e a senha num cofre: sem eles não dá para atualizar o app.</li>
-<li><b>Cadastre os secrets</b> no GitHub (Settings › Secrets › Actions): <code>AGORA_API_URL</code>, <code>AGORA_KEYSTORE_BASE64</code> e <code>AGORA_KEYSTORE_SENHA</code>.</li>
+<li><b>Cadastre os secrets</b> no GitHub (Settings › Secrets › Actions): <code>AGORA_KEYSTORE_BASE64</code> e <code>AGORA_KEYSTORE_SENHA</code>. Sem <code>AGORA_API_URL</code> sai o <b>app local</b> (sem conta, sem servidor), que é o indicado para a primeira versão na loja; com ela, o app ganha conta, nuvem e vínculo.</li>
 <li><b>Rode o workflow</b> Actions › Android › Run workflow. Ele gera <code>agora-debug.apk</code> (instale no celular para testar) e <code>agora-release.aab</code> (para a Play Store).</li>
-<li><b>Envie o AAB</b> ao Play Console, preencha a ficha da loja e a declaração de segurança dos dados, e siga o checklist abaixo.</li></ol>
+<li><b>Envie o AAB</b> ao Play Console seguindo <code>play/LEIA-PRIMEIRO.md</code>: a pasta <code>play/</code> tem os textos da ficha, o ícone, o gráfico de destaque, seis capturas 1080 × 1920 e as respostas prontas dos formulários (segurança dos dados, saúde, classificação, público-alvo) em <code>play/FORMULARIOS.md</code>.</li></ol>
 {figura("28-android-planos", "No Android, o Plus não é vendido dentro do app", True)}
 <h3>Checklist da Play Store</h3>
 <div class="tablewrap"><table>
 <tr><td>Conta de desenvolvedor</td><td>Prefira conta de <b>organização</b> com o seu CNPJ (exige número D-U-N-S). Conta pessoal criada depois de 13/11/2023 precisa de teste fechado com 12 testadores por 14 dias seguidos antes de publicar.</td></tr>
 <tr><td>Cobrança</td><td>Assinatura digital comprada dentro do app tem de usar o Google Play Billing, e o app não pode levar a pessoa para pagar no site. Por isso o app Android ainda não vende o Plus. Sessões de terapia (serviço clínico, atendimento 1:1) podem ser cobradas fora do Google Play.</td></tr>
-<tr><td>Saúde</td><td>Preencher a declaração de apps de saúde no Play Console e deixar claro na ficha que o app não faz diagnóstico.</td></tr>
-<tr><td>Privacidade</td><td>URL da política (<span class="mono">/privacidade.html</span>), seção de segurança dos dados e URL de exclusão de conta (<span class="mono">/excluir-conta.html</span>).</td></tr>
+<tr><td>Saúde</td><td>Preencher a declaração de apps de saúde (todo app preenche) e manter na descrição o aviso de que o app não é dispositivo médico e não diagnostica, trata, cura nem previne, com orientação para procurar um profissional. O texto pronto já traz isso.</td></tr>
+<tr><td>Privacidade</td><td>URL da política (no app local, a do protótipo publicado, cadastrada na variável <code>AGORA_PRIVACIDADE_URL</code>). App local: segurança dos dados = "não coleta dados" e não há exclusão de conta a declarar. Com servidor: declarar conta, e-mail e saúde, e informar a URL de exclusão (<span class="mono">/excluir-conta.html</span>).</td></tr>
 <tr><td>Identificador</td><td><code>br.com.agoratdah.app</code>. Não muda depois do primeiro envio: troque antes, em <code>android/capacitor.config.json</code> e no projeto Android, se for usar outro domínio.</td></tr>
 </table></div></section>
 

@@ -1,0 +1,20 @@
+test_cloud_restore_keeps_local_draft (tests.test_retomada_ui.RetomadaUI.test_cloud_restore_keeps_local_draft) ... ok
+test_course_resume_and_summary_with_lessons_already_done (tests.test_retomada_ui.RetomadaUI.test_course_resume_and_summary_with_lessons_already_done) ... ok
+test_explicit_send_uses_edited_text_and_cancel_sends_nothing (tests.test_retomada_ui.RetomadaUI.test_explicit_send_uses_edited_text_and_cancel_sends_nothing) ... ok
+test_small_routine_preserves_original_and_marks_partial (tests.test_retomada_ui.RetomadaUI.test_small_routine_preserves_original_and_marks_partial) ... ok
+test_small_step_preserves_task_and_default_duration (tests.test_retomada_ui.RetomadaUI.test_small_step_preserves_task_and_default_duration) ... ok
+test_summary_manual_edits_export_and_privacy (tests.test_retomada_ui.RetomadaUI.test_summary_manual_edits_export_and_privacy) ... ok
+test_task_resume_persists_without_duplicate_steps (tests.test_retomada_ui.RetomadaUI.test_task_resume_persists_without_duplicate_steps) ... ok
+test_01_paginas_legais_sem_lacunas (tests.test_publicacao.TestPublicacao.test_01_paginas_legais_sem_lacunas) ... ok
+test_02_links_relativos_e_noindex (tests.test_publicacao.TestPublicacao.test_02_links_relativos_e_noindex) ... ok
+test_03_pwa_instalavel_e_offline_em_subpasta (tests.test_publicacao.TestPublicacao.test_03_pwa_instalavel_e_offline_em_subpasta) ... ok
+test_04_boas_vindas_em_endereco_publico (tests.test_publicacao.TestPublicacao.test_04_boas_vindas_em_endereco_publico) ... ok
+test_05_vitrine_e_site (tests.test_publicacao.TestPublicacao.test_05_vitrine_e_site) ... ok
+test_06_android_sem_servidor (tests.test_publicacao.TestPublicacao.test_06_android_sem_servidor) ... ok
+test_07_kit_da_play (tests.test_publicacao.TestPublicacao.test_07_kit_da_play) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 13.038s
+
+OK
+PASS: task/course resumption, partial progress, reduced steps, source preservation, summary selection/export text, private snapshot, escaping and empty-step validation.

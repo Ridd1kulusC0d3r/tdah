@@ -1,5 +1,5 @@
 {
- "quando": "2026-11-21T17:10:24",
+ "quando": "2026-11-25T00:43:06",
  "resultados": [
   {
    "teste": "abre com banner de dados de exemplo",
@@ -184,7 +184,7 @@
   {
    "teste": "preparo: período e categorias mudam o resumo",
    "ok": true,
-   "detalhe": "Preparo para a sessão · Paula · 21/11/2026\nPeríodo: últimos 28 dias (25/10 a 21/11)\n\nO QUE QUERO LEVAR\n- O que atrapalhou: comecei três coisas e não terminei nenhuma\n- Em quais situações: (sem resposta)\n- O que gostaria de trabalhar: como retomar depois de interrupção\n\nTAREFAS E FOCO\n- Foco: 0,3 h e"
+   "detalhe": "Preparo para a sessão · Paula · 25/11/2026\nPeríodo: últimos 28 dias (29/10 a 25/11)\n\nO QUE QUERO LEVAR\n- O que atrapalhou: comecei três coisas e não terminei nenhuma\n- Em quais situações: (sem resposta)\n- O que gostaria de trabalhar: como retomar depois de interrupção\n\nTAREFAS E FOCO\n- Foco: 0,3 h e"
   },
   {
    "teste": "preparo: tirar uma categoria tira do resumo",
@@ -279,7 +279,7 @@
   {
    "teste": "URL limpa depois do retorno",
    "ok": true,
-   "detalhe": "http://localhost:42509/app/#mais"
+   "detalhe": "http://localhost:34611/app/#mais"
   },
   {
    "teste": "cópia na nuvem salva",
@@ -540,6 +540,16 @@
    "teste": "lembretes nativos agendados (3 rotinas + diário)",
    "ok": true,
    "detalhe": "['Arranque da manhã', 'Desligar o dia', 'Pausa de corpo', 'Como foi o seu dia?']"
+  },
+  {
+   "teste": "Android: boas-vindas na primeira abertura",
+   "ok": true,
+   "detalhe": ""
+  },
+  {
+   "teste": "lembretes nativos sem alarme exato",
+   "ok": true,
+   "detalhe": ""
   },
   {
    "teste": "Android não mostra botão de compra do Plus",

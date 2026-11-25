@@ -1,4 +1,4 @@
-# Comece aqui — Agora 2.1
+# Comece aqui — Agora 2.2
 
 Uma ação por vez. Faça só o passo 1 agora.
 
@@ -30,7 +30,9 @@ Pagamentos começam em **modo de teste**: a página de checkout tem botões "apr
 
 1. **Crie o repositório** privado no GitHub e suba esta pasta (o `.gitignore` já deixa de fora dados, `.env` e chaves).
 2. **Siga `docs/PRODUCAO.md`**: chave de criptografia, `.env`, `docker compose up -d`, promover sua conta a administradora, webhooks, backup no S3.
-3. **Antes de cobrar:** revisão do advogado (privacidade, termos, RIPD em `docs/RIPD.md`) e da publicidade com a orientação do CRP-04.
+3. **Site e app no celular hoje, sem servidor:** `prototipo/PUBLICAR.md` (Netlify Drop ou GitHub Pages; o app instala pela opção "Adicionar à tela inicial" e funciona sem internet).
+4. **Google Play:** `play/LEIA-PRIMEIRO.md` (textos, imagens e respostas dos formulários prontos).
+5. **Antes de cobrar:** revisão do advogado (privacidade, termos, RIPD em `docs/RIPD.md`) e da publicidade com a orientação do CRP-04.
 
 ## O que tem na pasta
 
@@ -45,9 +47,10 @@ Pagamentos começam em **modo de teste**: a página de checkout tem botões "apr
 | `server/admin.py` · `server/backup.py` | Linha de comando: chave, 2FA, administradores, tarefas · backup cifrado e restauração |
 | `catalogo/catalogo.json` | Catálogo de serviços (a cópia usada pelo servidor fica em `server/catalogo_padrao.json`) |
 | `android/` · `.github/` | Projeto Android (Capacitor) · testes a cada push e build do Android |
+| `prototipo/` · `play/` | Site e app como arquivos estáticos, prontos para hospedar · kit da Google Play |
 | `Dockerfile` · `docker-compose.yml` · `deploy/` · `.env.example` | Publicação com HTTPS, backup e homologação |
 | `tests/` · `rodar-testes.sh` | Testes da API, de produção e de ponta a ponta no navegador |
 
 Para zerar a demonstração: feche o servidor e apague a pasta `dados`.
 
-> Ferramenta de apoio à organização. Não faz diagnóstico nem substitui tratamento. Em crise: CVV 188 (24 h) ou SAMU 192.
+> Ferramenta de apoio à organização. Não é dispositivo médico, não faz diagnóstico nem substitui tratamento. Em crise: CVV 188 (24 h) ou SAMU 192.

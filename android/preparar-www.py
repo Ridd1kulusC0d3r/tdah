@@ -7,11 +7,13 @@ Sem ela, o app funciona só com os dados do aparelho (sem conta, planos ou vínc
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
 ORIGEM = AQUI.parent / "app"
 DESTINO = AQUI / "www"
+PRIVACIDADE_PADRAO = "https://ridd1kulusc0d3r.github.io/tdah/privacidade.html"  # protótipo no GitHub Pages
 FORA = {"pro.html", "admin.html", "checkout-simulado.html", "sw.js", "manifest.webmanifest"}  # painel, administração e checkout ficam só na web
 
 if DESTINO.exists():
@@ -26,7 +28,16 @@ api = os.environ.get("AGORA_API_URL", "").rstrip("/")
 cfg = {"plataforma": "android"}
 if api:
     cfg["api"] = api
+# endereço da política de privacidade (a Play exige um link público; o app mostra em Mais)
+cfg["privacidade"] = os.environ.get("AGORA_PRIVACIDADE_URL", "").strip() or (api + "/privacidade.html" if api else PRIVACIDADE_PADRAO)
+if not api:
+    # sem servidor: vitrine com os serviços que podem aparecer no Android (atendimento e interesse), pedidos por e-mail
+    sys.path.insert(0, str(AQUI.parent / "server"))
+    import catalogo as cat
+    from config import Config
+    (DESTINO / "catalogo.json").write_text(json.dumps(cat.Catalogo(Config(), None).publico("android", False, ["pessoas"]),
+                                                      ensure_ascii=False, indent=1), encoding="utf-8")
 (DESTINO / "config.js").write_text(
     "// Gerado por android/preparar-www.py. Não edite à mão.\n"
     f"window.AGORA_CONFIG = {json.dumps(cfg)};\n", encoding="utf-8")
-print(f"www/ pronto ({len(list(DESTINO.iterdir()))} arquivos). API: {api or '(nenhuma: só dados do aparelho)'}")
+print(f"www/ pronto ({len(list(DESTINO.iterdir()))} arquivos). API: {api or '(nenhuma: só dados do aparelho)'} · privacidade: {cfg['privacidade']}")

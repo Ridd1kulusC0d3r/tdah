@@ -1,7 +1,7 @@
 {
-  "name": "Agora TDAH",
+  "name": "Agora: uma ação por vez",
   "short_name": "Agora",
-  "description": "Uma ação por vez: tarefas, rotinas, foco, sono, humor e atividade para quem tem TDAH.",
+  "description": "Uma ação por vez para quem tem TDAH: tarefas em passos pequenos, foco, rotinas, cursos, diário e preparo da conversa com o psicólogo. Seus dados ficam no aparelho.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
@@ -18,13 +18,47 @@
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "./index.html",
+  "categories": [
+    "productivity",
+    "health",
+    "lifestyle"
+  ],
+  "orientation": "any",
+  "shortcuts": [
+    {
+      "name": "Próxima ação",
+      "url": "./index.html#agora"
+    },
+    {
+      "name": "Diário",
+      "url": "./index.html#diario"
+    },
+    {
+      "name": "Preparar minha próxima sessão",
+      "url": "./index.html#preparo"
     }
   ]
 }

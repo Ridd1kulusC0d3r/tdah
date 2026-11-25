@@ -37,8 +37,8 @@ Todas as páginas têm a faixa amarela "Protótipo" e pedem para não aparecer n
 
 ## Antes de divulgar
 
-- [ ] Preencher os campos entre colchetes em `privacidade.html` e `termos.html` (ou tirar os links do rodapé).
-- [ ] Conferir o e-mail de contato que aparece nos botões (vem de `AGORA_CONTATO_PUBLICO`).
+- [ ] Conferir o e-mail de contato que aparece nos botões e nas páginas legais (vem de `AGORA_CONTATO_PUBLICO`).
+- [ ] Ler `privacidade.html` e `termos.html` desta pasta: são as versões da demonstração, sem campos em aberto.
 - [ ] Abrir no celular e instalar o app pela opção "Adicionar à tela inicial".
 
 Para gerar de novo depois de mudar o app: `python3 ferramentas/gerar_prototipo.py`.

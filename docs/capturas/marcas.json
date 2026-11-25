@@ -1,7 +1,7 @@
 {
  "01-agora": {
   "w": 1280,
-  "h": 1430,
+  "h": 1488,
   "marcas": [
    {
     "n": 1,
@@ -24,13 +24,13 @@
    {
     "n": 4,
     "x": 301,
-    "y": 788,
+    "y": 846,
     "rotulo": "Troque a duração do foco"
    },
    {
     "n": 5,
     "x": 944,
-    "y": 788,
+    "y": 846,
     "rotulo": "Agora não: volta amanhã, sem culpa"
    },
    {
@@ -42,7 +42,7 @@
    {
     "n": 7,
     "x": 276,
-    "y": 868,
+    "y": 927,
     "rotulo": "Placar do dia"
    },
    {
@@ -55,7 +55,7 @@
  },
  "05-painel": {
   "w": 1280,
-  "h": 2748,
+  "h": 2788,
   "marcas": [
    {
     "n": 1,
@@ -72,13 +72,13 @@
    {
     "n": 3,
     "x": 297,
-    "y": 1268,
+    "y": 1307,
     "rotulo": "Sono e atividade física"
    },
    {
     "n": 4,
     "x": 297,
-    "y": 2375,
+    "y": 2414,
     "rotulo": "Comparações dos seus próprios dados"
    }
   ]
@@ -273,19 +273,19 @@
    {
     "n": 1,
     "x": 371,
-    "y": 358,
+    "y": 242,
     "rotulo": "Como foi"
    },
    {
     "n": 2,
     "x": 371,
-    "y": 434,
+    "y": 551,
     "rotulo": "Por onde começar da próxima vez"
    },
    {
     "n": 3,
     "x": 471,
-    "y": 524,
+    "y": 641,
     "rotulo": "Avancei um pouco: a tarefa continua na fila"
    }
   ]
@@ -442,7 +442,7 @@
  },
  "24-preparo": {
   "w": 1280,
-  "h": 1592,
+  "h": 1646,
   "marcas": [
    {
     "n": 1,
@@ -465,7 +465,7 @@
    {
     "n": 4,
     "x": 297,
-    "y": 955,
+    "y": 989,
     "rotulo": "Prévia revisável antes de levar ou enviar"
    }
   ]
@@ -1031,7 +1031,7 @@
  },
  "28-android-planos": {
   "w": 390,
-  "h": 3840,
+  "h": 3883,
   "marcas": [
    {
     "n": 1,

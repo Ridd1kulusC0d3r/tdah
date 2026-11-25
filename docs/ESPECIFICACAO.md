@@ -1,4 +1,4 @@
-# Agora — especificação do produto (v2.1)
+# Agora — especificação do produto (v2.2)
 
 Documento de produto e engenharia. O manual ilustrado (`docs/manual.html`) explica o uso; este arquivo explica **o que foi construído, por quê e o que vem depois**.
 
@@ -147,7 +147,7 @@ Consentimento → campos enviados: `checkins`→checkins · `foco`→sessions ·
 
 **Métricas de produto:** ativação (1ª sessão de foco no dia 1), dias com diário por semana, minutos de foco por semana, retenção D1/D7/D30, conversão para Plus, pedidos de contato, adesão a rotinas prescritas.
 
-## 9. Estado de cada parte (tabela única, 21/11/2026)
+## 9. Estado de cada parte (tabela única, 25/11/2026)
 
 Esta é a única fonte de verdade sobre o que existe. **Implementado** = código e testes automáticos no repositório. **Simulado** = funciona contra um provedor de teste ou falso, sem conta real. **Homologado** = testado com a conta real do provedor. **Publicado** = no ar para o público.
 
@@ -157,6 +157,8 @@ Esta é a única fonte de verdade sobre o que existe. **Implementado** = código
 | Preparar minha próxima sessão (roteiro, seleção, prévia, envio) | Sim (2.1) | — | — | Protótipo (sem o envio) |
 | Importar cursos (Lista Magna, painéis .html, planilhas) | Sim (2.1) | — | — | Protótipo |
 | Fim do foco com avanço parcial e "onde parei" | Sim (2.1) | — | — | Protótipo |
+| App instalável no celular (PWA: ícones, offline, boas-vindas) | Sim (2.2) | — | Testado em Chromium, inclusive sem internet e em subpasta | Protótipo, aguardando hospedagem |
+| Kit da Google Play (textos, imagens, formulários) | Sim (2.2), em `play/` | — | — | Não: falta a conta no Play Console |
 | Triagem ASRS | Sim, **desligada** | — | — | Não: falta o texto brasileiro validado e a licença |
 | Contas, vínculo, consentimento, prescrições, resumo para a sessão | Sim | — | — | Não |
 | Painel do psicólogo | Sim | — | — | Não (protótipo mostra convite para o piloto) |
@@ -167,8 +169,8 @@ Esta é a única fonte de verdade sobre o que existe. **Implementado** = código
 | Web Push | Sim | Sim (assinatura VAPID conferida; sem entrega real) | Não | Não |
 | Backup cifrado + S3 | Sim | Sim (envio falso nos testes) | Não | Não |
 | Cifra dos dados | Sim (`cryptography` obrigatória em produção) | — | — | Não |
-| App Android (Capacitor) | Projeto pronto | — | Build nunca rodou (Actions bloqueado por cobrança da conta) | Não |
-| Testes no GitHub Actions | Workflows prontos | — | Não rodaram (cobrança da conta) | — |
+| App Android (Capacitor) | Sim; build da loja só local (sem servidor) | — | APK de teste gerado no Actions; AAB assinado aguarda a chave | Não |
+| Testes no GitHub Actions | Sim (API, produção, navegador, publicação, imagem Docker) | — | Passando | — |
 
 ## 10. Limites conhecidos e próximos passos
 
@@ -178,4 +180,4 @@ Esta é a única fonte de verdade sobre o que existe. **Implementado** = código
 - **Catálogo no app:** o app mostra só a linha "Para você". Empresas e psicólogos têm páginas próprias no site.
 - O servidor embutido do Python atende uma clínica; para centenas de usuários simultâneos, trocar por um servidor de produção.
 - As datas do resumo de adesão usam o fuso do servidor.
-- Ordem de validação externa: GitHub Actions (resolver cobrança) → homologar pagamento com R$ 1 → e-mail real → build Android em aparelho real → push real.
+- Ordem de validação externa: hospedar o protótipo → chave de assinatura e teste fechado na Play → homologar pagamento com R$ 1 → e-mail real → build Android em aparelho real → push real.

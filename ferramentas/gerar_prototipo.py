@@ -73,9 +73,21 @@ def main():
     texto_cat = json.dumps(publico, ensure_ascii=False, indent=1)
     texto_cat_app = json.dumps(cat.Catalogo(Config(), None).publico("web", False, ["pessoas"]), ensure_ascii=False, indent=1)
 
+    # páginas legais: as do protótipo descrevem o que esta versão faz (nada sai do aparelho) e não têm lacunas;
+    # as de site/ são da versão com servidor e ficam para o lançamento completo.
+    cfg = Config()
+    legais = RAIZ / "ferramentas" / "prototipo_legal"
+    from datetime import date
+    trocas = {"{{CONTATO}}": contato, "{{RESP_NOME}}": cfg.responsavel_nome, "{{RESP_CRP}}": cfg.responsavel_crp,
+              "{{DATA}}": date.today().strftime("%d/%m/%Y")}
     for arq in (RAIZ / "site").iterdir():
         if arq.suffix == ".html":
-            (DEST / arq.name).write_text(marcar(relativizar(arq.read_text(encoding="utf-8"), 0)), encoding="utf-8")
+            fonte = legais / arq.name if (legais / arq.name).exists() else arq
+            html = fonte.read_text(encoding="utf-8")
+            for a, b in trocas.items():
+                html = html.replace(a, b)
+            assert "[" + "NOME" not in html and "{{" not in html, f"lacuna em {arq.name}"
+            (DEST / arq.name).write_text(marcar(relativizar(html, 0)), encoding="utf-8")
         elif arq.is_file():
             shutil.copy2(arq, DEST / arq.name)
     (DEST / "catalogo.json").write_text(texto_cat, encoding="utf-8")
@@ -154,8 +166,8 @@ Todas as páginas têm a faixa amarela "Protótipo" e pedem para não aparecer n
 
 ## Antes de divulgar
 
-- [ ] Preencher os campos entre colchetes em `privacidade.html` e `termos.html` (ou tirar os links do rodapé).
-- [ ] Conferir o e-mail de contato que aparece nos botões (vem de `AGORA_CONTATO_PUBLICO`).
+- [ ] Conferir o e-mail de contato que aparece nos botões e nas páginas legais (vem de `AGORA_CONTATO_PUBLICO`).
+- [ ] Ler `privacidade.html` e `termos.html` desta pasta: são as versões da demonstração, sem campos em aberto.
 - [ ] Abrir no celular e instalar o app pela opção "Adicionar à tela inicial".
 
 Para gerar de novo depois de mudar o app: `python3 ferramentas/gerar_prototipo.py`.

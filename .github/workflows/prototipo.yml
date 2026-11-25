@@ -5,7 +5,7 @@ name: Protótipo no GitHub Pages
 on:
   push:
     branches: [main]
-    paths: ["app/**", "site/**", "server/catalogo_padrao.json", "ferramentas/gerar_prototipo.py", ".github/workflows/prototipo.yml"]
+    paths: ["app/**", "site/**", "server/catalogo_padrao.json", "ferramentas/gerar_prototipo.py", "ferramentas/prototipo_legal/**", ".github/workflows/prototipo.yml"]
   workflow_dispatch:
 permissions:
   contents: read

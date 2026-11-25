@@ -7,12 +7,13 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["app/**", "android/**", ".github/workflows/android.yml"]
+    paths: ["app/**", "android/**", "server/catalogo_padrao.json", ".github/workflows/android.yml"]
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       AGORA_API_URL: ${{ secrets.AGORA_API_URL }}
+      AGORA_PRIVACIDADE_URL: ${{ vars.AGORA_PRIVACIDADE_URL }}
       AGORA_VERSION_CODE: ${{ github.run_number }}
       AGORA_KEYSTORE_BASE64: ${{ secrets.AGORA_KEYSTORE_BASE64 }}
     steps:

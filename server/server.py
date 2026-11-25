@@ -40,7 +40,7 @@ import push  # noqa: E402
 from config import Config  # noqa: E402
 from funil import Funil  # noqa: E402
 
-VERSAO = "2.1.0"
+VERSAO = "2.2.0"
 RAIZ = Path(__file__).resolve().parent.parent
 APP_DIR = RAIZ / "app"
 SITE_DIR = RAIZ / "site"

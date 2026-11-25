@@ -8,6 +8,9 @@
 <meta name="description" content="Uma ação por vez: tarefas, cursos, rotinas, foco, sono, humor e atividade para quem tem TDAH.">
 <meta name="theme-color" content="#edefea">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Agora">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
@@ -360,13 +363,15 @@ a.btn{text-decoration:none;color:inherit;justify-self:start}
 /* ================= utilidades ================= */
 const KEY = "agora.v1";
 const CFG = window.AGORA_CONFIG || {};
+const PRIVACIDADE = CFG.privacidade || "../privacidade.html";
 const ANDROID = CFG.plataforma === "android" || !!(window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() === "android");
 const NATIVO = () => window.Capacitor?.Plugins?.LocalNotifications || null;
 const PLANOS_PADRAO = [{ id: "plus_mensal", valor: 990 }, { id: "plus_anual", valor: 8900 }];
 let PLANOS_SRV = null;
 const preco = c => "R$ " + (c / 100).toFixed(2).replace(".", ",");
 const fmtISO = s => s ? new Date(s).toLocaleDateString("pt-BR") : "–";
-const PLUS = () => !!S.link?.direitos?.plus;
+// App Android sem servidor (build da Play só local): não há como assinar, então os extras que rodam no aparelho vêm liberados.
+const PLUS = () => !!S.link?.direitos?.plus || (ANDROID && !API);
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -492,7 +497,11 @@ function exemplo() {
 
 /* ================= estado ================= */
 let S = lsGet();
-if (!S || !S.v) { S = exemplo(); }
+// Primeira visita num endereço público: boas-vindas para começar com as próprias coisas (o exemplo fica a um toque).
+// Em localhost, no lançador e nos testes, abre direto o caso de demonstração.
+const PRIMEIRA_VEZ = !S || !S.v;
+const ENDERECO_PUBLICO = CFG.demo !== true && (!!window.Capacitor || (/^https?:$/.test(location.protocol) && !/^(localhost|127\.|0\.0\.0\.0|\[::1\])/.test(location.hostname)));
+if (PRIMEIRA_VEZ) { S = exemplo(); }
 function migrar() {
   S.settings = Object.assign(vazio().settings, S.settings || {});
   S.settings.lembretes = Object.assign({ rotinas: true, diario: "21:00" }, S.settings.lembretes || {});
@@ -942,9 +951,9 @@ function vMais() {
   const L = S.link;
   return `<div class="view">
     <div class="head"><h1>Mais</h1></div>
-    <section class="card stack" id="sec-conta"><h2>Sua conta</h2>${vConta()}</section>
+    ${ANDROID && !API ? "" : `<section class="card stack" id="sec-conta"><h2>Sua conta</h2>${vConta()}</section>
 
-    <section class="card stack" id="sec-planos"><h2>Planos</h2>${vPlanos()}</section>
+    <section class="card stack" id="sec-planos"><h2>Planos</h2>${vPlanos()}</section>`}
 
     <section class="card stack" id="sec-servicos"><h2>Serviços da equipe</h2>
       <p class="small muted">Terapia, grupos e treinos de habilidades sociais da Lume, aula aberta e e-books. Opcional: o app segue completo sem nada disso.</p>
@@ -968,7 +977,7 @@ function vMais() {
       <div class="row"><button class="btn primary" data-act="preparo">Preparar minha próxima sessão</button>${L && L.pro ? `<button class="btn" data-act="contact">Pedir contato a ${esc(L.pro.split(" ")[0])}</button>` : `<button class="btn" data-act="ajuda">Onde buscar ajuda</button>`}</div>
       <div id="contactRes"></div></section>
 
-    <section class="card stack" id="sec-vinculo"><h2>Vincular ao seu profissional</h2>${vVinculo()}</section>
+    ${ANDROID && !API ? "" : `<section class="card stack" id="sec-vinculo"><h2>Vincular ao seu profissional</h2>${vVinculo()}</section>`}
 
     <section class="card stack" id="sec-lembretes"><h2>Lembretes</h2>
       <p class="small muted">${NATIVO() ? "No celular, os lembretes chegam mesmo com o app fechado." : "No navegador, os lembretes aparecem enquanto o app estiver aberto. No app Android, chegam mesmo com ele fechado."}</p>
@@ -985,11 +994,11 @@ function vMais() {
     </section>
 
     <section class="card stack"><h2>Seus dados</h2>
-      <p class="small muted">Tudo fica neste aparelho. Só vai para a clínica o que você marcar no vínculo acima.</p>
+      <p class="small muted">${API ? "Tudo fica neste aparelho. Só vai para a clínica o que você marcar no vínculo acima." : "Tudo fica neste aparelho. Nada do que você registra é enviado para a internet."}</p>
       <div class="row"><button class="btn" data-act="export">Copiar backup</button><button class="btn" data-act="import">Restaurar backup</button><button class="btn ghost" data-act="wipe" style="color:var(--bad)">Apagar tudo</button></div>
       ${copias().length ? `<div class="stack" id="copias"><span class="label">Cópias guardadas</span>${copias().map((c, i) => `<div class="row between"><span class="small">${new Date(c.quando).toLocaleString("pt-BR")} · ${esc(c.rotulo)}</span><button class="btn sm" data-act="copia-restaurar" data-i="${i}">Voltar a esta</button></div>`).join("")}</div>` : ""}
       <div id="dataBox"></div></section>
-    <p class="small muted">Agora 2.1 · Ferramenta de apoio à organização. Não faz diagnóstico nem substitui tratamento. Em crise, ligue 188 (CVV, 24h) ou 192 (SAMU).</p>
+    <p class="small muted"><a href="${esc(PRIVACIDADE)}" target="_blank" rel="noopener">Política de privacidade</a> · Agora 2.2 · Ferramenta de apoio à organização. Não é dispositivo médico, não faz diagnóstico nem substitui tratamento: para isso, procure um profissional de saúde. Em crise, ligue 188 (CVV, 24h) ou 192 (SAMU).</p>
   </div>`;
 }
 function asrsResultado(r) {
@@ -1229,11 +1238,13 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && $("#layer"
 const chipsGrupo = (attr, opts, atual) => opts.map(([k, n, c]) => `<button class="chip" data-${attr}="${k}" aria-pressed="${atual === k}">${c ? `<span class="dotc" style="--c:${c}"></span>` : ""}${n}</button>`).join("");
 function ligaChips(sh, attr, cb) { $$(`[data-${attr}]`, sh).forEach(b => b.onclick = () => { cb(b.dataset[attr]); $$(`[data-${attr}]`, sh).forEach(c => c.setAttribute("aria-pressed", c === b)); }); }
 
-function sheetComeco() {
-  sheet(`<h2>Começar do zero</h2><p class="small muted">Os dados de exemplo somem. Nada sai deste aparelho.</p>
+function sheetComeco(boasVindas) {
+  sheet(`${boasVindas ? `<h2>Bem-vindo ao Agora</h2><p>Uma ação por vez. Escreva o que está na sua cabeça e o app escolhe por onde começar.</p>
+    <p class="small muted">Tudo fica neste aparelho: sem conta, sem cadastro.</p>` : `<h2>Começar do zero</h2><p class="small muted">Os dados de exemplo somem. Nada sai deste aparelho.</p>`}
     <label class="f" for="nn">Como quer ser chamado?<input type="text" id="nn" maxlength="40"></label>
     <label class="f" for="nd">O que está na sua cabeça agora? <span class="small muted" style="font-weight:400">uma linha por coisa</span><textarea id="nd" placeholder="responder o síndico&#10;terminar a apresentação"></textarea></label>
-    <div class="row"><button class="btn primary" id="ok">Começar</button><button class="btn ghost" data-close>Cancelar</button></div>`, sh => {
+    <div class="row"><button class="btn primary" id="ok">Começar</button>${boasVindas ? `<button class="btn ghost" id="exemplo">Ver um exemplo antes</button>` : `<button class="btn ghost" data-close>Cancelar</button>`}</div>`, sh => {
+    const ex = $("#exemplo", sh); if (ex) ex.onclick = () => { S._keepDemo = false; fechar(); toast("Este é o Lucas usando o app há 4 semanas. Quando quiser, toque em Começar do zero."); };
     $("#ok", sh).onclick = () => { subTarefas = "tarefas"; filtroTipo = "todos"; const skin = S.settings.skin; S = vazio($("#nn", sh).value.trim()); S.settings.skin = skin; aplicaTema();
       $("#nd", sh).value.split(/\n+/).map(s => s.trim()).filter(Boolean).forEach(t => S.tasks.push({ id: uid(), title: t, energy: "media", type: "pessoal", priority: "media", created: hoje(), steps: [], done: false }));
       lsSet(S); $("#layer").innerHTML = ""; go("agora"); toast("Pronto. Uma coisa por vez."); };
@@ -1377,7 +1388,7 @@ function abrirFoco(taskId, pequeno = null) {
   $("#ciYes").onclick = () => { $("#checkin").hidden = true; };
   $("#ciNo").onclick = () => { $("#checkin").hidden = true; toast("Tudo bem. Respira e volta pro primeiro passo."); };
   if (S.settings.sound !== "off" && (!["chuva", "ondas"].includes(S.settings.sound) || PLUS() || S._demo)) som(S.settings.sound);
-  try { NATIVO()?.schedule({ notifications: [{ id: 1950, title: "Tempo de foco terminou", body: x.title, schedule: { at: new Date(FOCO.end), allowWhileIdle: true } }] }); } catch {}
+  try { NATIVO()?.schedule({ notifications: [{ id: 1950, title: "Tempo de foco terminou", body: x.title, schedule: { at: new Date(FOCO.end), allowWhileIdle: true }, isExactNotification: false }] }); } catch {}
   try { navigator.wakeLock?.request("screen").then(l => FOCO && (FOCO.lock = l)).catch(() => {}); } catch {}
   salaEntrar();
   tick();
@@ -1469,7 +1480,7 @@ async function api(caminho, corpo, metodo) {
 function salaRender(pessoas, solo, bloqueado) {
   const el = $("#room"); if (!el) return;
   if (bloqueado) { el.innerHTML = `<p>A sala com outras pessoas é do <b>Plus</b>. Enquanto isso, o app pergunta de vez em quando se você ainda está na tarefa.</p>`; return; }
-  if (solo) { el.innerHTML = `<p>Modo solo. Você não está sozinho: o app vai perguntar de vez em quando se você ainda está na tarefa.</p><p class="muted">Com conta vinculada à clínica, aqui aparecem as pessoas focando agora.</p>`; return; }
+  if (solo) { el.innerHTML = `<p>Modo solo. Você não está sozinho: o app vai perguntar de vez em quando se você ainda está na tarefa.</p>${ANDROID && !API ? "" : `<p class="muted">Com conta vinculada à clínica, aqui aparecem as pessoas focando agora.</p>`}`; return; }
   el.innerHTML = `<p><b>${pessoas.length}</b> ${pessoas.length === 1 ? "pessoa focando" : "pessoas focando"} agora</p><div class="people">${pessoas.map(p => `<span class="person">${esc(p.apelido)} · ${p.restaMin} min</span>`).join("")}</div>`;
 }
 async function salaEntrar() {
@@ -1708,10 +1719,10 @@ async function agendarLembretes() {
     const lst = [];
     if (S.settings.lembretes.rotinas) S.routines.filter(r => r.time).slice(0, 40).forEach((r, i) => {
       const [h, m] = r.time.split(":").map(Number);
-      lst.push({ id: 1000 + i, title: r.name, body: `Hora da rotina: ${r.steps.length} passos, ${r.steps.reduce((a, s) => a + s.min, 0)} min.`, schedule: { on: { hour: h, minute: m }, allowWhileIdle: true } });
+      lst.push({ id: 1000 + i, title: r.name, body: `Hora da rotina: ${r.steps.length} passos, ${r.steps.reduce((a, s) => a + s.min, 0)} min.`, schedule: { on: { hour: h, minute: m }, allowWhileIdle: true }, isExactNotification: false });
     });
     if (S.settings.lembretes.diario) { const [h, m] = S.settings.lembretes.diario.split(":").map(Number);
-      lst.push({ id: 1900, title: "Como foi o seu dia?", body: "Um toque no humor e pronto. Menos de um minuto.", schedule: { on: { hour: h, minute: m }, allowWhileIdle: true } }); }
+      lst.push({ id: 1900, title: "Como foi o seu dia?", body: "Um toque no humor e pronto. Menos de um minuto.", schedule: { on: { hour: h, minute: m }, allowWhileIdle: true }, isExactNotification: false }); }
     if (lst.length) await LN.schedule({ notifications: lst });
   } catch {}
 }
@@ -1839,7 +1850,7 @@ function sheetInteresse(itemId) {
     <label class="f" for="inTel">WhatsApp ou telefone (opcional)<input type="tel" id="inTel" autocomplete="tel" maxlength="40"></label>
     <label class="f" for="inMsg">Quer contar algo? (opcional)<textarea id="inMsg" maxlength="1000" placeholder="Melhores horários, dúvidas..."></textarea></label>
     <div class="hp" aria-hidden="true"><label>Não preencha<input type="text" id="inSite" tabindex="-1" autocomplete="off"></label></div>
-    <label class="check"><input type="checkbox" id="inAceite"><span>Aceito que usem estes dados para responder a este pedido (veja a <a href="/privacidade" target="_blank" rel="noopener">política de privacidade</a>).</span></label>
+    <label class="check"><input type="checkbox" id="inAceite"><span>Aceito que usem estes dados para responder a este pedido (veja a <a href="${esc(PRIVACIDADE)}" target="_blank" rel="noopener">política de privacidade</a>).</span></label>
     <label class="check"><input type="checkbox" id="inMkt"><span>Quero receber 3 e-mails curtos com dicas de organização. Dá para sair em um clique.</span></label>
     <div class="row"><button class="btn primary" id="ok">Enviar</button><button class="btn ghost" data-close>Cancelar</button></div><p id="inErr" class="small" role="alert"></p>`, sh => {
     $("#ok", sh).onclick = async () => {
@@ -2181,6 +2192,7 @@ go(VIEW);
     } catch {}
   }
   try { if (hospedado && !window.Capacitor && "serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {}); } catch {}
+  if (PRIMEIRA_VEZ && ENDERECO_PUBLICO && !new URLSearchParams(location.search).get("convite")) setTimeout(() => sheetComeco(true), 400);
 })();
 window.addEventListener("hashchange", () => { const h = location.hash.slice(1); if (h && h !== VIEW && !FOCO) go(h); });
 </script>

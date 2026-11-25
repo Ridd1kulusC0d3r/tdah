@@ -1,8 +1,8 @@
 // Agora — service worker: guarda o app para funcionar sem internet e recebe lembretes com o app fechado.
 // A API nunca é guardada em cache. As notificações chegam sem conteúdo (Web Push "vazio"): o service worker
 // busca o texto no servidor do Agora, provando que é dono da inscrição. Nenhum texto passa pelo serviço de push.
-const CACHE = "agora-v22-retomada";
-const ARQ = ["./", "./index.html", "./manifest.webmanifest", "./config.js", "./icon.svg", "./fonts/fonts.css", "./fonts/next-latin.woff2", "./fonts/next-latin-ext.woff2", "./fonts/mono-400.woff2", "./fonts/mono-600.woff2", "./icon-192.png", "./icon-512.png"];
+const CACHE = "agora-v22";
+const ARQ = ["./", "./index.html", "./manifest.webmanifest", "./config.js", "./icon.svg", "./fonts/fonts.css", "./fonts/next-latin.woff2", "./fonts/next-latin-ext.woff2", "./fonts/mono-400.woff2", "./fonts/mono-600.woff2", "./icon-192.png", "./icon-512.png", "./icon-maskable-192.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARQ)).then(() => self.skipWaiting())));
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", e => {

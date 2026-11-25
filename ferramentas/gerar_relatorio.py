@@ -14,17 +14,24 @@ n_ui = sum(r["ok"] for r in ui["resultados"])
 _sem = RAIZ / "docs" / "resultado-testes-sem-cryptography.txt"
 SEM = _sem.read_text(encoding="utf-8").strip() if _sem.exists() else "não rodado"
 n_api = sum(1 for _, s in api if s == "ok")
+_pub = RAIZ / "docs" / "resultado-testes-publicacao.txt"
+pub_txt = _pub.read_text(encoding="utf-8") if _pub.exists() else ""
+pub = re.findall(r"^(test_\w+) \((tests\.test_\w+)\..*?\) \.\.\. (?:.*?\n)*?.*?\b(ok|FAIL|ERROR)$", pub_txt, re.M)
+n_pub = sum(1 for *_, s in pub if s == "ok")
+logica = "PASS" in pub_txt
 try:
     from playwright import __version__ as pwv
 except Exception:
     pwv = "?"
 linhas = [
-    "# Relatório de testes — Agora 2.1", "",
+    "# Relatório de testes — Agora 2.2", "",
     f"Executado em {ui['quando'].replace('T', ' ')} num ambiente Linux na nuvem.", "",
     "| Suíte | Resultado |", "|---|---|",
     f"| API e produção (`tests/test_api.py` e `tests/test_producao.py`, unittest) | **{n_api}/{len(api)}** |",
     f"| Mesmos testes sem o pacote opcional `cryptography` (cifra em Python puro) | **{SEM}** |",
-    f"| Ponta a ponta no navegador (`tests/test_ui.py`, Playwright + Chromium) | **{n_ui}/{len(ui['resultados'])}** |", "",
+    f"| Ponta a ponta no navegador (`tests/test_ui.py`, Playwright + Chromium) | **{n_ui}/{len(ui['resultados'])}** |",
+    f"| Retomada e preparo, publicação (protótipo estático, PWA offline, app Android sem servidor, kit da Play) | **{n_pub}/{len(pub)}** |",
+    f"| Lógica de retomada em Node (`tests/test_retomada_logic.cjs`) | **{'ok' if logica else 'não rodado'}** |", "",
     "## Ambiente", "",
     f"- Python {sys.version.split()[0]} em {platform.system()} {platform.release()}",
     f"- Playwright {pwv}, Chromium headless",
@@ -49,13 +56,20 @@ linhas = [
     "retenção, exportação e exclusão, backup cifrado com envio S3 e restauração, CLI de administração, recusa de partida em produção sem chave e sem o pacote cryptography. "
     "Na 2.1, no navegador: fim do foco com Concluí/Avancei/Retomar e o passo guardado em Onde você parou, dias em que voltei, triagem desligada até o texto validado, "
     "preparo da sessão (prévia, período, categorias, download e envio ao profissional vinculado), importação de cursos com prévia, atualização sem duplicar e expirados desmarcados, "
-    "catálogo do app só com a linha Para você. No navegador, o teste confere também que nenhuma página pede arquivos a servidores de fora (as fontes ficam no próprio app).", "",
+    "catálogo do app só com a linha Para você. "
+    "Na 2.2: protótipo estático sem caminhos absolutos e com noindex, PWA instalável e controlado pelo service worker numa subpasta, abrindo e navegando sem internet, "
+    "boas-vindas só na primeira visita em endereço público (o que a pessoa escreve fica salvo; o exemplo fica a um toque), páginas legais sem lacunas, vitrine sem links quebrados "
+    "e sem rolagem lateral, app Android sem servidor (sem conta, planos ou vínculo, nenhuma palavra de venda, vitrine só com atendimento e aula aberta por e-mail, link de privacidade, "
+    "lembretes sem alarme exato) e limites de texto e tamanho de imagens da ficha da Play. No navegador, o teste confere também que nenhuma página pede arquivos a servidores de fora (as fontes ficam no próprio app).", "",
     "| Teste da API | Resultado |", "|---|---|"]
 linhas += [f"| `{t}` | {'✓' if s == 'ok' else '✕ ' + s} |" for t, s in api]
+linhas += ["", "| Teste de publicação e retomada | Resultado |", "|---|---|"]
+linhas += [f"| `{m.split('.')[-1]}.{t}` | {'✓' if s == 'ok' else '✕ ' + s} |" for t, m, s in pub]
 linhas += ["", "## Verificações no navegador", "", "| # | Verificação | Resultado |", "|---|---|---|"]
 linhas += [f"| {i} | {r['teste']} | {'✓' if r['ok'] else '✕ ' + r['detalhe']} |" for i, r in enumerate(ui["resultados"], 1)]
 linhas += ["", "## Como repetir", "", "```bash", "./rodar-testes.sh", "# ou separadamente:",
-           "python3 -m unittest tests.test_api tests.test_producao -v", "python3 tests/test_ui.py   # requer: pip install playwright && playwright install chromium", "```", "",
+           "python3 -m unittest tests.test_api tests.test_producao -v", "python3 tests/test_ui.py   # requer: pip install playwright && playwright install chromium",
+           "python3 -m unittest tests.test_retomada_ui tests.test_publicacao -v", "node tests/test_retomada_logic.cjs", "```", "",
            "As capturas de tela do manual (`docs/capturas/`) são geradas pelo teste de navegador."]
 (RAIZ / "docs" / "RELATORIO-TESTES.md").write_text("\n".join(linhas) + "\n", encoding="utf-8")
-print(f"RELATORIO-TESTES.md  api {n_api}/{len(api)}  ui {n_ui}/{len(ui['resultados'])}")
+print(f"RELATORIO-TESTES.md  api {n_api}/{len(api)}  ui {n_ui}/{len(ui['resultados'])}  publicação {n_pub}/{len(pub)}")
