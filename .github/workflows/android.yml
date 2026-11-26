@@ -2,12 +2,15 @@
 # Saídas (aba Actions > execução > Artifacts):
 #   agora-debug.apk     para instalar direto no celular e testar
 #   agora-release.aab   para enviar à Google Play (só se os secrets de assinatura existirem)
+# O APK de teste também vai para a página Releases (versão "teste-android"): dá para baixar direto no celular.
 name: Android
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths: ["app/**", "android/**", "server/catalogo_padrao.json", ".github/workflows/android.yml"]
+permissions:
+  contents: write   # publicar o APK de teste em Releases
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,6 +39,27 @@ jobs:
         run: chmod +x gradlew && ./gradlew assembleDebug --no-daemon --stacktrace
       - uses: actions/upload-artifact@v4
         with: { name: agora-debug.apk, path: android/android/app/build/outputs/apk/debug/*.apk }
+      - name: Conferir permissões do APK (sem alarme exato)
+        run: |
+          AAPT=$(ls -1 "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)
+          "$AAPT" dump permissions android/android/app/build/outputs/apk/debug/app-debug.apk | tee permissoes.txt
+          ! grep -q "SCHEDULE_EXACT_ALARM\|USE_EXACT_ALARM" permissoes.txt
+          "$AAPT" dump badging android/android/app/build/outputs/apk/debug/app-debug.apk | grep -E "^package:|targetSdkVersion|application-label:"
+      - name: Publicar APK de teste em Releases
+        if: ${{ github.ref == 'refs/heads/main' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER=$(grep -oP 'versionName = "\K[^"]+' android/android/app/build.gradle)
+          cp android/android/app/build/outputs/apk/debug/app-debug.apk "agora-$VER-teste.apk"
+          NOTAS="APK de teste do Agora $VER (build ${{ github.run_number }}, commit ${GITHUB_SHA::7}). Para instalar: abra este link no celular Android, baixe o arquivo e permita instalar de fontes desconhecidas quando o Android pedir. Os dados ficam só no aparelho. Esta versão não é a da Google Play: quando a versão da loja sair, desinstale esta antes."
+          if gh release view teste-android >/dev/null 2>&1; then
+            gh release upload teste-android "agora-$VER-teste.apk" --clobber
+            gh release edit teste-android --title "Agora $VER — APK de teste" --notes "$NOTAS" --prerelease
+          else
+            gh release create teste-android "agora-$VER-teste.apk" --title "Agora $VER — APK de teste" --notes "$NOTAS" --prerelease --target "$GITHUB_SHA"
+          fi
       - name: AAB assinado para a Play Store
         if: ${{ env.AGORA_KEYSTORE_BASE64 != '' }}
         env:

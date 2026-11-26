@@ -174,6 +174,8 @@ class TestPublicacao(unittest.TestCase):
     def test_07_kit_da_play(self):
         T = RAIZ / "play" / "textos"
         limites = {"titulo.txt": 30, "descricao-curta.txt": 80, "descricao-completa.txt": 4000}
+        notas = (T / "novidades.txt").read_text(encoding="utf-8")
+        self.assertLessEqual(len(notas.split("<pt-BR>")[1].split("</pt-BR>")[0].strip()), 500, "notas da versão")
         for nome, lim in limites.items():
             texto = (T / nome).read_text(encoding="utf-8")
             self.assertLessEqual(len(texto), lim, nome)

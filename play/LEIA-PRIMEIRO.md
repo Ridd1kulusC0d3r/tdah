@@ -9,7 +9,9 @@ Siga na ordem. Cada passo diz onde clicar e o que colar.
 | `imagens/icone-512.png` | Ícone da ficha (512 × 512) |
 | `imagens/destaque-1024x500.jpg` | Gráfico de destaque |
 | `imagens/celular-01..06.jpg` | Capturas do celular (1080 × 1920) |
+| `textos/novidades.txt` | Notas da versão (campo "Notas da versão" de cada lançamento, até 500 caracteres) |
 | `FORMULARIOS.md` | Respostas de segurança dos dados, saúde, classificação, público-alvo |
+| `TESTADORES.md` | Teste fechado: Grupo do Google, mensagens de convite prontas, roteiro dos 14 dias e respostas para pedir a produção |
 
 Para refazer as imagens depois de mudar o app: `python3 ferramentas/gerar_kit_play.py`.
 
@@ -25,6 +27,10 @@ A primeira versão na Play é o **app local**: sem conta, sem servidor, tudo no 
 - o formulário de segurança dos dados fica simples: **o app não coleta dados**.
 
 Quando o servidor estiver no ar e você quiser contas e vínculo no Android, cadastre `AGORA_API_URL` e refaça a seção de segurança dos dados (o fim de `FORMULARIOS.md` traz o que muda).
+
+## Passo 0. Ver o app no seu celular hoje
+
+No Android, abra https://github.com/Ridd1kulusC0d3r/tdah/releases/tag/teste-android, baixe `agora-2.2.0-teste.apk` e permita instalar quando o sistema pedir. É o mesmo app da loja, com assinatura de teste.
 
 ## Passo 1. Conta de desenvolvedor (uma vez)
 
@@ -74,8 +80,8 @@ Categoria e contato também estão em `FORMULARIOS.md`.
 
 ## Passo 7. Teste e lançamento
 
-1. **Teste interno** (opcional, sai em minutos): *Testar e lançar › Teste interno › Criar versão*, envie o `.aab`, adicione o seu e-mail na lista de testadores e instale pelo link.
-2. **Teste fechado** (obrigatório para conta pessoal): *Teste fechado › Criar faixa*, envie o mesmo `.aab`, cadastre os e-mails dos **12 ou mais testadores** (lista de e-mails ou Grupo do Google) e mande para eles o link de inscrição. Conte 14 dias a partir do dia em que o 12º aceitou.
+1. **Teste interno** (opcional, sai em minutos): *Testar e lançar › Teste interno › Criar versão*, envie o `.aab`, cole `textos/novidades.txt` em "Notas da versão", adicione o seu e-mail na lista de testadores e instale pelo link.
+2. **Teste fechado** (obrigatório para conta pessoal): *Teste fechado › Criar faixa*, envie o mesmo `.aab` e siga `TESTADORES.md` (grupo, convites e roteiro dos 14 dias).
    Boas fontes de testadores: colegas de profissão, pacientes adultos que aceitarem (sem obrigação), turma da Lume.
 3. Depois dos 14 dias: *Painel › Solicitar acesso à produção*. O Google pergunta como foi o teste; responda com o que mudou a partir dos comentários.
 4. **Produção:** crie a versão, escolha *Brasil* em países e envie para revisão (costuma levar de alguns dias a uma semana).
