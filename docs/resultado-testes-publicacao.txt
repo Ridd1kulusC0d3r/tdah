@@ -14,7 +14,7 @@ test_06_android_sem_servidor (tests.test_publicacao.TestPublicacao.test_06_andro
 test_07_kit_da_play (tests.test_publicacao.TestPublicacao.test_07_kit_da_play) ... ok
 
 ----------------------------------------------------------------------
-Ran 14 tests in 13.038s
+Ran 14 tests in 13.890s
 
 OK
 PASS: task/course resumption, partial progress, reduced steps, source preservation, summary selection/export text, private snapshot, escaping and empty-step validation.

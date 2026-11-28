@@ -9,7 +9,7 @@ Valem para o build sem `AGORA_API_URL`. Os nomes dos campos seguem o Console em 
 | Categoria do app | **Produtividade** |
 | Tags (até 5) | Produtividade · Lista de tarefas · Organização · Bem-estar · Hábitos (escolha as que o Console oferecer mais próximas) |
 | E-mail de contato | o mesmo de `AGORA_CONTATO_PUBLICO` (hoje: contato@psicologotech.com.br; **confirme**) |
-| Site | endereço do site publicado (ex.: `https://ridd1kulusc0d3r.github.io/tdah/`) |
+| Site | o endereço do site quando estiver no ar; até lá, deixe em branco (é opcional) |
 | Telefone | deixe em branco (opcional) |
 
 Por que Produtividade e não Saúde: o uso principal é organizar tarefas e rotinas. Os recursos de saúde existem e são declarados abaixo, mas não são o centro do app.
@@ -17,7 +17,7 @@ Por que Produtividade e não Saúde: o uso principal é organizar tarefas e roti
 ## Política do app (Configurar o app)
 
 ### Política de privacidade
-URL: o endereço público de `prototipo/privacidade.html` (o mesmo de `AGORA_PRIVACIDADE_URL`).
+URL: https://github.com/Ridd1kulusC0d3r/tdah/blob/main/PRIVACIDADE.md (ou o endereço do site, se você cadastrou `AGORA_PRIVACIDADE_URL`).
 
 ### Acesso ao app
 **Todas as funcionalidades estão disponíveis sem restrições de acesso.** (Não há login.)

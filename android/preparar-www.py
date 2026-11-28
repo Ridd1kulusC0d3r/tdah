@@ -13,7 +13,8 @@ from pathlib import Path
 AQUI = Path(__file__).resolve().parent
 ORIGEM = AQUI.parent / "app"
 DESTINO = AQUI / "www"
-PRIVACIDADE_PADRAO = "https://ridd1kulusc0d3r.github.io/tdah/privacidade.html"  # protótipo no GitHub Pages
+# política pública mesmo sem site hospedado (o GitHub mostra o Markdown); troque por AGORA_PRIVACIDADE_URL quando o site estiver no ar
+PRIVACIDADE_PADRAO = "https://github.com/Ridd1kulusC0d3r/tdah/blob/main/PRIVACIDADE.md"
 FORA = {"pro.html", "admin.html", "checkout-simulado.html", "sw.js", "manifest.webmanifest"}  # painel, administração e checkout ficam só na web
 
 if DESTINO.exists():

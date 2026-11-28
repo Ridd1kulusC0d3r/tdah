@@ -54,6 +54,13 @@ class TestPublicacao(unittest.TestCase):
             self.assertIn("mailto:", html)
         self.assertIn("CRP-04/65709", (PROTO / "privacidade.html").read_text(encoding="utf-8"))
         self.assertIn("188", (PROTO / "privacidade.html").read_text(encoding="utf-8"))
+        md = (RAIZ / "PRIVACIDADE.md").read_text(encoding="utf-8")  # política pública do app Android (link padrão)
+        self.assertNotIn("{{", md)
+        sys.path.insert(0, str(RAIZ / "server"))
+        from config import Config
+        self.assertIn(Config().contato_publico, md, "mesmo contato do app")
+        for trecho in ("CRP-04/65709", "Notificações", "não tem anúncios".replace("não tem", "**não** tem"), "188", "18 anos"):
+            self.assertIn(trecho, md)
 
     def test_02_links_relativos_e_noindex(self):
         for arq in PROTO.rglob("*.html"):
@@ -157,7 +164,7 @@ class TestPublicacao(unittest.TestCase):
             for proibido in ("Assinar", "Assinaturas", "Plus", "Pix", "cartão"):
                 self.assertNotIn(proibido, texto, f"Android sem venda de digital: {proibido}")
             href = pg.get_attribute("main a:has-text('Política de privacidade')", "href")
-            self.assertTrue(href.startswith("https://"), href)
+            self.assertEqual(href, "https://github.com/Ridd1kulusC0d3r/tdah/blob/main/PRIVACIDADE.md", "link padrão público")
             pg.click("[data-act=servicos]")
             pg.wait_for_selector(".svc")
             ids = pg.evaluate("[...document.querySelectorAll('.svc')].map(e => e.id)")

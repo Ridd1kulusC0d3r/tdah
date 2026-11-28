@@ -39,23 +39,33 @@ No Android, abra https://github.com/Ridd1kulusC0d3r/tdah/releases/tag/teste-andr
    - **Organização:** pede CNPJ e número D-U-N-S (gratuito, sai em alguns dias úteis). A regra dos 12 testadores é das contas pessoais.
 2. Pague a taxa de registro (única) e conclua a verificação.
 
-## Passo 2. Chave de assinatura (uma vez, no seu computador)
+## Passo 2. Chave de assinatura (já criada: só colar no GitHub, 2 minutos)
 
-1. Com o Java instalado, rode `android/gerar-chave.sh`. Ele cria `android/chave-assinatura.jks`.
-2. **Guarde o arquivo e a senha em dois lugares** (cofre de senhas e um pendrive). Sem eles você não atualiza o app.
-3. No GitHub: *Settings › Secrets and variables › Actions › New repository secret*:
-   - `AGORA_KEYSTORE_BASE64` = saída de `base64 -w0 android/chave-assinatura.jks` (no Mac: `base64 -i android/chave-assinatura.jks`)
-   - `AGORA_KEYSTORE_SENHA` = a senha
-4. Na aba *Variables* (mesma tela), crie `AGORA_PRIVACIDADE_URL` com o endereço público da política de privacidade (passo 3).
-   Sem essa variável, o app aponta para `https://ridd1kulusc0d3r.github.io/tdah/privacidade.html`.
-5. *Actions › Android › Run workflow*. Ao terminar, baixe o artefato **agora-release.aab**.
+A chave de upload já foi gerada e veio no arquivo `agora-chave-assinatura.zip` (fora do repositório). Dentro dele:
 
+| Arquivo | O que fazer |
+|---|---|
+| `chave-assinatura.jks` | Guardar em dois lugares (cofre de senhas e pendrive). Sem ela você não atualiza o app. |
+| `AGORA_KEYSTORE_SENHA.txt` | A senha. Guardar junto com a chave. |
+| `AGORA_KEYSTORE_BASE64.txt` | A chave em texto, para colar no GitHub. |
+
+1. No GitHub: *Settings › Secrets and variables › Actions › New repository secret*. Crie dois:
+   - Nome `AGORA_KEYSTORE_BASE64`, valor = todo o conteúdo de `AGORA_KEYSTORE_BASE64.txt`
+   - Nome `AGORA_KEYSTORE_SENHA`, valor = o conteúdo de `AGORA_KEYSTORE_SENHA.txt`
+2. *Actions › Android › Run workflow*. Ao terminar, o AAB assinado aparece em **Releases › rascunho "Agora 2.2.0 para a Google Play"** (só você vê) e também na aba *Artifacts* da execução.
+
+Por que não é arriscado: o Play Console usa a **Assinatura de apps do Google Play**. O Google guarda a chave que assina o app de verdade; esta é só a **chave de upload**. Se ela vazar ou se perder, você pede a troca em *Configuração › Integridade do app*.
+
+Prefere criar a sua? Rode `android/gerar-chave.sh` no seu computador (precisa do Java) e cadastre os mesmos dois secrets.
 A chave **não** vai para o repositório: o `.gitignore` já ignora `*.jks`.
 
-## Passo 3. Política de privacidade no ar
+## Passo 3. Política de privacidade (já pública)
 
-A Play exige um link público. A política do app local está em `prototipo/privacidade.html` (inclui a seção "No app para Android").
-Publique o protótipo de um dos jeitos de `prototipo/PUBLICAR.md` (GitHub Pages ou Netlify Drop) e confira que o endereço abre no celular.
+A política do app está em `PRIVACIDADE.md`, na raiz do repositório, e o GitHub já a mostra como página pública:
+https://github.com/Ridd1kulusC0d3r/tdah/blob/main/PRIVACIDADE.md
+
+É esse o link que o app abre em Mais e o que vai no Play Console. Quando o site estiver no ar (GitHub Pages ou Netlify, veja `prototipo/PUBLICAR.md`), você pode trocar: crie a variável `AGORA_PRIVACIDADE_URL` em *Settings › Secrets and variables › Actions › Variables* com o novo endereço e rode o build de novo.
+O texto sai de `ferramentas/prototipo_legal/privacidade-app.md`; ao mudar, rode `python3 ferramentas/gerar_prototipo.py`.
 
 ## Passo 4. Criar o app no Play Console
 
@@ -90,7 +100,7 @@ Categoria e contato também estão em `FORMULARIOS.md`.
 
 - [ ] `python3 -m unittest tests.test_publicacao` passou (inclui o modo Android sem servidor).
 - [ ] O e-mail de contato (`AGORA_CONTATO_PUBLICO`) é um endereço que alguém lê.
-- [ ] A política de privacidade abre no endereço cadastrado.
+- [ ] A política de privacidade abre no endereço cadastrado (`PRIVACIDADE.md` no GitHub, ou o site).
 - [ ] `versionName` em `android/android/app/build.gradle` mudou (o `versionCode` sobe sozinho pelo número da execução do Actions).
 
 ## Requisitos da Google Play que este projeto já cumpre

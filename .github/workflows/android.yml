@@ -1,7 +1,8 @@
 # Gera o app Android a cada push na branch main (ou manualmente em Actions > Android > Run workflow).
 # Saídas (aba Actions > execução > Artifacts):
 #   agora-debug.apk     para instalar direto no celular e testar
-#   agora-release.aab   para enviar à Google Play (só se os secrets de assinatura existirem)
+#   agora-release.aab   para enviar à Google Play (só se os secrets de assinatura existirem);
+#                       também fica num rascunho de Releases ("play-<versão>"), visível só para quem administra o repositório
 # O APK de teste também vai para a página Releases (versão "teste-android"): dá para baixar direto no celular.
 name: Android
 on:
@@ -71,3 +72,18 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ hashFiles('android/android/app/build/outputs/bundle/release/*.aab') != '' }}
         with: { name: agora-release.aab, path: android/android/app/build/outputs/bundle/release/*.aab }
+      - name: Guardar o AAB num rascunho de Releases (só quem administra o repositório vê)
+        if: ${{ hashFiles('android/android/app/build/outputs/bundle/release/*.aab') != '' && github.ref == 'refs/heads/main' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VER=$(grep -oP 'versionName = "\K[^"]+' android/android/app/build.gradle)
+          ARQ="agora-$VER-play-${{ github.run_number }}.aab"
+          cp android/android/app/build/outputs/bundle/release/app-release.aab "$ARQ"
+          NOTAS="AAB assinado para enviar ao Play Console (versão $VER, versionCode ${{ github.run_number }}). Rascunho: não aparece para o público. Notas da versão para colar: play/textos/novidades.txt."
+          if gh release view "play-$VER" >/dev/null 2>&1; then
+            gh release upload "play-$VER" "$ARQ" --clobber
+          else
+            gh release create "play-$VER" "$ARQ" --draft --title "Agora $VER para a Google Play" --notes "$NOTAS" --target "$GITHUB_SHA"
+          fi

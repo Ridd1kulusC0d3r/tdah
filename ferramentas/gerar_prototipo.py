@@ -21,6 +21,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ / "server"))
 DEST = RAIZ / "prototipo"
+DATA_POLITICA_APP = "27/11/2026"  # mude quando o texto de privacidade-app.md mudar
 APP_FORA = {"admin.html", "checkout-simulado.html", "pro.html"}  # precisam do servidor
 
 FAIXA = ('<div style="position:sticky;top:0;z-index:99;background:#ffe977;color:#18211d;font:600 14px/1.35 system-ui,sans-serif;'
@@ -91,6 +92,13 @@ def main():
         elif arq.is_file():
             shutil.copy2(arq, DEST / arq.name)
     (DEST / "catalogo.json").write_text(texto_cat, encoding="utf-8")
+    # política do app Android em Markdown na raiz do repositório: o GitHub mostra como página pública,
+    # e é o link padrão de privacidade do app (funciona mesmo antes de o site estar hospedado)
+    md = (legais / "privacidade-app.md").read_text(encoding="utf-8")
+    for a, b in {**trocas, "{{DATA}}": DATA_POLITICA_APP}.items():
+        md = md.replace(a, b)
+    assert "{{" not in md
+    (RAIZ / "PRIVACIDADE.md").write_text(md, encoding="utf-8")
 
     for arq in (RAIZ / "app").iterdir():
         if arq.name in APP_FORA:
